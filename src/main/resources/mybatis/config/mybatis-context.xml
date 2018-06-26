@@ -5,10 +5,12 @@
 <configuration>
   <typeAliases>
   	<!-- typealias 추가 -->
+  	<package name="com.inc.vo"/>
   </typeAliases>
   <mappers>
     <!-- mapper추가 -->
     <!-- <mapper resource="mybatis/mapper/??.xml"/> -->
+    <mapper resource="mybatis/mapper/member.xml"/>
   </mappers>
 </configuration>
 

@@ -16,10 +16,13 @@
 	<mvc:resources mapping="/vendor/**" 
 	               location="/WEB-INF/resources/css/vendor/" />
 	<mvc:resources mapping="/img/**" 
-	               location="/WEB-INF/resources/img/" />               
+	               location="/WEB-INF/resources/img/" />
+	<mvc:resources mapping="/webjars/**" 
+	               location="classpath:/META-INF/resources/webjars/" />                              
 	      
 	<bean name="mainController" class="com.inc.controller.MainController" />
-	<bean name="memberController" class="com.inc.controller.MemberController" />
+	<bean name="memberController" class="com.inc.controller.MemberController" p:memberService-ref="memberService"/>
+	
 	      
 	<bean 
       class="org.springframework.web.servlet.view.InternalResourceViewResolver"

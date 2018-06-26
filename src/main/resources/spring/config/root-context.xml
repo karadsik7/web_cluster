@@ -8,7 +8,9 @@
 	
 	<context:property-placeholder 
 		location="classpath:mybatis/config/db.properties"/>
-		
+	
+	<bean id="memberService" class="com.inc.service.MemberServiceImpl" p:memberDao-ref="memberDao" />
+	<bean id="memberDao" class="com.inc.dao.MemberDao" p:sqlSession-ref="sqlSession" />
 		
 		
 		
