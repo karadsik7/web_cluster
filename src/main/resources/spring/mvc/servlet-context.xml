@@ -21,7 +21,10 @@
 	               location="classpath:/META-INF/resources/webjars/" />                              
 	      
 	<bean name="mainController" class="com.inc.controller.MainController" />
-	<bean name="memberController" class="com.inc.controller.MemberController" p:memberService-ref="memberService"/>
+	<bean name="memberController" class="com.inc.controller.MemberController" 
+	p:memberService-ref="memberService"/>
+	<bean name="freeBoardController" class="com.inc.controller.FreeBoardController" 
+	p:freeBoardService-ref="freeBoardService" />
 	
 	      
 	<bean 

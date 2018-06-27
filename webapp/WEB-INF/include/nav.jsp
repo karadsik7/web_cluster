@@ -13,7 +13,7 @@
 		<div class="collapse navbar-collapse" id="navbarResponsive">
 			<ul class="navbar-nav ml-auto">
 				<c:if test="${sessionScope.member != null}">
-					<li class="nav-item"><a class="nav-link" href="index.html">Board</a></li>
+					<li class="nav-item"><a class="nav-link" href="/fboard/list">Board</a></li>
 					<li class="nav-item"><a class="nav-link" href="about.html">Guest</a></li>
 					<li class="nav-item"><a class="nav-link" href="/member/logout">Logout</a></li>
 				</c:if>

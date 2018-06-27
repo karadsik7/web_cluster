@@ -23,7 +23,7 @@
 					<form:errors path="id" class="errors" value=""/>
 				</div>
 				<div class="col-sm-4">
-					<button type="button" class="btn btn-info btn-sm" onclick="dualCheck();">중복 확인</button>
+					<button type="button" class="btn btn-info" onclick="dualCheck();">중복 확인</button>
 				</div>
 			</div>
 			
@@ -59,7 +59,7 @@
 					<span id="email-error" class="errors"></span>
 				</div>
 				<div class="col-sm-3">
-					<button type="button" onclick="mailSend();" class="btn btn-primary btn-xs">인증 메일 발송</button>
+					<button type="button" onclick="mailSend();" class="btn btn-primary">인증 메일 발송</button>
 				</div>
 			</div>
 			
@@ -87,7 +87,7 @@
 			<br />
 			<div class="form-group">
 				<div class="col-sm-offset-3 col-sm-6">
-					<button class="btn btn-primary btn-block">회원 가입</button>
+					<button class="btn btn-primary btn-block btn-lg">회원 가입</button>
 				</div>
 			</div>
 		</form:form>
