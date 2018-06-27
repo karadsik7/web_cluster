@@ -9,9 +9,24 @@
 	<context:property-placeholder 
 		location="classpath:mybatis/config/db.properties"/>
 	
-	<bean id="memberService" class="com.inc.service.MemberServiceImpl" p:memberDao-ref="memberDao" />
+	<bean id="memberService" class="com.inc.service.MemberServiceImpl" p:memberDao-ref="memberDao" 
+	p:javaMailSender-ref="javaMailSender"/>
 	<bean id="memberDao" class="com.inc.dao.MemberDao" p:sqlSession-ref="sqlSession" />
-		
+	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com"/>
+		<property name="port" value="587" />
+		<property name="username" value="mktprogramtester@gmail.com" />
+		<property name="password" value="mkttester" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
+			</props>
+		</property>
+	</bean>
+	
 		
 		
 		

@@ -5,7 +5,7 @@ import javax.validation.constraints.Pattern;
 public class MemberVo {
 	@Pattern(regexp="[A-Za-z]{1}[A-Za-z0-9]{3,9}", message="영대소문자(+숫자)의 조합만 가능합니다.")
 	private String id;
-	@Pattern(regexp="[A-Za-z0-9]{0,10}", message="알파벳 혹은 숫자의 조합으로 입력해주세요.")
+	@Pattern(regexp="[A-Za-z0-9]{3,10}", message="알파벳 혹은 숫자의 조합으로 3글자 이상 입력해주세요.")
 	private String password;
 	private String passwordConfirm;
 	@Pattern(regexp="[가-힣]{2,6}", message="이름은 한글 2~6글자로 입력하세요.")

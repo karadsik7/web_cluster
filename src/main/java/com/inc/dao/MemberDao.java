@@ -23,6 +23,10 @@ public class MemberDao {
 	public int dualCheck(String id) {
 		return session.selectOne("member.dualCheck", id);
 	}
+
+	public int emailDualCheck(String email) {
+		return session.selectOne("member.emailCheck", email);
+	}
 	
 	
 	

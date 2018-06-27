@@ -54,17 +54,18 @@
 			<div class="form-group">
 				<label for="email" class="control-label col-sm-2">이메일</label>
 				<div class="col-sm-5">
-					<form:input type="text" class="form-control" path="email" />
-					<form:errors path="email" class="errors"/>
+					<form:input type="text" class="form-control" path="email" id="email"/>
+					<form:errors path="email" class="errors" />
+					<span id="email-error" class="errors"></span>
 				</div>
 				<div class="col-sm-3">
-					<span><a href="#" class="label label-info">인증 메일 발송</a></span>
+					<button type="button" onclick="mailSend();" class="btn btn-primary btn-xs">인증 메일 발송</button>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label for="emailCode" class="control-label col-sm-2">이메일 인증번호</label>
-				<div class="col-sm-6">
+				<div class="col-sm-5">
 					<form:input type="text" class="form-control" path="emailCode" placeholder="인증번호를 입력하세요" />
 					<form:errors path="emailCode" class="errors"/>
 				</div>
@@ -113,6 +114,33 @@
 			}
 		})
 	}
+	
+	function mailSend(){
+		$("#email-error").text("");
+		var email = $("#email").val();
+		console.log(email);
+		$.ajax({
+			url : "/member/mailSend",
+			type : "post",
+			data : {email : $("#email").val()},
+			success : function(data){
+				if(data == 'null'){
+					$("#email-error").text("이메일을 입력해주세요.");
+				}else if(data == 'dual'){
+					$("#email-error").text("중복된 이메일입니다.")
+				}else if(data == 'inconsistence'){
+					$("#email-error").text("이메일을 형식에 맞게 입력해주세요.");
+				}else if(data == 'error'){
+					$("#email-error").text("예기치 않은 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+				}else{
+					alert("인증메일을 전송했습니다. 인증번호를 입력해주세요.");
+					$("email-error").val("");
+				}
+			}
+		});
+		
+	}
+	
 </script>
 
 </html>

@@ -16,6 +16,10 @@
  		select count(*) from member where id = #{value}
  	</select>
  	
+ 	<select id="emailCheck" parameterType="String" resultType="int">
+ 		select count(*) from member where email = #{value}
+ 	</select>
+ 	
 </mapper>
 
 

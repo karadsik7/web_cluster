@@ -9,5 +9,9 @@ public interface MemberService {
 	public MemberVo findOne(MemberVo mvo);
 
 	public String dualCheck(String id);
+
+	public boolean emailDualCheck(String email);
+
+	public String mailSend(String email);
 	
 }

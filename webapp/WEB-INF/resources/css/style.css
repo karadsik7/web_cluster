@@ -8,6 +8,11 @@
 	font-family: 'Noto Sans KR', sans-serif;
 } 
 
+.errors{
+	font-size: 10pt;
+	color: red;
+	font-weight: bold; 
+}
 
 .navbar-brand{
 	font-size: 20pt; margin-left: 50px; text-shadow: 2px 2px 4px gray; letter-spacing: 5px;
