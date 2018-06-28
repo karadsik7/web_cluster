@@ -1,3 +1,11 @@
+create table member(
+    id varchar2(10) primary key,
+    password varchar2(10) not null,
+    name varchar2(30) not null,
+    email varchar2(30) not null unique,
+    gender char(1) check(gender in('m', 'f'))
+);
+
 select * from member;
 select * from member where email = 'karadsik7@naver.com';
 insert into member values('admin', '1234', '°ü¸®ÀÚ', 'a@b.c', 'm');
