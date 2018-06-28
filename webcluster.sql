@@ -21,5 +21,10 @@ create table freeBoard(
     depth number
 );
 
+create sequence seq_fBoard_id;
+
+insert into freeBoard values(seq_fBoard_id.nextval, '테스터', '테스트제목', '테스트본문', '127.0.0.1', sysdate, 0, 0, 0, 0);
+select * from freeBoard;
+desc freeBoard;
 select * from freeBoard;
 

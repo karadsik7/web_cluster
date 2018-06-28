@@ -28,7 +28,7 @@
 		</div>
 	</div>
 	<div class="body">
-		<table class="board">
+		<table class="board table table-striped table-hover">
 			<tr>
 				<th style="width:10%">번호</th>
 				<th style="width:55%">제목</th>
@@ -64,7 +64,7 @@
 			</c:forEach>
 		</table>
 		<div class="buttons">
-			<button type="button" onclick="location.href='${pageContext.request.contextPath}/board/add'" class="btn btn-primary">글쓰기</button>
+			<button type="button" onclick="location.href='/fboard/add'" class="btn btn-primary btn-lg">글쓰기</button>
 		</div>
 	</div>
 	<div class="footer">

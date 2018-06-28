@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+
+	<mvc:annotation-driven/>
+	<mvc:resources mapping="/css/**" 
+	               location="/WEB-INF/resources/css/" />
+	<mvc:resources mapping="/include/**" 
+	               location="/WEB-INF/resources/include/" />
+	<mvc:resources mapping="/vendor/**" 
+	               location="/WEB-INF/resources/css/vendor/" />
+	<mvc:resources mapping="/img/**" 
+	               location="/WEB-INF/resources/img/" />
+	<mvc:resources mapping="/webjars/**" 
+	               location="classpath:/META-INF/resources/webjars/" />                              
+	      
+	<bean name="mainController" class="com.inc.controller.MainController" />
+	<bean name="memberController" class="com.inc.controller.MemberController" 
+	p:memberService-ref="memberService"/>
+	<bean name="freeBoardController" class="com.inc.controller.FreeBoardController" 
+	p:freeBoardService-ref="freeBoardService" />
+	
+	      
+	<bean 
+      class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+      p:prefix="/WEB-INF/views"/>
+</beans>
+
+
+
+
+
+
+

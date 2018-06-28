@@ -1,6 +1,10 @@
 package com.inc.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
+
+import com.inc.vo.BoardVo;
 
 public class FreeBoardDao {
 
@@ -8,6 +12,10 @@ public class FreeBoardDao {
 
 	public void setSqlSession(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
+	}
+
+	public List<BoardVo> list() {
+		return sqlSession.selectList("freeBoard.list");
 	}
 
 	
