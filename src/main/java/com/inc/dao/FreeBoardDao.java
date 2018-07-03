@@ -18,6 +18,28 @@ public class FreeBoardDao {
 		return sqlSession.selectList("freeBoard.list");
 	}
 
+	public void add(BoardVo boardVo) {
+		sqlSession.insert("freeBoard.add", boardVo);
+	}
+
+	public BoardVo findOne(int id) {
+		return sqlSession.selectOne("freeBoard.selectOne", id);
+	}
+
+	public void hitUp(int id) {
+		sqlSession.update("freeBoard.hit", id);
+	}
+
+	public void update(BoardVo boardVo) {
+		sqlSession.update("freeBoard.update", boardVo);
+	}
+
+	public void delete(int id) {
+		sqlSession.delete("freeBoard.delete", id);
+	}
+	
+	
+
 	
 	
 	

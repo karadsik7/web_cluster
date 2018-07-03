@@ -18,8 +18,15 @@
 	<mvc:resources mapping="/img/**" 
 	               location="/WEB-INF/resources/img/" />
 	<mvc:resources mapping="/webjars/**" 
-	               location="classpath:/META-INF/resources/webjars/" />                              
-	      
+	               location="classpath:/META-INF/resources/webjars/" /> 
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/fboard/**"/>
+			<ref bean="loginInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<bean name="loginInterceptor" class="com.inc.interceptor.LoginInterceptor" />
 	<bean name="mainController" class="com.inc.controller.MainController" />
 	<bean name="memberController" class="com.inc.controller.MemberController" 
 	p:memberService-ref="memberService"/>

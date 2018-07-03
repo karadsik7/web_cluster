@@ -1,5 +1,10 @@
 package com.inc.vo;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import javax.ws.rs.DefaultValue;
+
 public class BoardVo {
 /*
 	ID      NOT NULL NUMBER       
@@ -11,11 +16,16 @@ public class BoardVo {
 	HIT              NUMBER       
 	REF              NUMBER       
 	STEP             NUMBER       
-	DEPTH            NUMBER*/
+	DEPTH            NUMBER
+	M_ID             VARCHAR2(10)
+	*/
 	
 	private int id;
+	@Pattern(regexp="[A-Za-z가-힣]{1,10}", message="이름은 1~10글자 이내로 작성해주세요")
 	private String name;
+	@Size(min=1, max=20, message="제목은 1글자부터 20글자 이내로 작성해주세요.")
 	private String title;
+	@Size(min=1, message="본문을 입력해주세요.")
 	private String content;
 	private String ip;
 	private String regdate;
@@ -23,8 +33,23 @@ public class BoardVo {
 	private int ref;
 	private int step;
 	private int depth;
+	private String m_id;
+	private MemberVo mvo;
 	
 	
+	
+	public MemberVo getMvo() {
+		return mvo;
+	}
+	public void setMvo(MemberVo mvo) {
+		this.mvo = mvo;
+	}
+	public String getM_id() {
+		return m_id;
+	}
+	public void setM_id(String m_id) {
+		this.m_id = m_id;
+	}
 	public int getId() {
 		return id;
 	}

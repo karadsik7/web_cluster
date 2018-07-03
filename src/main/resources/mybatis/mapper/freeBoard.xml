@@ -3,11 +3,48 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="freeBoard">
+ 	<!-- 
+ 	ID      NOT NULL NUMBER       
+	NAME    NOT NULL VARCHAR2(30) 
+	TITLE   NOT NULL VARCHAR2(60) 
+	CONTENT NOT NULL CLOB         
+	IP               VARCHAR2(20) 
+	REGDATE          DATE         
+	HIT              NUMBER       
+	REF              NUMBER       
+	STEP             NUMBER       
+	DEPTH            NUMBER -->
+ 
  
  	<select id="list" resultType="boardVo">
- 		select * from freeBoard
+ 		select * from freeBoard order by id desc
  	</select>
  	
+ 	<insert id="add" parameterType="boardVo">
+ 		insert into freeBoard values(seq_fBoard_id.nextval, #{name}, #{title}, 
+ 		#{content}, #{ip}, sysdate, 0, 0, 0, 0, #{m_id})
+ 	</insert>
+ 	
+ 	<select id="selectOne" parameterType="int" resultMap="selectMap">
+ 		select * from freeBoard where id = #{value}
+ 	</select>
+ 	
+ 	<resultMap type="boardVo" id="selectMap">
+ 		<id property="m_id" column="m_id"/>
+ 		<association property="mvo" column="m_id" javaType="memberVo" select="member.selectOne" />
+ 	</resultMap>
+ 	
+ 	<update id="hit" parameterType="int">
+ 		update freeBoard set hit = hit + 1 where id = #{value}
+ 	</update>
+ 	
+ 	<update id="update" parameterType="boardVo">
+ 		update freeBoard set title = #{title}, name = #{name}, content = #{content} where id = #{id}
+ 	</update>
+ 	
+ 	<delete id="delete" parameterType="int">
+ 		delete from freeBoard where id = #{value}
+ 	</delete>
 </mapper>
 
 

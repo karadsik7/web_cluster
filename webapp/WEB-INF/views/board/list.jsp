@@ -24,7 +24,7 @@
 				<option value="title_content">제목+내용</option>
 			</select>
 			<input type="text" id="search_text" value="${param.text }" />
-			<button type="button" onclick="search();" class="btn btn-success">검색</button>
+			<button type="button" onclick="search();" class="btn btn-success btn-lg">찾기</button>
 		</div>
 	</div>
 	<div class="body">
@@ -53,7 +53,7 @@
 						└▶
 						</c:if>
 					</c:forEach>
-					<a href="${pageContext.request.contextPath}/board/view?id=${bvo.id}&page=${param.page}">${bvo.title }</a></td>
+					<a href="${pageContext.request.contextPath}/fboard/view?id=${bvo.id}">${bvo.title }</a></td>
 				<td>${bvo.name }</td>
 				<td>
 					<f:parseDate var="date" value="${bvo.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/>

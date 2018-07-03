@@ -2,7 +2,9 @@ package com.inc.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,9 +12,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.inc.service.FreeBoardService;
 import com.inc.vo.BoardVo;
+import com.inc.vo.MemberVo;
 
 @Controller
 public class FreeBoardController {
@@ -37,14 +42,97 @@ public class FreeBoardController {
 	}
 	
 	@RequestMapping(value="/fboard/add", method=RequestMethod.POST)
-	public String add(@ModelAttribute BoardVo boardVo, BindingResult result, HttpSession session) {
-		//입력값 검증 및 필드에러 포워드
+	public String add(@ModelAttribute @Valid BoardVo boardVo, BindingResult result, HttpServletRequest request, HttpSession session) {
+		//입력값 검증 및 에러 포워드
 		if(result.hasErrors()) {
 			return "/board/add.jsp";
 		}
 		//성공시 데이터베이스 입력후 리다이렉트
-		
-		return "redirect:/";
+		MemberVo mvo = (MemberVo)session.getAttribute("member");
+		boardVo.setIp(request.getRemoteAddr());
+		boardVo.setM_id(mvo.getId());
+		freeBoardService.add(boardVo);
+		return "redirect:/fboard/list";
+	}
+	
+	@RequestMapping(value="/fboard/view", method=RequestMethod.GET)
+	public String view(@RequestParam int id, Model model, HttpSession session) {
+		//뷰페이지에 띄울 데이터 수신
+		BoardVo bvo = freeBoardService.findOne(id);
+		model.addAttribute("board", bvo);
+		if(session.getAttribute("member") != null) {
+			MemberVo loginMember = (MemberVo)session.getAttribute("member");
+			model.addAttribute("loginMemberId", loginMember.getId());
+		}else {
+			model.addAttribute("loginMemberId", "guest");
+		}
+		//조회수 추가
+		freeBoardService.hitUp(id);
+		return "/board/view.jsp";
+	}
+	
+	@RequestMapping(value="/fboard/update", method=RequestMethod.GET)
+	public String updateForm(@RequestParam int id, HttpSession session, Model model) {
+		BoardVo boardVo = freeBoardService.findOne(id);
+		if(session.getAttribute("member") == null) {
+			model.addAttribute("msg", "비로그인 사용자는 이용할 수 없습니다.");
+			model.addAttribute("url", "/fboard/list");
+			return "/error.jsp";
+		}else if(!((MemberVo)session.getAttribute("member")).getId().equals(boardVo.getM_id())){
+			System.out.println(((MemberVo)session.getAttribute("member")).getId());
+			System.out.println(boardVo.getM_id());
+			model.addAttribute("msg", "타인의 게시물은 수정이 불가능합니다.");
+			model.addAttribute("url", "/fboard/list");
+			return "/error.jsp";
+		}else {
+			//수정폼으로 보내줌
+			model.addAttribute("boardVo", boardVo);
+			return "/board/update.jsp?id="+boardVo.getId();
+		}
+	}
+	
+	
+	@RequestMapping(value="/fboard/update", method=RequestMethod.POST)
+	public String update(@ModelAttribute @Valid BoardVo boardVo, BindingResult result, HttpSession session, Model model) {
+		BoardVo originVo = freeBoardService.findOne(boardVo.getId());
+		//보안상 세션비교
+		if(session.getAttribute("member") == null) {
+			model.addAttribute("msg", "비로그인 사용자는 이용할 수 없습니다.");
+			model.addAttribute("url", "/fboard/list");
+			return "/error.jsp";
+		}else if(!((MemberVo)session.getAttribute("member")).getId().equals(originVo.getM_id())){
+			model.addAttribute("msg", "타인의 게시물은 수정이 불가능합니다.");
+			model.addAttribute("url", "/fboard/list");
+			return "/error.jsp";
+		}else if(result.hasErrors()){
+			//수정된 글이 정규표현식에 맞지 않을 경우
+			model.addAttribute("boardVo", boardVo);
+			return "/board/update.jsp?id="+boardVo.getId();
+		}else {
+			//수정
+			freeBoardService.update(boardVo);
+		}
+		//리다이렉트
+		return "redirect:/fboard/view?id="+boardVo.getId();
+	}
+	
+	@RequestMapping(value="/fboard/del", method=RequestMethod.POST)
+	@ResponseBody
+	public String delete(@RequestParam int id, HttpSession session, Model model) {
+		BoardVo originVo = freeBoardService.findOne(id);
+		//보안상 세션비교
+		if(session.getAttribute("member") == null) {
+			model.addAttribute("msg", "비로그인 사용자는 이용할 수 없습니다.");
+			model.addAttribute("url", "/fboard/list");
+			return "/error.jsp";
+		}else if(!((MemberVo)session.getAttribute("member")).getId().equals(originVo.getM_id())){
+			model.addAttribute("msg", "타인의 게시물은 수정이 불가능합니다.");
+			model.addAttribute("url", "/fboard/list");
+			return "/error.jsp";
+		}else {
+			freeBoardService.delete(id);
+			return "y";
+		}
 	}
 	
 	
