@@ -27,19 +27,6 @@
 		}
 	}
 	
-	function replySend(f){
-		if(/^.{2,10}$/.test(f.name.value) == false){
-			alert("이름은 2글자이상 10글자 이하로 작성해야합니다.");
-			f.name.focus();
-			return;
-		}else if(/^.{2,100}$/.test(f.content.value) == false){
-			alert("댓글 내용은 2글자 이상 100글자 이하로만 작성해야 합니다.");
-			f.content.focus();
-			return;
-		}
-		f.action = "${pageContext.request.contextPath}/reply/add";
-		f.submit();
-	}
 </script>
 <style>
 	.table{
@@ -74,7 +61,7 @@
 			<button type="button" style="text-align: right" class="btn btn-lg btn-info" 
 			onclick="location.href='${pageContext.request.contextPath}/fboard/list'">목록</button>
 			<button type="button" class="btn btn-lg btn-primary" 
-			onclick="location.href='${pageContext.request.contextPath}/board/comment?id=${board.id }'">답글</button>
+			onclick="location.href='${pageContext.request.contextPath}/fboard/reply?id=${board.id }'">답글</button>
 			<c:if test="${board.mvo.id == loginMemberId}">
 			<button type="button" style="text-align: right;" class="btn btn-lg btn-success"
 			onclick="mod(${board.id});">수정</button>

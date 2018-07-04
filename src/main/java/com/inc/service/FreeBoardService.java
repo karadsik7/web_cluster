@@ -2,6 +2,8 @@ package com.inc.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.inc.vo.BoardVo;
 
 public interface FreeBoardService {
@@ -17,6 +19,10 @@ public interface FreeBoardService {
 	void update(BoardVo boardVo);
 
 	void delete(int id);
+
+	void updateStep(BoardVo boardVo);
+
+	void addReply(BoardVo boardVo);
 
 	
 	

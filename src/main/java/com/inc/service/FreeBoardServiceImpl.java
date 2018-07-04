@@ -22,6 +22,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 
 	@Override
 	public void add(BoardVo boardVo) {
+		
 		freeBoardDao.add(boardVo);
 	}
 
@@ -43,6 +44,22 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 	@Override
 	public void delete(int id) {
 		freeBoardDao.delete(id);
+	}
+
+	@Override
+	public void updateStep(BoardVo boardVo) {
+		//답글을 쓰는 원본글의 ref depth step 정보를 가져옴
+		BoardVo originVo = freeBoardDao.findOne(boardVo.getId());
+		//ref depth step 설정
+		boardVo.setRef(originVo.getRef());
+		boardVo.setDepth(originVo.getDepth() + 1);
+		boardVo.setStep(originVo.getStep() + 1);
+		freeBoardDao.updateStep(boardVo);
+	}
+
+	@Override
+	public void addReply(BoardVo boardVo) {
+		freeBoardDao.addReply(boardVo);
 	}
 	
 	

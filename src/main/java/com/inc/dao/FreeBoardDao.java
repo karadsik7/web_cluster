@@ -37,6 +37,14 @@ public class FreeBoardDao {
 	public void delete(int id) {
 		sqlSession.delete("freeBoard.delete", id);
 	}
+
+	public void updateStep(BoardVo boardVo) {
+		sqlSession.update("freeBoard.updateStep", boardVo);
+	}
+
+	public void addReply(BoardVo boardVo) {
+		sqlSession.insert("freeBoard.addReply", boardVo);
+	}
 	
 	
 

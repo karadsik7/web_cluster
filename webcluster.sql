@@ -29,10 +29,17 @@ create table freeBoard(
     depth number
 );
 
+
+
 create sequence seq_fBoard_id;
 
 insert into freeBoard values(seq_fBoard_id.nextval, '테스터', '테스트제목', '테스트본문', '127.0.0.1', sysdate, 0, 0, 0, 0);
 select * from freeBoard;
 desc freeBoard;
-select * from freeBoard;
+
+delete from freeBoard;
+
+alter table freeBoard add u_id varchar2(10) constraint fk_member_id references member(id);
+
+alter table freeBoard rename column u_id to m_id;
 

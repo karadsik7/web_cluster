@@ -57,7 +57,7 @@
 				<td>${bvo.name }</td>
 				<td>
 					<f:parseDate var="date" value="${bvo.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/>
-					<f:formatDate value="${date }" pattern="yyyy/MM/dd" />
+					<f:formatDate value="${date }" pattern="yyyy/MM/dd HH:mm:ss" />
 				</td>
 				<td>${bvo.hit }</td>
 			</tr>

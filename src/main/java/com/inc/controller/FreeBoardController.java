@@ -135,6 +135,34 @@ public class FreeBoardController {
 		}
 	}
 	
+	@RequestMapping(value="/fboard/reply", method=RequestMethod.GET)
+	public String replyForm(@RequestParam int id, Model model) {
+		//원본글의 정보를 가져오기
+		BoardVo originVo = freeBoardService.findOne(id);
+		//원본글의 내용을 같이 포워드
+		model.addAttribute("board", originVo);
+		model.addAttribute("boardVo", new BoardVo());
+		return "/board/reply.jsp";
+	}
+	
+	@RequestMapping(value="/fboard/reply", method=RequestMethod.POST)
+	public String addReply(@ModelAttribute @Valid BoardVo boardVo, BindingResult result, HttpServletRequest request, HttpSession session) {
+		//데이터에 유효성에 문제가 있을 시 다시 돌려보냄
+		if(result.hasErrors()) {
+			return "/board/reply.jsp";
+		}
+		//사용자 정보 저장
+		boardVo.setIp(request.getRemoteAddr());
+		MemberVo mvo = (MemberVo)session.getAttribute("member");
+		boardVo.setM_id(mvo.getId());
+		//정렬을 위해 이전의 답글들의 step을 비교해 뒤로 미룸 (원본글은 올리면 안되므로 boardVo의 step값보다 같거나 크면 올림)
+		freeBoardService.updateStep(boardVo);
+		freeBoardService.addReply(boardVo);
+		
+		return "redirect:/fboard/list";
+	}
+	
+	
 	
 	
 	

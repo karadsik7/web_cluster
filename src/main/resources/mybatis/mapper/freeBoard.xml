@@ -17,12 +17,12 @@
  
  
  	<select id="list" resultType="boardVo">
- 		select * from freeBoard order by id desc
+ 		select * from freeBoard order by ref desc, step asc
  	</select>
  	
  	<insert id="add" parameterType="boardVo">
  		insert into freeBoard values(seq_fBoard_id.nextval, #{name}, #{title}, 
- 		#{content}, #{ip}, sysdate, 0, 0, 0, 0, #{m_id})
+ 		#{content}, #{ip}, sysdate+9/24, 0, seq_fBoard_id.currval, 0, 0, #{m_id})
  	</insert>
  	
  	<select id="selectOne" parameterType="int" resultMap="selectMap">
@@ -45,6 +45,16 @@
  	<delete id="delete" parameterType="int">
  		delete from freeBoard where id = #{value}
  	</delete>
+ 	
+ 	<update id="updateStep" parameterType="boardVo">
+ 		update freeBoard set step = step + 1 where ref = #{ref} and step >= #{step}
+ 	</update>
+ 	
+ 	<insert id="addReply" parameterType="boardVo">
+ 		insert into freeBoard values(seq_fBoard_id.nextval, #{name}, #{title}, 
+ 		#{content}, #{ip}, sysdate+9/24, 0, #{ref}, #{step}, #{depth}, #{m_id})
+ 	</insert>
+ 	
 </mapper>
 
 
