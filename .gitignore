@@ -2,4 +2,5 @@
 /.classpath
 /.project
 /.metadata/
-/target/
+/target/**
+/webapp/WEB-INF/classes/**
