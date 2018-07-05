@@ -31,6 +31,8 @@ create table freeBoard(
 
 
 
+select rownum as rnum from freeBoard;
+
 create sequence seq_fBoard_id;
 
 insert into freeBoard values(seq_fBoard_id.nextval, '테스터', '테스트제목', '테스트본문', '127.0.0.1', sysdate, 0, 0, 0, 0);
@@ -43,3 +45,4 @@ alter table freeBoard add u_id varchar2(10) constraint fk_member_id references m
 
 alter table freeBoard rename column u_id to m_id;
 
+select to_char(sysdate + 9/24, 'YYYY/MM/DD HH24:MI:SS') from dual;

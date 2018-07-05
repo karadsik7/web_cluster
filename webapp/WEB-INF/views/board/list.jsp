@@ -7,7 +7,46 @@
 <head>
 	<jsp:include page="/WEB-INF/include/header.jsp" />
 	<link href="/css/board.css" rel="stylesheet">
+	<style>
+		.center{
+			text-align:center;
+		}
+		.pagination{
+			display:inline-block;
+		}
+	</style>
 </head>
+<script>
+	window.onload = function(){
+		for(var option of $('#search_option').children()){
+			if($(option).val() == '${param.option}'){
+				$(option).attr('selected', 'selected');
+			}
+		}
+		$('#search_text').val('${param.text}');
+		lock();
+	}
+	
+	function lock(){
+		if($('#search_option').val() == 'all'){
+			$('#search_text').attr('disabled', 'disabled');
+		}else{
+			$('#search_text').removeAttr('disabled');
+		}
+	}
+	
+	function search(){
+		var option = $('#search_option').val();
+		var text = $('#search_text').val();
+		if(text == "" && option == 'all'){
+			alert("검색어를 입력하세요.");
+			$('#search_text').focus();
+			return;
+		}else{
+			location.href = '/fboard/list?option='+option+'&text='+text;
+		}
+	}
+</script>
 <body>
 	<jsp:include page="/WEB-INF/include/nav.jsp" />
 	<header class="masthead" style="background-image: url('/img/board.png') ">
@@ -67,10 +106,10 @@
 			<button type="button" onclick="location.href='/fboard/add'" class="btn btn-primary btn-lg">글쓰기</button>
 		</div>
 	</div>
-	<div class="footer">
-		<div class="paging text_center">
-			${paging }
-		</div>
+	<div class="center">
+		<ul class="pagination">
+			${paging}
+		</ul>
 	</div>
 </div>
 <!-- script library -->

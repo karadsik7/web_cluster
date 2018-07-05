@@ -1,6 +1,8 @@
 package com.inc.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.inc.service.FreeBoardService;
+import com.inc.service.FreeBoardServiceImpl;
+import com.inc.util.Paging;
 import com.inc.vo.BoardVo;
 import com.inc.vo.MemberVo;
 
@@ -28,10 +32,30 @@ public class FreeBoardController {
 		this.freeBoardService = freeBoardService;
 	}
 	
+	private Paging paging;
+	
+	public void setPaging(Paging paging) {
+		this.paging = paging;
+	}
+
 	@RequestMapping(value="/fboard/list", method=RequestMethod.GET)
-	public String list(Model model) {
-		List<BoardVo> boardList = freeBoardService.list();
+	public String list(Model model, @RequestParam(required=false) String text, 
+			@RequestParam(required=false) String option, @RequestParam(defaultValue="1") int page) {
+		Map<String, Object> searchMap = new HashMap<>();
+		searchMap.put("text", text);
+		searchMap.put("option", option);
+		searchMap.put("page", page);
+		
+		String searchParam = "";
+		if(text != null && option != "all") {
+			searchParam = "&option="+option+"&text="+text;
+		}
+		List<BoardVo> boardList = freeBoardService.list(searchMap);
+		model.addAttribute(searchMap);
 		model.addAttribute("boardList", boardList);
+		model.addAttribute("paging", paging.getPaging("/fboard/list", page, 
+				freeBoardService.getTotalCount(searchMap), FreeBoardServiceImpl.maxCountOfOneList, 
+				FreeBoardServiceImpl.maxCountOfOnePage, searchParam));
 		return "/board/list.jsp";
 	}
 	

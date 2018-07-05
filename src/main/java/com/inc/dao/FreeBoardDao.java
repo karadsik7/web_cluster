@@ -1,6 +1,7 @@
 package com.inc.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -14,8 +15,8 @@ public class FreeBoardDao {
 		this.sqlSession = sqlSession;
 	}
 
-	public List<BoardVo> list() {
-		return sqlSession.selectList("freeBoard.list");
+	public List<BoardVo> list(Map<String, Object> searchMap) {
+		return sqlSession.selectList("freeBoard.list", searchMap);
 	}
 
 	public void add(BoardVo boardVo) {
@@ -44,6 +45,10 @@ public class FreeBoardDao {
 
 	public void addReply(BoardVo boardVo) {
 		sqlSession.insert("freeBoard.addReply", boardVo);
+	}
+
+	public int getTotalCount(Map<String, Object> searchMap) {
+		return sqlSession.selectOne("freeBoard.totalCount", searchMap);
 	}
 	
 	

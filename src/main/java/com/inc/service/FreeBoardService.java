@@ -1,14 +1,13 @@
 package com.inc.service;
 
 import java.util.List;
-
-import javax.validation.Valid;
+import java.util.Map;
 
 import com.inc.vo.BoardVo;
 
 public interface FreeBoardService {
 
-	List<BoardVo> list();
+	List<BoardVo> list(Map<String, Object> searchMap);
 
 	void add(BoardVo boardVo);
 
@@ -23,6 +22,8 @@ public interface FreeBoardService {
 	void updateStep(BoardVo boardVo);
 
 	void addReply(BoardVo boardVo);
+
+	int getTotalCount(Map<String, Object> searchMap);
 
 	
 	

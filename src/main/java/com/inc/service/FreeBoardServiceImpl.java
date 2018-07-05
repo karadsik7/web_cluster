@@ -1,23 +1,33 @@
 package com.inc.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.inc.dao.FreeBoardDao;
 import com.inc.vo.BoardVo;
 
-import oracle.net.aso.b;
 
 public class FreeBoardServiceImpl implements FreeBoardService{
 
 	private FreeBoardDao freeBoardDao;
+	
+	public static final int maxCountOfOneList = 10;
+	public static final int maxCountOfOnePage = 10;
 
 	public void setFreeBoardDao(FreeBoardDao freeBoardDao) {
 		this.freeBoardDao = freeBoardDao;
 	}
 
 	@Override
-	public List<BoardVo> list() {
-		return freeBoardDao.list();
+	public List<BoardVo> list(Map<String, Object> searchMap) {
+		int page = (int)searchMap.get("page");
+		int startRownum = (page - 1) * maxCountOfOneList + 1;
+		int endRownum = startRownum + (maxCountOfOneList - 1);
+		
+		searchMap.put("start", startRownum);
+		searchMap.put("end", endRownum);
+		return freeBoardDao.list(searchMap);
 	}
 
 	@Override
@@ -61,6 +71,13 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 	public void addReply(BoardVo boardVo) {
 		freeBoardDao.addReply(boardVo);
 	}
+
+	@Override
+	public int getTotalCount(Map<String, Object> searchMap) {
+		return freeBoardDao.getTotalCount(searchMap);
+	}
+	
+	
 	
 	
 	

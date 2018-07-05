@@ -16,8 +16,26 @@
 	DEPTH            NUMBER -->
  
  
- 	<select id="list" resultType="boardVo">
- 		select * from freeBoard order by ref desc, step asc
+ 	<select id="list" resultType="boardVo" parameterType="Map">
+ 		select * from (select rownum as rnum, b.* from (select * from freeBoard 
+ 			<if test="option != 'all' and text != null">
+ 			where
+ 				<choose>
+ 					<when test="option == 'title'">
+ 						title like '%'||#{text}||'%'
+ 					</when>
+ 					<when test="option == 'name'">
+ 						name like '%'||#{text}||'%'
+ 					</when>
+ 					<when test="option == 'content'">
+ 						content like '%'||#{text}||'%'
+ 					</when>
+ 					<when test="option == 'title_content'">
+						title like '%'||#{text}||'%' or content like '%'||#{text}||'%' 
+					</when>
+ 				</choose>
+ 			</if>
+ 		order by ref desc, step asc) b ) where rnum between #{start} and #{end}
  	</select>
  	
  	<insert id="add" parameterType="boardVo">
@@ -54,6 +72,27 @@
  		insert into freeBoard values(seq_fBoard_id.nextval, #{name}, #{title}, 
  		#{content}, #{ip}, sysdate+9/24, 0, #{ref}, #{step}, #{depth}, #{m_id})
  	</insert>
+ 	
+ 	<select id="totalCount" parameterType="Map" resultType="int">
+ 		select count(*) from freeBoard
+ 		<if test="option != null and option != 'all'">
+			where
+			<choose>
+				<when test="option == 'title'">
+					title like '%'||#{text}||'%'
+				</when>
+				<when test="option == 'name'">
+					name like '%'||#{text}||'%'
+				</when>
+				<when test="option == 'content'">
+					content like '%'||#{text}||'%'
+				</when>
+				<when test="option == 'title_content'">
+					title like '%'||#{text}||'%' or content like '%'||#{text}||'%' 
+				</when>
+			</choose>
+		</if> 
+ 	</select>
  	
 </mapper>
 

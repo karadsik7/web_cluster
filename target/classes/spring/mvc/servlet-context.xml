@@ -27,11 +27,11 @@
 	</mvc:interceptors>
 	
 	<bean name="loginInterceptor" class="com.inc.interceptor.LoginInterceptor" />
-	<bean name="mainController" class="com.inc.controller.MainController" />
+	<bean name="mainController" class="com.inc.controller.MainController" p:freeBoardService-ref="freeBoardService"/>
 	<bean name="memberController" class="com.inc.controller.MemberController" 
 	p:memberService-ref="memberService"/>
 	<bean name="freeBoardController" class="com.inc.controller.FreeBoardController" 
-	p:freeBoardService-ref="freeBoardService" />
+	p:freeBoardService-ref="freeBoardService" p:paging-ref="paging"/>
 	
 	      
 	<bean 
