@@ -56,7 +56,8 @@ public class MemberController {
 			return "/member/signup.jsp";
 		}
 		//암호화
-		SHA256Encryptor.shaEncrypt(memberVo.getPassword());
+		String encryptedPassword = SHA256Encryptor.shaEncrypt(memberVo.getPassword()); 
+		memberVo.setPassword(encryptedPassword);
 		memberService.add(memberVo);
 		return "redirect:/";
 	}
@@ -69,7 +70,9 @@ public class MemberController {
 	@RequestMapping(value="/member/login", method=RequestMethod.POST)
 	public String login(HttpServletRequest request, @ModelAttribute MemberVo mvo, Model model) {
 		//암호화
-		mvo.setPassword(SHA256Encryptor.shaEncrypt(mvo.getPassword()));
+		String encryptedPassword = SHA256Encryptor.shaEncrypt(mvo.getPassword()); 
+		mvo.setPassword(encryptedPassword);
+		
 		MemberVo findMember = memberService.findOne(mvo);
 		if(findMember == null) {
 			model.addAttribute("msg", "아이디 혹은 비밀번호가 틀렸습니다.");
