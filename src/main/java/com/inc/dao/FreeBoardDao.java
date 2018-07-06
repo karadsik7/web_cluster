@@ -50,6 +50,14 @@ public class FreeBoardDao {
 	public int getTotalCount(Map<String, Object> searchMap) {
 		return sqlSession.selectOne("freeBoard.totalCount", searchMap);
 	}
+
+	public void notice(int id) {
+		sqlSession.update("freeBoard.notice", id);
+	}
+
+	public void delNotice(int id) {
+		sqlSession.update("freeBoard.delNotice", id);
+	}
 	
 	
 

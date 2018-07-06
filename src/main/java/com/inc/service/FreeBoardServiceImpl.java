@@ -1,11 +1,13 @@
 package com.inc.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import com.inc.dao.FreeBoardDao;
 import com.inc.vo.BoardVo;
+import com.inc.vo.MemberVo;
 
 
 public class FreeBoardServiceImpl implements FreeBoardService{
@@ -75,6 +77,36 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 	@Override
 	public int getTotalCount(Map<String, Object> searchMap) {
 		return freeBoardDao.getTotalCount(searchMap);
+	}
+
+	@Override
+	public boolean checkAdmin(HttpSession session) {
+		MemberVo enterMember = (MemberVo)session.getAttribute("member");
+		if(enterMember.getAdmin() == 1) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+	@Override
+	public void notice(int id) {
+		freeBoardDao.notice(id);
+	}
+	
+	@Override
+	public void delNotice(int id) {
+		freeBoardDao.delNotice(id);
+	}
+
+	@Override
+	public boolean checkNotice(int id) {
+		BoardVo bvo = freeBoardDao.findOne(id);
+		if(bvo.getNotice() == 1) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 	
 	

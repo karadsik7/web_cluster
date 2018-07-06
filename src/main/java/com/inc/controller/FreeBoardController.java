@@ -51,6 +51,7 @@ public class FreeBoardController {
 			searchParam = "&option="+option+"&text="+text;
 		}
 		List<BoardVo> boardList = freeBoardService.list(searchMap);
+		
 		model.addAttribute(searchMap);
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("paging", paging.getPaging("/fboard/list", page, 
@@ -83,6 +84,12 @@ public class FreeBoardController {
 	public String view(@RequestParam int id, Model model, HttpSession session) {
 		//뷰페이지에 띄울 데이터 수신
 		BoardVo bvo = freeBoardService.findOne(id);
+		
+		boolean isAdmin = freeBoardService.checkAdmin(session);
+		boolean isNotice = freeBoardService.checkNotice(id);
+		
+		model.addAttribute("isNotice", isNotice);
+		model.addAttribute("isAdmin", isAdmin);
 		model.addAttribute("board", bvo);
 		if(session.getAttribute("member") != null) {
 			MemberVo loginMember = (MemberVo)session.getAttribute("member");
@@ -149,8 +156,9 @@ public class FreeBoardController {
 			model.addAttribute("msg", "비로그인 사용자는 이용할 수 없습니다.");
 			model.addAttribute("url", "/fboard/list");
 			return "/error.jsp";
-		}else if(!((MemberVo)session.getAttribute("member")).getId().equals(originVo.getM_id())){
-			model.addAttribute("msg", "타인의 게시물은 수정이 불가능합니다.");
+		}else if(!((MemberVo)session.getAttribute("member")).getId().equals(originVo.getM_id())
+				&& !freeBoardService.checkAdmin(session)){
+			model.addAttribute("msg", "타인의 게시물은 삭제가 불가능합니다.");
 			model.addAttribute("url", "/fboard/list");
 			return "/error.jsp";
 		}else {
@@ -184,6 +192,34 @@ public class FreeBoardController {
 		freeBoardService.addReply(boardVo);
 		
 		return "redirect:/fboard/list";
+	}
+	
+	@RequestMapping(value="/fboard/notice", method=RequestMethod.POST)
+	@ResponseBody
+	public String notice(@RequestParam int id, HttpSession session) {
+		if(!freeBoardService.checkAdmin(session)) {
+			return "notAdmin";
+		}
+		try {
+			freeBoardService.notice(id);
+			return "success";
+		} catch (RuntimeException e) {
+			return "error";
+		}
+	}
+	
+	@RequestMapping(value="/fboard/delNotice", method=RequestMethod.POST)
+	@ResponseBody
+	public String delNotice(@RequestParam int id, HttpSession session) {
+		if(!freeBoardService.checkAdmin(session)) {
+			return "notAdmin";
+		}
+		try {
+			freeBoardService.delNotice(id);
+			return "success";
+		} catch (RuntimeException e) {
+			return "error";
+		}
 	}
 	
 	

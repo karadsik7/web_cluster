@@ -15,8 +15,15 @@ public class MemberVo {
 	@Pattern(regexp="[mf]{1}", message="올바르지 않은 데이터 접근입니다.")
 	private String gender;
 	private String emailCode;
+	private int admin;
 	
 	
+	public int getAdmin() {
+		return admin;
+	}
+	public void setAdmin(int admin) {
+		this.admin = admin;
+	}
 	public String getEmailCode() {
 		return emailCode;
 	}

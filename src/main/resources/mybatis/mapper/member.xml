@@ -5,7 +5,7 @@
 <mapper namespace="member">
  
  	<insert id="add" parameterType="memberVo">
- 		insert into member values(#{id}, #{password}, #{name}, #{email}, #{gender})
+ 		insert into member values(#{id}, #{password}, #{name}, #{email}, #{gender}, 0)
  	</insert>
  
  	<select id="findOne" parameterType="memberVo" resultType="memberVo">

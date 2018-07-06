@@ -14,6 +14,9 @@
 		.pagination{
 			display:inline-block;
 		}
+		.notice{
+			background-color: #FFFF99 !important;
+		}
 	</style>
 </head>
 <script>
@@ -81,9 +84,12 @@
 			</tr>
 			</c:if>
 			<c:forEach var="bvo" items="${boardList }">
-			<tr>
+			<tr <c:if test="${bvo.notice == 1}">class="notice"</c:if>>
 				<td>${bvo.id }</td>
-				<td style="text-align: left;">
+				<td style="text-align: left;" >
+					<c:if test="${bvo.notice == 1}">
+						<span class="label label-danger">공지</span>
+					</c:if>
 					<c:forEach var="i" begin="1" end="${bvo.depth }">
 						<c:if test="${i != bvo.depth}">
 						&nbsp;&nbsp;&nbsp;
@@ -92,7 +98,7 @@
 						└▶
 						</c:if>
 					</c:forEach>
-					<a href="${pageContext.request.contextPath}/fboard/view?id=${bvo.id}">${bvo.title }</a></td>
+					<a href="${pageContext.request.contextPath}/fboard/view?id=${bvo.id}">${bvo.title }</a>
 				<td>${bvo.name }</td>
 				<td>
 					<f:parseDate var="date" value="${bvo.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/>

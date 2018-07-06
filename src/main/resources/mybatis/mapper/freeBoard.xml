@@ -35,12 +35,12 @@
 					</when>
  				</choose>
  			</if>
- 		order by ref desc, step asc) b ) where rnum between #{start} and #{end}
+ 		order by notice desc, ref desc, step asc) b ) where rnum between #{start} and #{end}
  	</select>
  	
  	<insert id="add" parameterType="boardVo">
  		insert into freeBoard values(seq_fBoard_id.nextval, #{name}, #{title}, 
- 		#{content}, #{ip}, sysdate+9/24, 0, seq_fBoard_id.currval, 0, 0, #{m_id})
+ 		#{content}, #{ip}, sysdate+9/24, 0, seq_fBoard_id.currval, 0, 0, #{m_id}, 0)
  	</insert>
  	
  	<select id="selectOne" parameterType="int" resultMap="selectMap">
@@ -93,6 +93,15 @@
 			</choose>
 		</if> 
  	</select>
+ 	
+ 	<update id="notice" parameterType="int">
+ 		update freeBoard set notice = 1 where id = #{value}
+ 	</update>
+ 	
+ 	<update id="delNotice" parameterType="int">
+ 		update freeBoard set notice = 0 where id = #{value}
+ 	</update>
+ 	
  	
 </mapper>
 

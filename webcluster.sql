@@ -57,3 +57,9 @@ alter table freeBoard add constraint fk_member_id foreign key(m_id) references m
 select * from tabs;
 select * from user_constraints where table_name = 'FREEBOARD';
 select * from member;
+alter table member add admin number(1) check(admin in(0, 1));
+update member set admin = 1 where id = 'admin';
+select * from member;
+
+alter table freeBoard add notice number(1) check(notice in(0, 1));
+select * from freeBoard;

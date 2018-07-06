@@ -35,9 +35,14 @@ public class BoardVo {
 	private int depth;
 	private String m_id;
 	private MemberVo mvo;
+	private int notice;
 	
-	
-	
+	public int getNotice() {
+		return notice;
+	}
+	public void setNotice(int notice) {
+		this.notice = notice;
+	}
 	public MemberVo getMvo() {
 		return mvo;
 	}

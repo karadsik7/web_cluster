@@ -3,6 +3,8 @@ package com.inc.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import com.inc.vo.BoardVo;
 
 public interface FreeBoardService {
@@ -24,6 +26,14 @@ public interface FreeBoardService {
 	void addReply(BoardVo boardVo);
 
 	int getTotalCount(Map<String, Object> searchMap);
+
+	boolean checkAdmin(HttpSession session);
+
+	void notice(int id);
+
+	boolean checkNotice(int id);
+
+	void delNotice(int id);
 
 	
 	

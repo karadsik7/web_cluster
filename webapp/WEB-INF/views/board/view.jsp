@@ -27,6 +27,49 @@
 		}
 	}
 	
+	function notice(id){
+		if(confirm("이 글을 공지로 등록하시겠습니까?")){
+			$.ajax({
+				url : '/fboard/notice',
+				type : 'post',
+				data : {id : id},
+				success : function(data){
+					if(data == 'notAdmin'){
+						alert("비정상적 접근입니다.");
+						return;
+					}else if(data == 'error'){
+						alert("에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
+						return;
+					}else if(data == 'success'){
+						alert("공지로 등록했습니다.");
+						location.href='/fboard/view?id='+id;
+					}
+				}
+			});
+		}
+	}
+	
+	function delNotice(id){
+		if(confirm("공지에서 해제하시겠습니까?")){
+			$.ajax({
+				url : '/fboard/delNotice',
+				type : 'post',
+				data : {id : id},
+				success : function(data){
+					if(data == 'notAdmin'){
+						alert("비정상적 접근입니다.");
+						return;
+					}else if(data == 'error'){
+						alert("에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
+						return;
+					}else if(data == 'success'){
+						alert("일반글로 전환하였습니다.");
+						location.href='/fboard/view?id='+id;
+					}
+				}
+			});
+		}
+	}
 </script>
 <style>
 	.table{
@@ -41,6 +84,14 @@
 </header>
 <div class="container">
 	<div class="header">
+		<c:if test="${isAdmin && !isNotice}">
+			<button type="button" class="btn btn-lg btn-warning" 
+			onclick="notice(${board.id});">이 글을 공지사항으로</button>
+		</c:if>
+		<c:if test="${isAdmin && isNotice}">
+			<button type="button" class="btn btn-lg btn-warning" 
+			onclick="delNotice(${board.id});">공지사항 해제</button>
+		</c:if>
 	</div>
 	<div class="body">
 		<table class="board-view table table-bordered table-hover">
@@ -65,6 +116,8 @@
 			<c:if test="${board.mvo.id == loginMemberId}">
 			<button type="button" style="text-align: right;" class="btn btn-lg btn-success"
 			onclick="mod(${board.id});">수정</button>
+			</c:if>
+			<c:if test="${board.mvo.id == loginMemberId || isAdmin}">
 			<button type="button" style="text-align: right" class="btn btn-lg btn-danger"
 			onclick="del(${board.id});">삭제</button>
 			</c:if>
