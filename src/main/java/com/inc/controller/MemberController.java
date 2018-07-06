@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.inc.encryptor.SHA256Encryptor;
 import com.inc.service.MemberService;
 import com.inc.vo.MemberVo;
 
@@ -54,6 +55,8 @@ public class MemberController {
 		if(result.hasErrors()) {
 			return "/member/signup.jsp";
 		}
+		//암호화
+		SHA256Encryptor.shaEncrypt(memberVo.getPassword());
 		memberService.add(memberVo);
 		return "redirect:/";
 	}
@@ -65,6 +68,8 @@ public class MemberController {
 	
 	@RequestMapping(value="/member/login", method=RequestMethod.POST)
 	public String login(HttpServletRequest request, @ModelAttribute MemberVo mvo, Model model) {
+		//암호화
+		mvo.setPassword(SHA256Encryptor.shaEncrypt(mvo.getPassword()));
 		MemberVo findMember = memberService.findOne(mvo);
 		if(findMember == null) {
 			model.addAttribute("msg", "아이디 혹은 비밀번호가 틀렸습니다.");
