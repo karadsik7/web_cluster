@@ -1,5 +1,6 @@
 package com.inc.vo;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 public class MemberVo {

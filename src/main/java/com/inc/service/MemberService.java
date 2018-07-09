@@ -13,5 +13,9 @@ public interface MemberService {
 	public boolean emailDualCheck(String email);
 
 	public String mailSend(String email);
+
+	public void modify(MemberVo memberVo);
+
+	public String findId(String email);
 	
 }

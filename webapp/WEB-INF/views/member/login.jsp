@@ -31,7 +31,10 @@
 			</div>
 			<br />
 			<div class="form-group">
-				<div class="col-sm-offset-3 col-sm-6">
+				<div class="col-sm-offset-3 col-sm-3">
+					<button class="btn btn-success btn-block" type="button" onclick="location.href='/member/search'">아이디/비밀번호 찾기</button>
+				</div>
+				<div class="col-sm-3">
 					<button class="btn btn-primary btn-block">로그인</button>
 				</div>
 			</div>

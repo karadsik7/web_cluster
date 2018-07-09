@@ -27,6 +27,14 @@ public class MemberDao {
 	public int emailDualCheck(String email) {
 		return session.selectOne("member.emailCheck", email);
 	}
+
+	public void modify(MemberVo memberVo) {
+		session.update("member.modify", memberVo);
+	}
+
+	public String findId(String email) {
+		return session.selectOne("member.findId", email);
+	}
 	
 	
 	

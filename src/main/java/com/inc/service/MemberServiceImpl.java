@@ -7,6 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 import com.inc.dao.MemberDao;
+import com.inc.encryptor.SHA256Encryptor;
 import com.inc.vo.MemberVo;
 
 public class MemberServiceImpl implements MemberService{
@@ -32,6 +33,7 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public MemberVo findOne(MemberVo mvo) {
+		mvo.setPassword(SHA256Encryptor.shaEncrypt(mvo.getPassword()));
 		return memberDao.findOne(mvo);
 	}
 
@@ -73,6 +75,18 @@ public class MemberServiceImpl implements MemberService{
 		}
 		return mailCode;
 	}
+	
+	@Override
+	public void modify(MemberVo memberVo) {
+		memberVo.setPassword(SHA256Encryptor.shaEncrypt(memberVo.getPassword()));
+		memberDao.modify(memberVo);
+		
+	}
+	
+	@Override
+	public String findId(String email) {
+		return memberDao.findId(email);
+	}
 
 	private String getRandomCode() {
 		StringBuffer sb = new StringBuffer();
@@ -81,6 +95,7 @@ public class MemberServiceImpl implements MemberService{
 		}
 		return sb.toString();
 	}
+	
 	
 	
 

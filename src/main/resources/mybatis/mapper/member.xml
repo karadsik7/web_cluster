@@ -24,6 +24,15 @@
  		select * from member where id = #{m_id}
  	</select>
  	
+ 	<update id="modify" parameterType="memberVo">
+ 		update member set password = #{password}, name = #{name}, email = #{email}, gender = #{gender}
+ 		where id = #{id} 
+ 	</update>
+ 	
+ 	<select id="findId" parameterType="String" resultType="String">
+ 		select id from member where email = #{value}
+ 	</select>
+ 	
 </mapper>
 
 

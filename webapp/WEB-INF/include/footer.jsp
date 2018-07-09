@@ -33,12 +33,15 @@
         </div>
       </div>
 </footer>
-
 	<script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
 	<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	
 <!-- Bootstrap core JavaScript -->
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Custom scripts for this template -->
+    
+    	
     <script src="/css/clean-blog.min.js"></script>
     

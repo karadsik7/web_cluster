@@ -69,11 +69,8 @@ public class MemberController {
 	
 	@RequestMapping(value="/member/login", method=RequestMethod.POST)
 	public String login(HttpServletRequest request, @ModelAttribute MemberVo mvo, Model model) {
-		//암호화
-		String encryptedPassword = SHA256Encryptor.shaEncrypt(mvo.getPassword()); 
-		mvo.setPassword(encryptedPassword);
-		
 		MemberVo findMember = memberService.findOne(mvo);
+		
 		if(findMember == null) {
 			model.addAttribute("msg", "아이디 혹은 비밀번호가 틀렸습니다.");
 			model.addAttribute("url", "/member/login");
@@ -94,13 +91,14 @@ public class MemberController {
 	
 	@RequestMapping(value="/member/dualCheck", method=RequestMethod.POST)
 	@ResponseBody
-	public String dualCheck(@RequestParam String id) {
+	public String dualCheck(@RequestParam String id, BindingResult result) {
 		if(id == "") {
 			FieldError error = new FieldError("noValueId", "id", "아이디를 입력하세요.");
+			result.addError(error);
 			return "denied";
 		}
-		String result = memberService.dualCheck(id);
-		return result;
+		String dualResult = memberService.dualCheck(id);
+		return dualResult;
 	}
 	
 	@RequestMapping(value="/member/mailSend", method=RequestMethod.POST)
@@ -127,6 +125,58 @@ public class MemberController {
 				return "error";
 			}
 		}
+	}
+	
+	@RequestMapping(value="/member/modify", method=RequestMethod.GET)
+	public String modifyForm(Model model, HttpSession session) {
+		MemberVo member = (MemberVo)session.getAttribute("member");
+		member.setPassword(null);
+		model.addAttribute("memberVo", member);
+		return "/member/modify.jsp";
+	}
+	
+	@RequestMapping(value="/member/modify", method=RequestMethod.POST)
+	public String modify(@ModelAttribute @Valid MemberVo memberVo, BindingResult result, Model model, 
+			HttpSession session) {
+		MemberVo originMember = (MemberVo)session.getAttribute("member");
+		String sessionEmail = (String)session.getAttribute("email");
+		
+		//이메일 바꾸고 인증 안하는 경우 체크
+		if(!originMember.getEmail().equals(memberVo.getEmail()) && sessionEmail == null) {
+			FieldError error = new FieldError("emailValid", "email", "이메일 인증이 필요합니다.");
+			result.addError(error);
+		}
+		if(result.hasErrors()) {
+			memberVo.setId(originMember.getId());
+			memberVo.setEmail(originMember.getEmail());
+			model.addAttribute("memberVo", memberVo);
+			return "/member/modify.jsp";
+		}else {
+			memberVo.setId(originMember.getId());
+			memberService.modify(memberVo);
+			session.invalidate();
+			model.addAttribute("msg", "회원정보 수정이 완료됐습니다. 재로그인 해주세요.");
+			model.addAttribute("url", "/member/login");
+			return "/error.jsp";
+		}
+	}
+	
+	@RequestMapping(value="/member/search", method=RequestMethod.GET)
+	public String searchForm() {
+		return "/member/search.jsp";
+	}
+	
+	@RequestMapping(value="/member/idSearch", method=RequestMethod.GET)
+	public String idSearchForm() {
+		return "/member/idSearch.jsp";
+	}
+	
+	@RequestMapping(value="/member/idSearch", method=RequestMethod.POST)
+	@ResponseBody
+	public String idSearchForm(@RequestParam String email) {
+		String result = memberService.findId(email);
+		System.out.println(result);
+		return result;
 	}
 	
 	private boolean emailValidator(String email) {

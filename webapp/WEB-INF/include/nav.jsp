@@ -14,7 +14,7 @@
 			<ul class="navbar-nav ml-auto">
 				<c:if test="${sessionScope.member != null}">
 					<li class="nav-item"><a class="nav-link" href="/fboard/list">Board</a></li>
-					<li class="nav-item"><a class="nav-link" href="about.html">Guest</a></li>
+					<li class="nav-item"><a class="nav-link" href="/member/modify">MyPage</a></li>
 					<li class="nav-item"><a class="nav-link" href="/member/logout">Logout</a></li>
 				</c:if>
 				<c:if test="${sessionScope.member == null }">
