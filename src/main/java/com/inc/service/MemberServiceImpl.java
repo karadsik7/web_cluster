@@ -1,8 +1,12 @@
 package com.inc.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -96,7 +100,29 @@ public class MemberServiceImpl implements MemberService{
 		return sb.toString();
 	}
 	
-	
+	@Override
+	public void passMailSend(String email, String id) {
+		String tempPass = RandomStringUtils.randomAlphanumeric(6);
+		String encryptedPass = SHA256Encryptor.shaEncrypt(tempPass);
+		Map<String, String> tempMap = new HashMap<>();
+		tempMap.put("id", id);
+		tempMap.put("password", encryptedPass);
+		memberDao.tempPass(tempMap);
+		MimeMessage msg = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper;
+		try {
+			helper = new MimeMessageHelper(msg, true, "UTF-8");
+			helper.setFrom("mktprogramtester@gmail.com");
+			helper.setTo(email);
+			helper.setSubject("Web Cluster 임시 비밀번호 발급메일입니다.");
+			helper.setText("Web Cluster 임시 비밀번호 발급 페이지입니다. Web Cluster에 이하의 임시 비밀번호로 로그인 하신 후 반드시 비밀번호 변경을 진행해주세요.\n\t\t임시 비밀번호 : " 
+			+ tempPass);
+			javaMailSender.send(msg);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
 	
 
 	

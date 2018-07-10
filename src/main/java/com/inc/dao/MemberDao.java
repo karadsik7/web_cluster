@@ -1,5 +1,7 @@
 package com.inc.dao;
 
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 
 import com.inc.vo.MemberVo;
@@ -34,6 +36,10 @@ public class MemberDao {
 
 	public String findId(String email) {
 		return session.selectOne("member.findId", email);
+	}
+
+	public void tempPass(Map<String, String> tempMap) {
+		session.update("member.tempPass", tempMap);
 	}
 	
 	

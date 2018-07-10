@@ -161,27 +161,49 @@ public class MemberController {
 		}
 	}
 	
-	@RequestMapping(value="/member/search", method=RequestMethod.GET)
-	public String searchForm() {
-		return "/member/search.jsp";
+	@RequestMapping(value="/member/find", method=RequestMethod.GET)
+	public String findForm() {
+		return "/member/find.jsp";
 	}
 	
-	@RequestMapping(value="/member/idSearch", method=RequestMethod.GET)
-	public String idSearchForm() {
-		return "/member/idSearch.jsp";
+	@RequestMapping(value="/member/idFind", method=RequestMethod.GET)
+	public String idFindForm() {
+		return "/member/idFind.jsp";
 	}
 	
-	@RequestMapping(value="/member/idSearch", method=RequestMethod.POST)
+	@RequestMapping(value="/member/idFind", method=RequestMethod.POST)
 	@ResponseBody
-	public String idSearchForm(@RequestParam String email) {
+	public String idFindForm(@RequestParam String email) {
 		String result = memberService.findId(email);
 		System.out.println(result);
 		return result;
 	}
 	
+	@RequestMapping(value="/member/passFind", method=RequestMethod.GET)
+	public String passFindForm() {
+		return "/member/passFind.jsp";
+	}
+	
+	@RequestMapping(value="/member/passFind", method=RequestMethod.POST)
+	@ResponseBody
+	public String passFindForm(@RequestParam String email) {
+		String id = memberService.findId(email);
+		if(id == null) {
+			return "notFind";
+		}else {
+			try {
+				memberService.passMailSend(email, id);
+				return "success";
+			} catch (RuntimeException e) {
+				return "error";
+			}
+		}
+	}
+	
 	private boolean emailValidator(String email) {
 		return Pattern.compile("[A-Za-z0-9]+@[A-Za-z0-9]+.[A-Za-z]{2,10}").matcher(email).matches();
 	}
+	
 	
 	
 }

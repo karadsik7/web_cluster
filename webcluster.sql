@@ -5,8 +5,9 @@ create table member(
     email varchar2(30) not null unique,
     gender char(1) check(gender in('m', 'f'))
 );
-
+delete from member where id = 'tester';
 select * from member;
+select * from member where id = 'admin';
 select * from member where email = 'karadsik7@naver.com';
 insert into member values('admin', '1234', '°ü¸®ÀÚ', 'a@b.c', 'm');
 desc member;

@@ -21,11 +21,11 @@
 		<div class="bod">
 				<div class="panel panel-success text-center">
 					<div class="panel-heading">아이디 찾기</div>
-					<div class="panel-body"><a href="/member/idSearch">이메일로 인증</a></div>
+					<div class="panel-body"><a href="/member/idFind">이메일로 인증</a></div>
 				</div>
 				<div class="panel panel-danger text-center">
 					<div class="panel-heading">비밀번호 찾기</div>
-					<div class="panel-body"><a href="">이메일로 인증</a></div>
+					<div class="panel-body"><a href="/member/passFind">이메일로 인증</a></div>
 				</div>
 		</div>
 	</div>

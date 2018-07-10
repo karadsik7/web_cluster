@@ -18,4 +18,6 @@ public interface MemberService {
 
 	public String findId(String email);
 	
+	public void passMailSend(String email, String id);
+	
 }

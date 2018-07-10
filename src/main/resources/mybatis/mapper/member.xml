@@ -33,6 +33,10 @@
  		select id from member where email = #{value}
  	</select>
  	
+ 	<update id="tempPass" parameterType="Map">
+ 		update member set password = #{password} where id = #{id}
+ 	</update>
+ 	
 </mapper>
 
 
