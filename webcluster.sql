@@ -56,7 +56,7 @@ alter table freeBoard drop constraint fk_member_id;
 alter table freeBoard add constraint fk_member_id foreign key(m_id) references member(id) on delete set null;
 
 select * from tabs;
-select * from user_constraints where table_name = 'FREEBOARD';
+select * from user_constraints where table_name = 'COMMENTS';
 select * from member;
 alter table member add admin number(1) check(admin in(0, 1));
 update member set admin = 1 where id = 'admin';
@@ -64,3 +64,20 @@ select * from member;
 
 alter table freeBoard add notice number(1) check(notice in(0, 1));
 select * from freeBoard;
+
+select * from tabs;
+alter table freeBoard rename to board;
+create table comments(
+    id number primary key,
+    b_id number constraint fk_comments_bid references board(id) on delete cascade,
+    m_id varchar2(10) constraint fk_comments_mid references member(id) on delete cascade,
+    name varchar2(30) not null,
+    content varchar2(300) not null,
+    regdate date not null
+);
+
+create sequence seq_comments_id;
+select * from comments;
+insert into comments values(seq_comments_id.nextval, 64, 'admin', '淫軒切', 'げしげし', sysdate+9/24);
+drop table comments;
+desc comments;

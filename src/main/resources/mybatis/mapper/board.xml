@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="freeBoard">
+<mapper namespace="board">
  	<!-- 
  	ID      NOT NULL NUMBER       
 	NAME    NOT NULL VARCHAR2(30) 
@@ -17,7 +17,7 @@
  
  
  	<select id="list" resultType="boardVo" parameterType="Map">
- 		select * from (select rownum as rnum, b.* from (select * from freeBoard 
+ 		select * from (select rownum as rnum, b.* from (select * from board 
  			<if test="option != 'all' and text != null">
  			where
  				<choose>
@@ -39,12 +39,12 @@
  	</select>
  	
  	<insert id="add" parameterType="boardVo">
- 		insert into freeBoard values(seq_fBoard_id.nextval, #{name}, #{title}, 
+ 		insert into board values(seq_fBoard_id.nextval, #{name}, #{title}, 
  		#{content}, #{ip}, sysdate+9/24, 0, seq_fBoard_id.currval, 0, 0, #{m_id}, 0)
  	</insert>
  	
  	<select id="selectOne" parameterType="int" resultMap="selectMap">
- 		select * from freeBoard where id = #{value}
+ 		select * from board where id = #{value}
  	</select>
  	
  	<resultMap type="boardVo" id="selectMap">
@@ -53,28 +53,28 @@
  	</resultMap>
  	
  	<update id="hit" parameterType="int">
- 		update freeBoard set hit = hit + 1 where id = #{value}
+ 		update board set hit = hit + 1 where id = #{value}
  	</update>
  	
  	<update id="update" parameterType="boardVo">
- 		update freeBoard set title = #{title}, name = #{name}, content = #{content} where id = #{id}
+ 		update board set title = #{title}, name = #{name}, content = #{content} where id = #{id}
  	</update>
  	
  	<delete id="delete" parameterType="int">
- 		delete from freeBoard where id = #{value}
+ 		delete from board where id = #{value}
  	</delete>
  	
  	<update id="updateStep" parameterType="boardVo">
- 		update freeBoard set step = step + 1 where ref = #{ref} and step >= #{step}
+ 		update board set step = step + 1 where ref = #{ref} and step >= #{step}
  	</update>
  	
  	<insert id="addReply" parameterType="boardVo">
- 		insert into freeBoard values(seq_fBoard_id.nextval, #{name}, #{title}, 
+ 		insert into board values(seq_fBoard_id.nextval, #{name}, #{title}, 
  		#{content}, #{ip}, sysdate+9/24, 0, #{ref}, #{step}, #{depth}, #{m_id})
  	</insert>
  	
  	<select id="totalCount" parameterType="Map" resultType="int">
- 		select count(*) from freeBoard
+ 		select count(*) from board
  		<if test="option != null and option != 'all'">
 			where
 			<choose>
@@ -95,11 +95,11 @@
  	</select>
  	
  	<update id="notice" parameterType="int">
- 		update freeBoard set notice = 1 where id = #{value}
+ 		update board set notice = 1 where id = #{value}
  	</update>
  	
  	<update id="delNotice" parameterType="int">
- 		update freeBoard set notice = 0 where id = #{value}
+ 		update board set notice = 0 where id = #{value}
  	</update>
  	
  	

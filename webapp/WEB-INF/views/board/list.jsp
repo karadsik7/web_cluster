@@ -46,7 +46,7 @@
 			$('#search_text').focus();
 			return;
 		}else{
-			location.href = '/fboard/list?option='+option+'&text='+text;
+			location.href = '/board/list?option='+option+'&text='+text;
 		}
 	}
 </script>
@@ -98,7 +98,7 @@
 						└▶
 						</c:if>
 					</c:forEach>
-					<a href="${pageContext.request.contextPath}/fboard/view?id=${bvo.id}">${bvo.title }</a>
+					<a href="${pageContext.request.contextPath}/board/view?id=${bvo.id}">${bvo.title }</a>
 				<td>${bvo.name }</td>
 				<td>
 					<f:parseDate var="date" value="${bvo.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/>
@@ -109,7 +109,7 @@
 			</c:forEach>
 		</table>
 		<div class="buttons">
-			<button type="button" onclick="location.href='/fboard/add'" class="btn btn-primary btn-lg">글쓰기</button>
+			<button type="button" onclick="location.href='/board/add'" class="btn btn-primary btn-lg">글쓰기</button>
 		</div>
 	</div>
 	<div class="center">

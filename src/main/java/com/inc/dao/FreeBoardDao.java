@@ -16,47 +16,47 @@ public class FreeBoardDao {
 	}
 
 	public List<BoardVo> list(Map<String, Object> searchMap) {
-		return sqlSession.selectList("freeBoard.list", searchMap);
+		return sqlSession.selectList("board.list", searchMap);
 	}
 
 	public void add(BoardVo boardVo) {
-		sqlSession.insert("freeBoard.add", boardVo);
+		sqlSession.insert("board.add", boardVo);
 	}
 
 	public BoardVo findOne(int id) {
-		return sqlSession.selectOne("freeBoard.selectOne", id);
+		return sqlSession.selectOne("board.selectOne", id);
 	}
 
 	public void hitUp(int id) {
-		sqlSession.update("freeBoard.hit", id);
+		sqlSession.update("board.hit", id);
 	}
 
 	public void update(BoardVo boardVo) {
-		sqlSession.update("freeBoard.update", boardVo);
+		sqlSession.update("board.update", boardVo);
 	}
 
 	public void delete(int id) {
-		sqlSession.delete("freeBoard.delete", id);
+		sqlSession.delete("board.delete", id);
 	}
 
 	public void updateStep(BoardVo boardVo) {
-		sqlSession.update("freeBoard.updateStep", boardVo);
+		sqlSession.update("board.updateStep", boardVo);
 	}
 
 	public void addReply(BoardVo boardVo) {
-		sqlSession.insert("freeBoard.addReply", boardVo);
+		sqlSession.insert("board.addReply", boardVo);
 	}
 
 	public int getTotalCount(Map<String, Object> searchMap) {
-		return sqlSession.selectOne("freeBoard.totalCount", searchMap);
+		return sqlSession.selectOne("board.totalCount", searchMap);
 	}
 
 	public void notice(int id) {
-		sqlSession.update("freeBoard.notice", id);
+		sqlSession.update("board.notice", id);
 	}
 
 	public void delNotice(int id) {
-		sqlSession.update("freeBoard.delNotice", id);
+		sqlSession.update("board.delNotice", id);
 	}
 	
 	

@@ -17,19 +17,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.inc.service.CommentService;
 import com.inc.service.FreeBoardService;
 import com.inc.service.FreeBoardServiceImpl;
 import com.inc.util.Paging;
 import com.inc.vo.BoardVo;
+import com.inc.vo.CommentVo;
 import com.inc.vo.MemberVo;
 
 @Controller
 public class FreeBoardController {
 	
 	private FreeBoardService freeBoardService;
+	private CommentService commentService;
 
 	public void setFreeBoardService(FreeBoardService freeBoardService) {
 		this.freeBoardService = freeBoardService;
+	}
+	
+	public void setCommentService(CommentService commentService) {
+		this.commentService = commentService;
 	}
 	
 	private Paging paging;
@@ -38,7 +45,7 @@ public class FreeBoardController {
 		this.paging = paging;
 	}
 
-	@RequestMapping(value="/fboard/list", method=RequestMethod.GET)
+	@RequestMapping(value="/board/list", method=RequestMethod.GET)
 	public String list(Model model, @RequestParam(required=false) String text, 
 			@RequestParam(required=false) String option, @RequestParam(defaultValue="1") int page) {
 		Map<String, Object> searchMap = new HashMap<>();
@@ -51,22 +58,21 @@ public class FreeBoardController {
 			searchParam = "&option="+option+"&text="+text;
 		}
 		List<BoardVo> boardList = freeBoardService.list(searchMap);
-		
 		model.addAttribute(searchMap);
 		model.addAttribute("boardList", boardList);
-		model.addAttribute("paging", paging.getPaging("/fboard/list", page, 
+		model.addAttribute("paging", paging.getPaging("/board/list", page, 
 				freeBoardService.getTotalCount(searchMap), FreeBoardServiceImpl.maxCountOfOneList, 
 				FreeBoardServiceImpl.maxCountOfOnePage, searchParam));
 		return "/board/list.jsp";
 	}
 	
-	@RequestMapping(value="/fboard/add", method=RequestMethod.GET)
+	@RequestMapping(value="/board/add", method=RequestMethod.GET)
 	public String addForm(Model model) {
 		model.addAttribute("boardVo", new BoardVo());
 		return "/board/add.jsp";
 	}
 	
-	@RequestMapping(value="/fboard/add", method=RequestMethod.POST)
+	@RequestMapping(value="/board/add", method=RequestMethod.POST)
 	public String add(@ModelAttribute @Valid BoardVo boardVo, BindingResult result, HttpServletRequest request, HttpSession session) {
 		//입력값 검증 및 에러 포워드
 		if(result.hasErrors()) {
@@ -77,43 +83,39 @@ public class FreeBoardController {
 		boardVo.setIp(request.getRemoteAddr());
 		boardVo.setM_id(mvo.getId());
 		freeBoardService.add(boardVo);
-		return "redirect:/fboard/list";
+		return "redirect:/board/list";
 	}
 	
-	@RequestMapping(value="/fboard/view", method=RequestMethod.GET)
+	@RequestMapping(value="/board/view", method=RequestMethod.GET)
 	public String view(@RequestParam int id, Model model, HttpSession session) {
 		//뷰페이지에 띄울 데이터 수신
 		BoardVo bvo = freeBoardService.findOne(id);
 		
 		boolean isAdmin = freeBoardService.checkAdmin(session);
 		boolean isNotice = freeBoardService.checkNotice(id);
-		
+		List<CommentVo> commentList = commentService.list(id);
+		model.addAttribute("commentVo", new CommentVo());
 		model.addAttribute("isNotice", isNotice);
 		model.addAttribute("isAdmin", isAdmin);
 		model.addAttribute("board", bvo);
-		if(session.getAttribute("member") != null) {
-			MemberVo loginMember = (MemberVo)session.getAttribute("member");
-			model.addAttribute("loginMemberId", loginMember.getId());
-		}else {
-			model.addAttribute("loginMemberId", "guest");
-		}
+		model.addAttribute("commentList", commentList);
 		//조회수 추가
 		freeBoardService.hitUp(id);
 		return "/board/view.jsp";
 	}
 	
-	@RequestMapping(value="/fboard/update", method=RequestMethod.GET)
+	@RequestMapping(value="/board/update", method=RequestMethod.GET)
 	public String updateForm(@RequestParam int id, HttpSession session, Model model) {
 		BoardVo boardVo = freeBoardService.findOne(id);
 		if(session.getAttribute("member") == null) {
 			model.addAttribute("msg", "비로그인 사용자는 이용할 수 없습니다.");
-			model.addAttribute("url", "/fboard/list");
+			model.addAttribute("url", "/board/list");
 			return "/error.jsp";
 		}else if(!((MemberVo)session.getAttribute("member")).getId().equals(boardVo.getM_id())){
 			System.out.println(((MemberVo)session.getAttribute("member")).getId());
 			System.out.println(boardVo.getM_id());
 			model.addAttribute("msg", "타인의 게시물은 수정이 불가능합니다.");
-			model.addAttribute("url", "/fboard/list");
+			model.addAttribute("url", "/board/list");
 			return "/error.jsp";
 		}else {
 			//수정폼으로 보내줌
@@ -123,17 +125,17 @@ public class FreeBoardController {
 	}
 	
 	
-	@RequestMapping(value="/fboard/update", method=RequestMethod.POST)
+	@RequestMapping(value="/board/update", method=RequestMethod.POST)
 	public String update(@ModelAttribute @Valid BoardVo boardVo, BindingResult result, HttpSession session, Model model) {
 		BoardVo originVo = freeBoardService.findOne(boardVo.getId());
 		//보안상 세션비교
 		if(session.getAttribute("member") == null) {
 			model.addAttribute("msg", "비로그인 사용자는 이용할 수 없습니다.");
-			model.addAttribute("url", "/fboard/list");
+			model.addAttribute("url", "/board/list");
 			return "/error.jsp";
 		}else if(!((MemberVo)session.getAttribute("member")).getId().equals(originVo.getM_id())){
 			model.addAttribute("msg", "타인의 게시물은 수정이 불가능합니다.");
-			model.addAttribute("url", "/fboard/list");
+			model.addAttribute("url", "/board/list");
 			return "/error.jsp";
 		}else if(result.hasErrors()){
 			//수정된 글이 정규표현식에 맞지 않을 경우
@@ -144,22 +146,22 @@ public class FreeBoardController {
 			freeBoardService.update(boardVo);
 		}
 		//리다이렉트
-		return "redirect:/fboard/view?id="+boardVo.getId();
+		return "redirect:/board/view?id="+boardVo.getId();
 	}
 	
-	@RequestMapping(value="/fboard/del", method=RequestMethod.POST)
+	@RequestMapping(value="/board/del", method=RequestMethod.POST)
 	@ResponseBody
 	public String delete(@RequestParam int id, HttpSession session, Model model) {
 		BoardVo originVo = freeBoardService.findOne(id);
 		//보안상 세션비교
 		if(session.getAttribute("member") == null) {
 			model.addAttribute("msg", "비로그인 사용자는 이용할 수 없습니다.");
-			model.addAttribute("url", "/fboard/list");
+			model.addAttribute("url", "/board/list");
 			return "/error.jsp";
 		}else if(!((MemberVo)session.getAttribute("member")).getId().equals(originVo.getM_id())
 				&& !freeBoardService.checkAdmin(session)){
 			model.addAttribute("msg", "타인의 게시물은 삭제가 불가능합니다.");
-			model.addAttribute("url", "/fboard/list");
+			model.addAttribute("url", "/board/list");
 			return "/error.jsp";
 		}else {
 			freeBoardService.delete(id);
@@ -167,7 +169,7 @@ public class FreeBoardController {
 		}
 	}
 	
-	@RequestMapping(value="/fboard/reply", method=RequestMethod.GET)
+	@RequestMapping(value="/board/reply", method=RequestMethod.GET)
 	public String replyForm(@RequestParam int id, Model model) {
 		//원본글의 정보를 가져오기
 		BoardVo originVo = freeBoardService.findOne(id);
@@ -177,7 +179,7 @@ public class FreeBoardController {
 		return "/board/reply.jsp";
 	}
 	
-	@RequestMapping(value="/fboard/reply", method=RequestMethod.POST)
+	@RequestMapping(value="/board/reply", method=RequestMethod.POST)
 	public String addReply(@ModelAttribute @Valid BoardVo boardVo, BindingResult result, HttpServletRequest request, HttpSession session) {
 		//데이터에 유효성에 문제가 있을 시 다시 돌려보냄
 		if(result.hasErrors()) {
@@ -191,10 +193,10 @@ public class FreeBoardController {
 		freeBoardService.updateStep(boardVo);
 		freeBoardService.addReply(boardVo);
 		
-		return "redirect:/fboard/list";
+		return "redirect:/board/list";
 	}
 	
-	@RequestMapping(value="/fboard/notice", method=RequestMethod.POST)
+	@RequestMapping(value="/board/notice", method=RequestMethod.POST)
 	@ResponseBody
 	public String notice(@RequestParam int id, HttpSession session) {
 		if(!freeBoardService.checkAdmin(session)) {
@@ -208,7 +210,7 @@ public class FreeBoardController {
 		}
 	}
 	
-	@RequestMapping(value="/fboard/delNotice", method=RequestMethod.POST)
+	@RequestMapping(value="/board/delNotice", method=RequestMethod.POST)
 	@ResponseBody
 	public String delNotice(@RequestParam int id, HttpSession session) {
 		if(!freeBoardService.checkAdmin(session)) {

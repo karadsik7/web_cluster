@@ -26,7 +26,7 @@
 		<h1 class="title text_center">게시글 수정</h1>
 	</div>
 	<div class="body">
-	<form:form action="/fboard/update" method="post" modelAttribute="boardVo">
+	<form:form action="/board/update" method="post" modelAttribute="boardVo">
 	<form:hidden path="id" value="${boardVo.id }" />
 		<table class="board-view table table-bordered table-hover">
 			<tr class="info">
@@ -53,7 +53,7 @@
 		</table>
 		<div class="buttons">
 			<button class="btn btn-priamry btn-lg">수정</button>
-			<button class="btn btn-danger btn-lg" type="button" onclick="location.href='/fboard/view?id='+${boardVo.id}">취소</button>
+			<button class="btn btn-danger btn-lg" type="button" onclick="location.href='/board/view?id='+${boardVo.id}">취소</button>
 		</div>
 	</form:form>
 	</div>

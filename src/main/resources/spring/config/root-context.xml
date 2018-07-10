@@ -9,11 +9,13 @@
 	<context:property-placeholder 
 		location="classpath:mybatis/config/db.properties"/>
 	
+	<bean id="commentService" class="com.inc.service.CommentServiceImpl" p:commentDao-ref="commentDao"/>
 	<bean id="memberService" class="com.inc.service.MemberServiceImpl" p:memberDao-ref="memberDao" 
 	p:javaMailSender-ref="javaMailSender"/>
 	<bean id="freeBoardService" class="com.inc.service.FreeBoardServiceImpl"
-	p:freeBoardDao-ref="freeBoardDao" />
+	p:freeBoardDao-ref="freeBoardDao"/>
 	
+	<bean id="commentDao" class="com.inc.dao.CommentDao" p:sqlSession-ref="sqlSession"/>
 	<bean id="memberDao" class="com.inc.dao.MemberDao" p:sqlSession-ref="sqlSession" />
 	<bean id="freeBoardDao" class="com.inc.dao.FreeBoardDao" p:sqlSession-ref="sqlSession" />
 	<bean id="paging" class="com.inc.util.Paging" />

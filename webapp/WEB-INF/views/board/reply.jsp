@@ -37,7 +37,7 @@
 			</tr>
 		</table>
 		<hr />
-	<form:form action="/fboard/reply" method="post" modelAttribute="boardVo">
+	<form:form action="/board/reply" method="post" modelAttribute="boardVo">
 	<form:hidden path="id" value="${board.id }" />
 		<table class="board-view table table-bordered table-hover reply">
 			<tr class="info">
@@ -64,7 +64,7 @@
 		</table>
 		<div class="buttons">
 			<button class="btn btn-primary btn-lg">등록</button>
-			<button type="button" onclick="location.href='/fboard/list'" class="btn btn-danger btn-lg">취소</button>
+			<button type="button" onclick="location.href='/board/list'" class="btn btn-danger btn-lg">취소</button>
 		</div>
 	</form:form>
 	</div>

@@ -11,7 +11,8 @@
     <!-- mapper추가 -->
     <!-- <mapper resource="mybatis/mapper/??.xml"/> -->
     <mapper resource="mybatis/mapper/member.xml"/>
-    <mapper resource="mybatis/mapper/freeBoard.xml"/>
+    <mapper resource="mybatis/mapper/board.xml"/>
+    <mapper resource="mybatis/mapper/comments.xml"/>
   </mappers>
 </configuration>
 

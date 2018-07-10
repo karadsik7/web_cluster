@@ -35,7 +35,7 @@
           <c:forEach var="bvo" items="${boardList }" begin="0" end="2">
           <div class="post-preview">
             <h2 class="post-title">
-            <a href="/fboard/view?id=${bvo.id}">
+            <a href="/board/view?id=${bvo.id}">
              ${bvo.title }
             </a>
             </h2>
@@ -49,7 +49,7 @@
           <hr>
           <!-- Pager -->
           <div class="clearfix">
-            <a class="btn btn-primary float-right" href="/fboard/list">Older Posts &rarr;</a>
+            <a class="btn btn-primary float-right" href="/board/list">Older Posts &rarr;</a>
           </div>
         </div>
       </div>
