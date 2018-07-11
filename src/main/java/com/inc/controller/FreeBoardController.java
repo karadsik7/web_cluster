@@ -90,10 +90,12 @@ public class FreeBoardController {
 	public String view(@RequestParam int id, Model model, HttpSession session) {
 		//뷰페이지에 띄울 데이터 수신
 		BoardVo bvo = freeBoardService.findOne(id);
-		
+		MemberVo loginMember = (MemberVo)session.getAttribute("member");
 		boolean isAdmin = freeBoardService.checkAdmin(session);
 		boolean isNotice = freeBoardService.checkNotice(id);
 		List<CommentVo> commentList = commentService.list(id);
+		
+		model.addAttribute("loginMemberId", loginMember.getId());
 		model.addAttribute("commentVo", new CommentVo());
 		model.addAttribute("isNotice", isNotice);
 		model.addAttribute("isAdmin", isAdmin);

@@ -12,14 +12,35 @@
 	CONTENT NOT NULL VARCHAR2(300) 
 	REGDATE NOT NULL DATE -->
 	<select id="list" parameterType="int" resultType="commentVo">
-		select * from comments where b_id = #{value} order by id desc
+		select * from comments_view where b_id = #{value} order by id desc
 	</select>
 	
 	<insert id="add" parameterType="commentVo">
 		insert into comments values(seq_comments_id.nextval, #{b_id}, #{m_id}, #{name}, #{content}, sysdate+9/24)
 	</insert>
 	
+	<select id="findOne" parameterType="int" resultType="commentVo">
+		select * from comments where id = #{value}
+	</select>
 	
+	<delete id="delete" parameterType="int">
+		delete from comments where id = #{value}
+	</delete>
+	
+	<select id="dualCheck" parameterType="Map" resultType="int">
+		 select sum(c.cnt) from 
+		 ( (select count(*) cnt from love where c_id = #{c_id} and m_id = #{m_id} ) 
+		 union all 
+		 (select count(*) cnt from hate where c_id = #{c_id} and m_id = #{m_id} ) ) c
+	</select>
+	
+	<insert id="addLove" parameterType="Map">
+		insert into love values(seq_love_id.nextval, #{c_id}, #{m_id})
+	</insert>
+	
+	<insert id="addHate" parameterType="Map">
+		insert into hate values(seq_hate_id.nextval, #{c_id}, #{m_id})
+	</insert>
 	
 </mapper>
 

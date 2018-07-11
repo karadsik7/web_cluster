@@ -21,7 +21,21 @@ public class CommentVo {
 	@Size(min=2, max=100, message="내용은 100자 이내로만 작성 가능합니다.")
 	private String content;
 	private String regdate;
+	private int loveCount;
+	private int hateCount;
 	
+	public int getLoveCount() {
+		return loveCount;
+	}
+	public void setLoveCount(int loveCount) {
+		this.loveCount = loveCount;
+	}
+	public int getHateCount() {
+		return hateCount;
+	}
+	public void setHateCount(int hateCount) {
+		this.hateCount = hateCount;
+	}
 	public int getId() {
 		return id;
 	}

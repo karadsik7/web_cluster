@@ -99,7 +99,7 @@
 						</c:if>
 					</c:forEach>
 					<a href="${pageContext.request.contextPath}/board/view?id=${bvo.id}">${bvo.title }</a>
-				<td>${bvo.name }</td>
+				<td>${bvo.name } (${bvo.m_id})</td>
 				<td>
 					<f:parseDate var="date" value="${bvo.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/>
 					<f:formatDate value="${date }" pattern="yyyy/MM/dd HH:mm:ss" />

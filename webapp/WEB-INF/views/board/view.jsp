@@ -8,103 +8,9 @@
 <head>
 <jsp:include page="/WEB-INF/include/header.jsp" />
 <link href="/css/board.css" rel="stylesheet">
-<style>
-	.commentTime{
-		font-size: 11px;
-	    color: #999;
-	    font-family: tahoma;
-	    white-space: nowrap;
-	    text-align: right;
-	}
-	.table{
-		width: 100%;
-	}
-	.commentName{
-		position: relative;
-	    padding-right: 10px;
-	    top: 5px;
-	    padding-bottom: 10px;
-	}
-	.commentWrite {
-    height: auto;
-    overflow: hidden;
-    overflow-y: scroll;
-    width: 100%;
-    border: 0;
-    border-bottom: 1px solid #c2c2c2;
-    vertical-align: top;
-    padding: 0;
-    resize: vertical;
-    background: 0 0;
-    font: 12px/1.5 '돋움',dotum,sans-serif;
-    co
+<link href="/css/boardView.css" rel="stylesheet">
+<script src="/js/boardView.js" type="text/javascript"></script>
 	
-</style>
-<script>
-	function del(id){
-		if(confirm("정말로 삭제하시겠습니까?")){
-			$.ajax({
-				"url" : "/board/del",
-				"type" : "post",
-				"data" : {"id" : id},
-				"success" : function(data){
-					alert("삭제가 완료됐습니다. 메인페이지로 이동합니다.");
-					location.href = '${pageContext.request.contextPath}/board/list';
-				}
-			})
-		}
-	}
-	
-	function mod(id){
-		if(confirm("수정하시겠습니까?")){
-			location.href = '${pageContext.request.contextPath}/board/update?id='+id;
-		}
-	}
-	
-	function notice(id){
-		if(confirm("이 글을 공지로 등록하시겠습니까?")){
-			$.ajax({
-				url : '/board/notice',
-				type : 'post',
-				data : {id : id},
-				success : function(data){
-					if(data == 'notAdmin'){
-						alert("비정상적 접근입니다.");
-						return;
-					}else if(data == 'error'){
-						alert("에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
-						return;
-					}else if(data == 'success'){
-						alert("공지로 등록했습니다.");
-						location.href='/board/view?id='+id;
-					}
-				}
-			});
-		}
-	}
-	
-	function delNotice(id){
-		if(confirm("공지에서 해제하시겠습니까?")){
-			$.ajax({
-				url : '/board/delNotice',
-				type : 'post',
-				data : {id : id},
-				success : function(data){
-					if(data == 'notAdmin'){
-						alert("비정상적 접근입니다.");
-						return;
-					}else if(data == 'error'){
-						alert("에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
-						return;
-					}else if(data == 'success'){
-						alert("일반글로 전환하였습니다.");
-						location.href='/board/view?id='+id;
-					}
-				}
-			});
-		}
-	}
-</script>
 </head>
 <body>
 <jsp:include page="/WEB-INF/include/nav.jsp" />
@@ -130,7 +36,7 @@
 			</tr>
 			<tr class="active">
 				<th>이름</th>
-				<td>${board.name }</td>
+				<td>${board.name } (${board.m_id})</td>
 			</tr>
 			<tr class="warning">
 				<th>내용</th>
@@ -178,7 +84,7 @@
 				</table>
 				
 			</form:form>
-			<table class="table table-bordered table-sm">
+			<table class="table table-bordered table-sm comment_table">
 			<c:if test="${empty commentList}">
 				<tr>
 					<th colspan="2">
@@ -187,18 +93,40 @@
 				</tr>
 			</c:if>
 			<c:forEach var="comment" items="${commentList}">
-				<tr>
-					<th width="15%" class="commentName">${comment.name} <br /> (${comment.m_id})</th>
-					<td width="75%" class="commentContent">${comment.content}</td>
-					<td width="10%">
-						<button class="btn btn-sm">
-							<span class="glyphicon glyphicon-thumbs-up" style="color:blue;"></span>조와요
+				<c:if test="${comment.loveCount - comment.hateCount >= 2}">
+					<tr class="comment_best_tr">
+					<th width="15%" class="commentName bestTh text-right">${comment.name} <br /> (${comment.m_id})</th>
+					<td width="75%" class="commentContent bestTd"><span class="label label-danger">best</span><br />${comment.content}</td>
+					<td width="10%" class="bestTd">
+						<button class="btn btn-sm thumb_up_btn" type="button" onclick="love(${comment.id}, ${board.id});">
+							<span class="glyphicon glyphicon-thumbs-up thumb"></span>좋아요 <span class="count">${comment.loveCount}</span>
 						</button>
-						<button class="btn btn-sm" >
-							<span class="glyphicon glyphicon-thumbs-down" style="color:blue;"></span>시러요
+						<button class="btn btn-sm thumb_down_btn" type="button" onclick="hate(${comment.id}, ${board.id});">
+							<span class="glyphicon glyphicon-thumbs-down thumb"></span>싫어요 <span class="count">${comment.hateCount}</span>
 						</button>
 						<f:parseDate var="date" value="${comment.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/>
 						<span class="commentTime"><f:formatDate value="${date }" pattern="yy.MM.dd HH:mm:ss"/></span>
+						<c:if test="${isAdmin || loginMemberId == comment.m_id}">
+							<span class="label label-danger glyphicon glyphicon-remove" onclick="delComment(${comment.id}, ${board.id});">삭제</span>
+						</c:if>
+				</c:if>
+			</c:forEach>
+			<c:forEach var="comment" items="${commentList}">
+				<tr class="comment_all_tr">
+					<th width="15%" class="commentName comment_all_th text-right">${comment.name} <br /> (${comment.m_id})</th>
+					<td width="75%" class="commentContent"><c:if test="${comment.loveCount - comment.hateCount >= 2}"><span class="label label-danger">best</span><br /></c:if>${comment.content}</td>
+					<td width="10%">
+						<button class="btn btn-sm thumb_up_btn" type="button" onclick="love(${comment.id}, ${board.id});">
+							<span class="glyphicon glyphicon-thumbs-up thumb"></span>좋아요 <span class="count">${comment.loveCount}</span>
+						</button>
+						<button class="btn btn-sm thumb_down_btn" type="button" onclick="hate(${comment.id}, ${board.id});">
+							<span class="glyphicon glyphicon-thumbs-down thumb"></span>싫어요 <span class="count">${comment.hateCount}</span>
+						</button>
+						<f:parseDate var="date" value="${comment.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/>
+						<span class="commentTime"><f:formatDate value="${date }" pattern="yy.MM.dd HH:mm:ss"/></span>
+						<c:if test="${isAdmin || loginMemberId == comment.m_id}">
+							<span class="label label-danger glyphicon glyphicon-remove" onclick="delComment(${comment.id}, ${board.id});">삭제</span>
+						</c:if>
 					</td>
 				</tr>
 			</c:forEach>

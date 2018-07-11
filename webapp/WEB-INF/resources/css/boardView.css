@@ -1,0 +1,69 @@
+@charset "UTF-8";
+
+	.commentTime{
+		font-size: 11px;
+	    color: #999;
+	    font-family: tahoma;
+	    white-space: nowrap;
+	    text-align: right;
+	}
+	.table{
+		width: 100%;
+	}
+	.commentName{
+		position: relative;
+	    padding-right: 10px;
+	    padding-bottom: 10px;
+	}
+	.commentWrite {
+    height: auto;
+    overflow: hidden;
+    overflow-y: scroll;
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid #c2c2c2;
+    vertical-align: top;
+    padding: 0;
+    resize: vertical;
+    background: 0 0;
+    font: 12px/1.5 '돋움',dotum,sans-serif;
+    }
+    .count{
+    	font-weight: bold;
+    	color: red;
+    }
+    .thumb_up_btn{
+    	background-color: #819FF7;
+    	color: #2E2E2E;
+    	font-weight: bold;
+    }
+    .thumb_down_btn{
+    	background-color: #FAAC58;
+    	color: #2E2E2E;
+    	font-weight: bold;
+    }
+	.thumb{
+		color: #0101DF!important;
+		font-weight: bold;
+		font-size: 12pt;
+	}
+	.bestTh{
+		background-color: #FFCAD5;
+	}
+	.bestTd{
+		background-color: #FFE3EE;
+	}
+	.comment_table{
+		border: 1px solid #828282;
+		max-height: 100px;
+	}
+	.comment_best_tr{
+		border: 1px solid #5a5a5a!important;
+	}
+	.comment_all_th{
+		background-color: #a5daef;
+	}
+	
+	
+	
+	

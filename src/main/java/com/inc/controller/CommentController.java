@@ -9,6 +9,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.inc.service.CommentService;
@@ -41,6 +43,60 @@ public class CommentController {
 		commentVo.setM_id(loginMember.getId());
 		commentService.add(commentVo);
 		return "redirect:/board/view?id="+commentVo.getB_id();
+	}
+	
+	@RequestMapping(value="/comment/del", method=RequestMethod.POST)
+	@ResponseBody
+	public String del(@RequestParam int id, HttpSession session, Model model) {
+		CommentVo originVo = commentService.findOne(id);
+		//보안상 세션비교
+		if(!((MemberVo)session.getAttribute("member")).getId().equals(originVo.getM_id())
+				&& !freeBoardService.checkAdmin(session)){
+			model.addAttribute("msg", "타인의 게시물은 삭제가 불가능합니다.");
+			model.addAttribute("url", "/board/list");
+			return "/error.jsp";
+		}else {
+			commentService.delete(id);
+			return "y";
+		}
+	}
+	
+	@RequestMapping(value="/comment/love", method=RequestMethod.POST)
+	@ResponseBody
+	public String love(@RequestParam int id, HttpSession session) {
+		MemberVo loginMember = (MemberVo)session.getAttribute("member");
+		String loginMemberId = loginMember.getId();
+		boolean isCommentDual = commentService.commentDual(loginMemberId, id);
+		if(isCommentDual) {
+			return "dual";
+		}else {
+			try {
+				commentService.addLove(loginMemberId, id);
+				return "done";
+			} catch (RuntimeException e) {
+				e.printStackTrace();
+				return "error";
+			}
+		}
+	}
+	
+	@RequestMapping(value="/comment/hate", method=RequestMethod.POST)
+	@ResponseBody
+	public String hate(@RequestParam int id, HttpSession session) {
+		MemberVo loginMember = (MemberVo)session.getAttribute("member");
+		String loginMemberId = loginMember.getId();
+		boolean isCommentDual = commentService.commentDual(loginMemberId, id);
+		if(isCommentDual) {
+			return "dual";
+		}else {
+			try {
+				commentService.addHate(loginMemberId, id);
+				return "done";
+			} catch (RuntimeException e) {
+				e.printStackTrace();
+				return "error";
+			}
+		}
 	}
 	
 	

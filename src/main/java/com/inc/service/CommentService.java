@@ -12,6 +12,17 @@ public interface CommentService {
 
 	void add(CommentVo commentVo);
 
+	CommentVo findOne(int id);
+
+	void delete(int id);
+
+	boolean commentDual(String loginMemberId, int id);
+
+	void addLove(String loginMemberId, int id);
+
+	void addHate(String loginMemberId, int id);
+
+
 	
 	
 }

@@ -1,6 +1,7 @@
 package com.inc.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -20,6 +21,26 @@ public class CommentDao {
 
 	public void add(CommentVo commentVo) {
 		session.insert("comments.add", commentVo);
+	}
+
+	public CommentVo findOne(int id) {
+		return session.selectOne("comments.findOne", id);
+	}
+
+	public void delete(int id) {
+		session.delete("comments.delete", id);
+	}
+
+	public int commentDualCheck(Map<String, Object> idMap) {
+		return session.selectOne("comments.dualCheck", idMap);
+	}
+
+	public void addLove(Map<String, Object> idMap) {
+		session.insert("comments.addLove", idMap);
+	}
+
+	public void addHate(Map<String, Object> idMap) {
+		session.insert("comments.addHate", idMap);
 	}
 	
 }

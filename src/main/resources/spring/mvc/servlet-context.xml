@@ -11,6 +11,8 @@
 	<mvc:annotation-driven/>
 	<mvc:resources mapping="/css/**" 
 	               location="/WEB-INF/resources/css/" />
+	<mvc:resources mapping="/js/**" 
+	               location="/WEB-INF/resources/js/" />
 	<mvc:resources mapping="/include/**" 
 	               location="/WEB-INF/resources/include/" />
 	<mvc:resources mapping="/vendor/**" 

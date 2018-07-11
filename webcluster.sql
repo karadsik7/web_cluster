@@ -63,7 +63,7 @@ update member set admin = 1 where id = 'admin';
 select * from member;
 
 alter table freeBoard add notice number(1) check(notice in(0, 1));
-select * from freeBoard;
+select * from board;    
 
 select * from tabs;
 alter table freeBoard rename to board;
@@ -81,3 +81,40 @@ select * from comments;
 insert into comments values(seq_comments_id.nextval, 64, 'admin', '淫軒切', 'げしげし', sysdate+9/24);
 drop table comments;
 desc comments;
+
+create table love(
+    id number primary key,
+    c_id number constraint fk_love_cid references comments(id) on delete cascade,
+    m_id varchar2(10) constraint fk_love_mid references member(id) on delete cascade
+);
+
+create table hate(
+    id number primary key,
+    c_id number constraint fk_hate_cid references comments(id) on delete cascade,
+    m_id varchar2(10) constraint fk_hate_mid references member(id) on delete cascade
+);
+create sequence seq_love_id;
+create sequence seq_hate_id;
+select * from tabs;
+select * from comments;
+create or replace view comments_view as select a.*, (select count(*) from love where c_id = a.id) as loveCount, (select count(*) from hate where c_id = a.id) as hateCount from (select id, b_id, m_id, name, content, regdate from comments) a;
+
+select a.*, (select count(*) from love where c_id = a.id) as loveCount, (select count(*) from hate where c_id = a.id) as hateCount from (select id, b_id, m_id, name, content, regdate from comments) a;
+
+insert into love values(seq_love_id.nextval, '5', 'admin');
+
+select * from comments_view;
+
+select count(*) from love where c_id = 5;
+select * from love;
+select * from hate;
+
+insert into love values(seq_love_id.nextval, '6', 'admin');
+insert into hate values(seq_hate_id.nextval, '6', 'admin');
+rollback;
+
+
+select sum(c.cnt) from ( (select count(*) cnt from love where c_id = '7' and m_id = 'test' ) union all (select count(*) cnt from hate where c_id='7' and m_id = 'test') ) c;
+select * from love;
+select * from hate;
+
