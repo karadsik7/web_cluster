@@ -37,6 +37,22 @@
  		update member set password = #{password} where id = #{id}
  	</update>
  	
+ 	<select id="adminList" resultType="memberVo">
+ 		select * from member where admin >= 1
+ 	</select>
+ 	
+ 	<select id="normalList" resultType="memberVo">
+ 		select * from member where admin = 0
+ 	</select>
+ 	
+ 	<update id="addAdmin" parameterType="String">
+ 		update member set admin = 1 where id = #{value}
+ 	</update>
+ 	
+ 	<update id="delAdmin" parameterType="String">
+ 		update member set admin = 0 where id = #{value}
+ 	</update>
+ 	
 </mapper>
 
 

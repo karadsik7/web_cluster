@@ -28,9 +28,17 @@
 			<mvc:mapping path="/comment/**"/>
 			<ref bean="loginInterceptor"/>
 		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/member/admin/**"/>
+			<mvc:mapping path="/member/addAdmin/**"/>
+			<mvc:mapping path="/member/delAdmin/**"/>
+			<ref bean="adminInterceptor"/>
+		</mvc:interceptor>
 	</mvc:interceptors>
 	
+	
 	<bean name="loginInterceptor" class="com.inc.interceptor.LoginInterceptor" />
+	<bean name="adminInterceptor" class="com.inc.interceptor.AdminInterceptor" />
 	<bean name="mainController" class="com.inc.controller.MainController" p:freeBoardService-ref="freeBoardService"/>
 	<bean name="memberController" class="com.inc.controller.MemberController" 
 	p:memberService-ref="memberService"/>

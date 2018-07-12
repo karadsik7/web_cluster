@@ -1,5 +1,6 @@
 package com.inc.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -40,6 +41,22 @@ public class MemberDao {
 
 	public void tempPass(Map<String, String> tempMap) {
 		session.update("member.tempPass", tempMap);
+	}
+
+	public List<MemberVo> getAdminList() {
+		return session.selectList("member.adminList");
+	}
+
+	public List<MemberVo> getNormalList() {
+		return session.selectList("member.normalList");
+	}
+
+	public void addAdmin(String id) {
+		session.update("member.addAdmin", id);
+	}
+
+	public void delAdmin(String id) {
+		session.update("member.delAdmin", id);
 	}
 	
 	

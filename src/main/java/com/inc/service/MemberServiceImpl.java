@@ -1,10 +1,12 @@
 package com.inc.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -123,8 +125,36 @@ public class MemberServiceImpl implements MemberService{
 			throw new RuntimeException(e);
 		}
 	}
-	
 
+	@Override
+	public List<MemberVo> getAdminList() {
+		return memberDao.getAdminList();
+	}
+
+	@Override
+	public List<MemberVo> getNormalList() {
+		return memberDao.getNormalList();
+	}
+	
+	@Override
+	public boolean checkAdmin(HttpSession session) {
+		MemberVo enterMember = (MemberVo)session.getAttribute("member");
+		if(enterMember.getAdmin() == 1) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+	@Override
+	public void addAdmin(String id) {
+		memberDao.addAdmin(id);
+	}
+	
+	@Override
+	public void delAdmin(String id) {
+		memberDao.delAdmin(id);
+	}
 	
 	
 	

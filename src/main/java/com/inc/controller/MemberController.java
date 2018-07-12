@@ -1,5 +1,6 @@
 package com.inc.controller;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.inc.encryptor.SHA256Encryptor;
 import com.inc.service.MemberService;
+import com.inc.vo.BoardVo;
 import com.inc.vo.MemberVo;
 
 @Controller
@@ -205,6 +207,50 @@ public class MemberController {
 			}
 		}
 	}
+	
+	@RequestMapping(value="/member/admin", method=RequestMethod.GET)
+	public String adminForm(Model model, HttpSession session) {
+		List<MemberVo> adminList = memberService.getAdminList();
+		List<MemberVo> memberList = memberService.getNormalList();
+		MemberVo loginAdmin = (MemberVo)session.getAttribute("member");
+		model.addAttribute("myId", loginAdmin.getId());
+		model.addAttribute("memberList", memberList);
+		model.addAttribute("adminList", adminList);
+		return "/member/admin.jsp";
+	}
+	
+	@RequestMapping(value="/member/addAdmin", method=RequestMethod.POST)
+	@ResponseBody
+	public String addAdmin(@RequestParam String id, HttpSession session) {
+		if(!memberService.checkAdmin(session)) {
+			return "hack";
+		}else {
+			try {
+				memberService.addAdmin(id);
+				return "done";
+			} catch (RuntimeException e) {
+				logger.error("error by addAdmin", e.getMessage());
+				return "error";
+			}
+		}
+	}
+	
+	@RequestMapping(value="/member/delAdmin", method=RequestMethod.POST)
+	@ResponseBody
+	public String delAdmin(@RequestParam String id, HttpSession session) {
+		if(!memberService.checkAdmin(session)) {
+			return "hack";
+		}else {
+			try {
+				memberService.delAdmin(id);
+				return "done";
+			} catch (RuntimeException e) {
+				logger.error("error by delAdmin", e.getMessage());
+				return "error";
+			}
+		}
+	}
+	
 	
 	private boolean emailValidator(String email) {
 		return Pattern.compile("[A-Za-z0-9]+@[A-Za-z0-9]+.[A-Za-z]{2,10}").matcher(email).matches();

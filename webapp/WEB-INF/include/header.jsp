@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Insert title here</title>
+<title>WEB Cluster</title>
 <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">

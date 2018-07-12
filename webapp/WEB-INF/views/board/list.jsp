@@ -98,7 +98,7 @@
 						└▶
 						</c:if>
 					</c:forEach>
-					<a href="${pageContext.request.contextPath}/board/view?id=${bvo.id}">${bvo.title }</a>
+					<a href="/board/view?id=${bvo.id}">${bvo.title }</a>
 				<td>${bvo.name } (${bvo.m_id})</td>
 				<td>
 					<f:parseDate var="date" value="${bvo.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/>

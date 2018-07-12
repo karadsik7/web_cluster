@@ -1,5 +1,9 @@
 package com.inc.service;
 
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
 import com.inc.vo.MemberVo;
 
 public interface MemberService {
@@ -19,5 +23,15 @@ public interface MemberService {
 	public String findId(String email);
 	
 	public void passMailSend(String email, String id);
+
+	public List<MemberVo> getAdminList();
+
+	public List<MemberVo> getNormalList();
+	
+	public boolean checkAdmin(HttpSession session);
+
+	public void addAdmin(String id);
+
+	public void delAdmin(String id);
 	
 }
