@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,6 +42,8 @@ public class FreeBoardController {
 	}
 	
 	private Paging paging;
+	
+	private static final Logger logger = LoggerFactory.getLogger(FreeBoardController.class);
 	
 	public void setPaging(Paging paging) {
 		this.paging = paging;
@@ -83,6 +87,7 @@ public class FreeBoardController {
 		boardVo.setIp(request.getRemoteAddr());
 		boardVo.setM_id(mvo.getId());
 		freeBoardService.add(boardVo);
+		logger.error("error by " + mvo.getId() + " " + request.getRemoteAddr());
 		return "redirect:/board/list";
 	}
 	
@@ -208,6 +213,7 @@ public class FreeBoardController {
 			freeBoardService.notice(id);
 			return "success";
 		} catch (RuntimeException e) {
+			logger.error("error by notice", e.getStackTrace());
 			return "error";
 		}
 	}
@@ -222,6 +228,7 @@ public class FreeBoardController {
 			freeBoardService.delNotice(id);
 			return "success";
 		} catch (RuntimeException e) {
+			logger.error("error by delNotice", e.getMessage());
 			return "error";
 		}
 	}

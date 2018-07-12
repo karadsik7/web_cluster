@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,8 @@ import com.inc.vo.MemberVo;
 public class MemberController {
 
 	private MemberService memberService;
+	
+	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 	
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
@@ -122,6 +126,7 @@ public class MemberController {
 				return "done";
 			}
 			 catch (RuntimeException e) {
+				logger.error("error by mailSend", e.getMessage());
 				return "error";
 			}
 		}
@@ -195,6 +200,7 @@ public class MemberController {
 				memberService.passMailSend(email, id);
 				return "success";
 			} catch (RuntimeException e) {
+				logger.error("error by passFindMailSend", e.getMessage());
 				return "error";
 			}
 		}

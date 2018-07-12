@@ -3,6 +3,8 @@ package com.inc.controller;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,9 +22,9 @@ import com.inc.vo.MemberVo;
 
 @Controller
 public class CommentController {
-
 	private CommentService commentService;
 	private FreeBoardService freeBoardService;
+	private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 	
 	public void setCommentService(CommentService commentService) {
 		this.commentService = commentService;
@@ -74,7 +76,7 @@ public class CommentController {
 				commentService.addLove(loginMemberId, id);
 				return "done";
 			} catch (RuntimeException e) {
-				e.printStackTrace();
+				logger.error("error by love", e.getMessage());
 				return "error";
 			}
 		}
@@ -93,7 +95,7 @@ public class CommentController {
 				commentService.addHate(loginMemberId, id);
 				return "done";
 			} catch (RuntimeException e) {
-				e.printStackTrace();
+				logger.error("error by hate", e.getMessage());
 				return "error";
 			}
 		}
