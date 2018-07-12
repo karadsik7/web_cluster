@@ -45,9 +45,9 @@
 		</table>
 		<div class="buttons">
 			<button type="button" style="text-align: right" class="btn btn-lg btn-info" 
-			onclick="location.href='${pageContext.request.contextPath}/board/list'">목록</button>
+			onclick="location.href='/board/list'">목록</button>
 			<button type="button" class="btn btn-lg btn-primary" 
-			onclick="location.href='${pageContext.request.contextPath}/board/reply?id=${board.id }'">답글</button>
+			onclick="location.href='/board/reply?id=${board.id }'">답글</button>
 			<c:if test="${board.mvo.id == loginMemberId}">
 			<button type="button" style="text-align: right;" class="btn btn-lg btn-success"
 			onclick="mod(${board.id});">수정</button>

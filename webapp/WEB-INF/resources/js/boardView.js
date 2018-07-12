@@ -6,7 +6,7 @@
 				"data" : {"id" : id},
 				"success" : function(data){
 					alert("삭제가 완료됐습니다. 리스트로 이동합니다.");
-					location.href = '${pageContext.request.contextPath}/board/list';
+					location.href = '/board/list';
 				}
 			})
 		}
@@ -20,7 +20,7 @@
 				"data" : {"id" : id},
 				"success" : function(data){
 					alert("삭제가 완료됐습니다.");
-					location.href = '${pageContext.request.contextPath}/board/view?id='+boardId;
+					location.href = '/board/view?id='+boardId;
 				}
 			})
 		}
@@ -28,7 +28,7 @@
 	
 	function mod(id){
 		if(confirm("수정하시겠습니까?")){
-			location.href = '${pageContext.request.contextPath}/board/update?id='+id;
+			location.href = '/board/update?id='+id;
 		}
 	}
 	
