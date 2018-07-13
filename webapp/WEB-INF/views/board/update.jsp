@@ -76,6 +76,23 @@
 				}
 			}
 		});
+		
+		function sendFile(file, editor, welEditable){
+			var data = new FormData();
+			data.append('upload', file);
+			$.ajax({
+				url : "/board/imgUpload",
+				cache: false,
+				processData: false,
+                contentType: false,
+				data : data,
+				type : "post",
+				success : function(data){
+					var $img = $("<img>").attr('src', data.url);
+					$("#content").summernote("insertNode", $img[0]);
+				}
+			});
+		} 
 	</script>
 </body>
 </html>

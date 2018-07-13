@@ -64,7 +64,7 @@ select * from member;
 
 alter table freeBoard add notice number(1) check(notice in(0, 1));
 select * from board;    
-
+desc board;
 select * from tabs;
 alter table freeBoard rename to board;
 create table comments(
@@ -97,7 +97,9 @@ create sequence seq_love_id;
 create sequence seq_hate_id;
 select * from tabs;
 select * from comments;
-create or replace view comments_view as select a.*, (select count(*) from love where c_id = a.id) as loveCount, (select count(*) from hate where c_id = a.id) as hateCount from (select id, b_id, m_id, name, content, regdate from comments) a;
+create or replace view comments_view as select a.*, 
+(select count(*) from love where c_id = a.id) as loveCount, 
+(select count(*) from hate where c_id = a.id) as hateCount from (select id, b_id, m_id, name, content, regdate from comments) a;
 
 select a.*, (select count(*) from love where c_id = a.id) as loveCount, (select count(*) from hate where c_id = a.id) as hateCount from (select id, b_id, m_id, name, content, regdate from comments) a;
 
@@ -117,4 +119,9 @@ rollback;
 select sum(c.cnt) from ( (select count(*) cnt from love where c_id = '7' and m_id = 'test' ) union all (select count(*) cnt from hate where c_id='7' and m_id = 'test') ) c;
 select * from love;
 select * from hate;
+
+select * from comments_view;
+select * from comments;
+select * from love;
+
 

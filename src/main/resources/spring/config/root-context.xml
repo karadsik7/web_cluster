@@ -9,6 +9,7 @@
 	<context:property-placeholder 
 		location="classpath:mybatis/config/db.properties"/>
 	
+	<bean id="fileService" class="com.inc.service.FileServiceImpl" />
 	<bean id="commentService" class="com.inc.service.CommentServiceImpl" p:commentDao-ref="commentDao"/>
 	<bean id="memberService" class="com.inc.service.MemberServiceImpl" p:memberDao-ref="memberDao" 
 	p:javaMailSender-ref="javaMailSender"/>

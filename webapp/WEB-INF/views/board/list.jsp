@@ -49,6 +49,8 @@
 			location.href = '/board/list?option='+option+'&text='+text;
 		}
 	}
+	
+	
 </script>
 <body>
 	<jsp:include page="/WEB-INF/include/nav.jsp" />

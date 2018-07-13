@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.inc.service.CommentService;
 import com.inc.service.BoardService;
 import com.inc.service.BoardServiceImpl;
+import com.inc.service.CommentService;
+import com.inc.service.FileService;
 import com.inc.util.Paging;
 import com.inc.vo.BoardVo;
 import com.inc.vo.CommentVo;
@@ -32,8 +34,14 @@ public class BoardController {
 	
 	private BoardService boardService;
 	private CommentService commentService;
-
+	private FileService fileService;
 	
+	
+	
+	public void setFileService(FileService fileService) {
+		this.fileService = fileService;
+	}
+
 	public void setBoardService(BoardService boardService) {
 		this.boardService = boardService;
 	}
@@ -241,6 +249,22 @@ public class BoardController {
 					+ " " + request.getRemoteAddr() + e.getMessage());
 			return "error";
 		}
+	}
+	
+	@RequestMapping(value="/board/imgUpload", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> summerNote_imgUpload(HttpServletRequest request, @RequestParam MultipartFile upload) {
+		String path = request.getServletContext().getRealPath("/WEB-INF/resources/img/upload_img");
+		try {
+			String url = "/img/upload_img/" + fileService.uploadImg(path, upload);
+			Map<String, Object> urlMap = new HashMap<>();
+			urlMap.put("url", url);
+			return urlMap;
+		} catch (Exception e) {
+			logger.error("error by summerNote_imgUpload : " + e.getMessage());
+			return null;
+		}
+		
 	}
 	
 	

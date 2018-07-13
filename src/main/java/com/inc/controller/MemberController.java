@@ -202,7 +202,7 @@ public class MemberController {
 				memberService.passMailSend(email, id);
 				return "success";
 			} catch (RuntimeException e) {
-				logger.error("error by passFindMailSend", e.getMessage());
+				logger.error("error by passFindMailSend" + e.getMessage());
 				return "error";
 			}
 		}

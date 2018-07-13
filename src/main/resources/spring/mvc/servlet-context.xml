@@ -7,7 +7,15 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
-
+	
+	<!-- 리졸버 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+      p:prefix="/WEB-INF/views"/>
+    
+    <bean name="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" 
+	p:defaultEncoding="utf-8" p:maxUploadSize="1048576"/>
+    
+	<!-- mvc -->
 	<mvc:annotation-driven/>
 	<mvc:resources mapping="/css/**" 
 	               location="/WEB-INF/resources/css/" />
@@ -21,6 +29,8 @@
 	               location="/WEB-INF/resources/img/" />
 	<mvc:resources mapping="/webjars/**" 
 	               location="classpath:/META-INF/resources/webjars/" /> 
+	               
+		<!-- 인터셉터 -->
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/board/**"/>
@@ -39,16 +49,18 @@
 	
 	<bean name="loginInterceptor" class="com.inc.interceptor.LoginInterceptor" />
 	<bean name="adminInterceptor" class="com.inc.interceptor.AdminInterceptor" />
+	
+	<!-- 컨트롤러 -->
 	<bean name="mainController" class="com.inc.controller.MainController" p:boardService-ref="boardService"/>
 	<bean name="memberController" class="com.inc.controller.MemberController" 
 	p:memberService-ref="memberService"/>
 	<bean name="boardController" class="com.inc.controller.BoardController" 
-	p:boardService-ref="boardService" p:paging-ref="paging" p:commentService-ref="commentService"/>
+	p:boardService-ref="boardService" p:paging-ref="paging"
+	 p:commentService-ref="commentService" p:fileService-ref="fileService"/>
 	<bean name="commentController" class="com.inc.controller.CommentController"
 	 p:commentService-ref="commentService" p:boardService-ref="boardService"/>
-	<bean 
-      class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-      p:prefix="/WEB-INF/views"/>
+	
+	
 </beans>
 
 
