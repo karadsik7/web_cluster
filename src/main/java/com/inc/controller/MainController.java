@@ -14,10 +14,10 @@ import com.inc.vo.BoardVo;
 @Controller
 public class MainController {
 
-	private BoardService freeBoardService;
+	private BoardService boardService;
 	
-	public void setFreeBoardService(BoardService freeBoardService) {
-		this.freeBoardService = freeBoardService;
+	public void setBoardService(BoardService boardService) {
+		this.boardService = boardService;
 	}
 
 
@@ -25,7 +25,7 @@ public class MainController {
 	public String main(Model model) {
 		Map<String, Object> defaultMap = new HashMap<>();
 		defaultMap.put("page", 1);
-		List<BoardVo> boardList = freeBoardService.list(defaultMap);
+		List<BoardVo> boardList = boardService.list(defaultMap);
 		model.addAttribute("boardList", boardList);
 		return "/home.jsp";
 	}

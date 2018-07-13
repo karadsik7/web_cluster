@@ -23,15 +23,15 @@ import com.inc.vo.MemberVo;
 @Controller
 public class CommentController {
 	private CommentService commentService;
-	private BoardService freeBoardService;
+	private BoardService boardService;
 	private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 	
 	public void setCommentService(CommentService commentService) {
 		this.commentService = commentService;
 	}
 	
-	public void setFreeBoardService(BoardService freeBoardService) {
-		this.freeBoardService = freeBoardService;
+	public void setBoardService(BoardService boardService) {
+		this.boardService = boardService;
 	}
 
 	@RequestMapping(value="/comment/add", method=RequestMethod.POST)
@@ -53,7 +53,7 @@ public class CommentController {
 		CommentVo originVo = commentService.findOne(id);
 		//보안상 세션비교
 		if(!((MemberVo)session.getAttribute("member")).getId().equals(originVo.getM_id())
-				&& !freeBoardService.checkAdmin(session)){
+				&& !boardService.checkAdmin(session)){
 			model.addAttribute("msg", "타인의 게시물은 삭제가 불가능합니다.");
 			model.addAttribute("url", "/board/list");
 			return "/error.jsp";
