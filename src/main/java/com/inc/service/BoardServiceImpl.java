@@ -1,5 +1,6 @@
 package com.inc.service;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,9 @@ public class BoardServiceImpl implements BoardService{
 		
 		searchMap.put("start", startRownum);
 		searchMap.put("end", endRownum);
-		return boardDao.list(searchMap);
+		List<BoardVo> boardList = boardDao.list(searchMap);
+		boardList = compareDay(boardList);
+		return boardList;
 	}
 
 	@Override
@@ -110,7 +113,27 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	
-	
+	private List<BoardVo> compareDay(List<BoardVo> boardList) {
+		Calendar today = Calendar.getInstance();
+		Integer todayYear = today.get(Calendar.YEAR);
+		Integer todayMonth = today.get(Calendar.MONTH) + 1;
+		Integer todayDate = today.get(Calendar.DATE);
+		
+		String strMonth = String.valueOf(todayMonth);
+		if(todayMonth < 10) {
+			strMonth = "0" +todayMonth;
+		}
+		String toDay = todayYear+"-"+strMonth+"-"+todayDate;
+		
+		for(int i = 0; i < boardList.size(); i++) {
+			if(toDay.equals(boardList.get(i).getRegdate().substring(0, 10))) {
+				boardList.get(i).setRegdate(boardList.get(i).getRegdate().substring(11, 16));
+			}else {
+				boardList.get(i).setRegdate(boardList.get(i).getRegdate().replaceAll("-", ".").substring(0, 10));
+			}
+		}
+		return boardList;
+	}
 	
 	
 	

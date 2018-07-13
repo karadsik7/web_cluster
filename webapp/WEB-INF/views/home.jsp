@@ -41,8 +41,8 @@
             </h2>
             <p class="post-meta">Posted by
               ${bvo.name}
-              on <f:parseDate var="date" value="${bvo.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/>
-				<f:formatDate value="${date }" pattern="yyyy/MM/dd HH:mm:ss" /></p>
+              on ${bvo.regdate}<%-- <f:parseDate var="date" value="${bvo.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/>
+				<f:formatDate value="${date }" pattern="yyyy/MM/dd HH:mm:ss" /> --%></p>
           </div>
           <hr>
           </c:forEach>
