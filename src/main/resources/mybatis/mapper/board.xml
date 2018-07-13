@@ -70,7 +70,7 @@
  	
  	<insert id="addReply" parameterType="boardVo">
  		insert into board values(seq_fBoard_id.nextval, #{name}, #{title}, 
- 		#{content}, #{ip}, sysdate+9/24, 0, #{ref}, #{step}, #{depth}, #{m_id})
+ 		#{content}, #{ip}, sysdate+9/24, 0, #{ref}, #{step}, #{depth}, #{m_id}, 0)
  	</insert>
  	
  	<select id="totalCount" parameterType="Map" resultType="int">

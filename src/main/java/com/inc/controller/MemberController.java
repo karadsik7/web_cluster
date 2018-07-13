@@ -128,7 +128,7 @@ public class MemberController {
 				return "done";
 			}
 			 catch (RuntimeException e) {
-				logger.error("error by mailSend", e.getMessage());
+				 logger.error("error by mailSend " + e.getMessage());
 				return "error";
 			}
 		}
@@ -221,7 +221,7 @@ public class MemberController {
 	
 	@RequestMapping(value="/member/addAdmin", method=RequestMethod.POST)
 	@ResponseBody
-	public String addAdmin(@RequestParam String id, HttpSession session) {
+	public String addAdmin(@RequestParam String id, HttpSession session, HttpServletRequest request) {
 		if(!memberService.checkAdmin(session)) {
 			return "hack";
 		}else {
@@ -229,7 +229,8 @@ public class MemberController {
 				memberService.addAdmin(id);
 				return "done";
 			} catch (RuntimeException e) {
-				logger.error("error by addAdmin", e.getMessage());
+				logger.error("error by addAdmin " + ((MemberVo)session.getAttribute("member")).getId() 
+						+ " " + request.getRemoteAddr() + e.getMessage());
 				return "error";
 			}
 		}
@@ -237,7 +238,7 @@ public class MemberController {
 	
 	@RequestMapping(value="/member/delAdmin", method=RequestMethod.POST)
 	@ResponseBody
-	public String delAdmin(@RequestParam String id, HttpSession session) {
+	public String delAdmin(@RequestParam String id, HttpSession session, HttpServletRequest request) {
 		if(!memberService.checkAdmin(session)) {
 			return "hack";
 		}else {
@@ -245,7 +246,8 @@ public class MemberController {
 				memberService.delAdmin(id);
 				return "done";
 			} catch (RuntimeException e) {
-				logger.error("error by delAdmin", e.getMessage());
+				logger.error("error by delAdmin " + ((MemberVo)session.getAttribute("member")).getId() 
+						+ " " + request.getRemoteAddr() + e.getMessage());
 				return "error";
 			}
 		}

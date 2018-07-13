@@ -1,5 +1,6 @@
 package com.inc.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.inc.service.CommentService;
 import com.inc.service.BoardService;
+import com.inc.service.CommentService;
 import com.inc.vo.CommentVo;
 import com.inc.vo.MemberVo;
 
@@ -65,7 +66,7 @@ public class CommentController {
 	
 	@RequestMapping(value="/comment/love", method=RequestMethod.POST)
 	@ResponseBody
-	public String love(@RequestParam int id, HttpSession session) {
+	public String love(@RequestParam int id, HttpSession session, HttpServletRequest request) {
 		MemberVo loginMember = (MemberVo)session.getAttribute("member");
 		String loginMemberId = loginMember.getId();
 		boolean isCommentDual = commentService.commentDual(loginMemberId, id);
@@ -76,7 +77,8 @@ public class CommentController {
 				commentService.addLove(loginMemberId, id);
 				return "done";
 			} catch (RuntimeException e) {
-				logger.error("error by love", e.getMessage());
+				logger.error("error by love " + ((MemberVo)session.getAttribute("member")).getId() 
+						+ " " + request.getRemoteAddr() + e.getMessage());
 				return "error";
 			}
 		}
@@ -84,7 +86,7 @@ public class CommentController {
 	
 	@RequestMapping(value="/comment/hate", method=RequestMethod.POST)
 	@ResponseBody
-	public String hate(@RequestParam int id, HttpSession session) {
+	public String hate(@RequestParam int id, HttpSession session, HttpServletRequest request) {
 		MemberVo loginMember = (MemberVo)session.getAttribute("member");
 		String loginMemberId = loginMember.getId();
 		boolean isCommentDual = commentService.commentDual(loginMemberId, id);
@@ -95,7 +97,8 @@ public class CommentController {
 				commentService.addHate(loginMemberId, id);
 				return "done";
 			} catch (RuntimeException e) {
-				logger.error("error by hate", e.getMessage());
+				logger.error("error by hate " + ((MemberVo)session.getAttribute("member")).getId() 
+						+ " " + request.getRemoteAddr() + e.getMessage());
 				return "error";
 			}
 		}

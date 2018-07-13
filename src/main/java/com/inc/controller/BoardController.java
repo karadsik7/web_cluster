@@ -78,7 +78,8 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/board/add", method=RequestMethod.POST)
-	public String add(@ModelAttribute @Valid BoardVo boardVo, BindingResult result, HttpServletRequest request, HttpSession session) {
+	public String add(@ModelAttribute @Valid BoardVo boardVo, BindingResult result, HttpServletRequest request, HttpSession session,
+			Model model) {
 		//입력값 검증 및 에러 포워드
 		if(result.hasErrors()) {
 			return "/board/add.jsp";
@@ -87,8 +88,14 @@ public class BoardController {
 		MemberVo mvo = (MemberVo)session.getAttribute("member");
 		boardVo.setIp(request.getRemoteAddr());
 		boardVo.setM_id(mvo.getId());
-		boardService.add(boardVo);
-		logger.error("error by " + mvo.getId() + " " + request.getRemoteAddr());
+		try {
+			boardService.add(boardVo);
+		} catch (RuntimeException e) {
+			logger.error("error by add " + mvo.getId() + " " + request.getRemoteAddr() + e.getMessage());
+			model.addAttribute("msg", "서버 에러입니다. 잠시 후 다시 시도하세요.");
+			model.addAttribute("url", "/board/list");
+			return "/error.jsp";
+		}
 		return "redirect:/board/list";
 	}
 	
@@ -206,7 +213,7 @@ public class BoardController {
 	
 	@RequestMapping(value="/board/notice", method=RequestMethod.POST)
 	@ResponseBody
-	public String notice(@RequestParam int id, HttpSession session) {
+	public String notice(@RequestParam int id, HttpSession session, HttpServletRequest request) {
 		if(!boardService.checkAdmin(session)) {
 			return "notAdmin";
 		}
@@ -214,14 +221,15 @@ public class BoardController {
 			boardService.notice(id);
 			return "success";
 		} catch (RuntimeException e) {
-			logger.error("error by notice", e.getStackTrace());
+			logger.error("error by notice " + ((MemberVo)session.getAttribute("member")).getId() 
+					+ " " + request.getRemoteAddr() + e.getMessage());
 			return "error";
 		}
 	}
 	
 	@RequestMapping(value="/board/delNotice", method=RequestMethod.POST)
 	@ResponseBody
-	public String delNotice(@RequestParam int id, HttpSession session) {
+	public String delNotice(@RequestParam int id, HttpSession session, HttpServletRequest request) {
 		if(!boardService.checkAdmin(session)) {
 			return "notAdmin";
 		}
@@ -229,7 +237,8 @@ public class BoardController {
 			boardService.delNotice(id);
 			return "success";
 		} catch (RuntimeException e) {
-			logger.error("error by delNotice", e.getMessage());
+			logger.error("error by delNotice " + ((MemberVo)session.getAttribute("member")).getId() 
+					+ " " + request.getRemoteAddr() + e.getMessage());
 			return "error";
 		}
 	}
