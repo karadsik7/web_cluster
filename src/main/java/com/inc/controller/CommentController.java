@@ -16,21 +16,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.inc.service.CommentService;
-import com.inc.service.FreeBoardService;
+import com.inc.service.BoardService;
 import com.inc.vo.CommentVo;
 import com.inc.vo.MemberVo;
 
 @Controller
 public class CommentController {
 	private CommentService commentService;
-	private FreeBoardService freeBoardService;
+	private BoardService freeBoardService;
 	private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 	
 	public void setCommentService(CommentService commentService) {
 		this.commentService = commentService;
 	}
 	
-	public void setFreeBoardService(FreeBoardService freeBoardService) {
+	public void setFreeBoardService(BoardService freeBoardService) {
 		this.freeBoardService = freeBoardService;
 	}
 

@@ -5,20 +5,20 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import com.inc.dao.FreeBoardDao;
+import com.inc.dao.BoardDao;
 import com.inc.vo.BoardVo;
 import com.inc.vo.MemberVo;
 
 
-public class FreeBoardServiceImpl implements FreeBoardService{
+public class BoardServiceImpl implements BoardService{
 
-	private FreeBoardDao freeBoardDao;
+	private BoardDao boardDao;
 	
 	public static final int maxCountOfOneList = 10;
 	public static final int maxCountOfOnePage = 10;
 
-	public void setFreeBoardDao(FreeBoardDao freeBoardDao) {
-		this.freeBoardDao = freeBoardDao;
+	public void setBoardDao(BoardDao boardDao) {
+		this.boardDao = boardDao;
 	}
 
 	@Override
@@ -29,54 +29,54 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		
 		searchMap.put("start", startRownum);
 		searchMap.put("end", endRownum);
-		return freeBoardDao.list(searchMap);
+		return boardDao.list(searchMap);
 	}
 
 	@Override
 	public void add(BoardVo boardVo) {
 		
-		freeBoardDao.add(boardVo);
+		boardDao.add(boardVo);
 	}
 
 	@Override
 	public BoardVo findOne(int id) {
-		return freeBoardDao.findOne(id);
+		return boardDao.findOne(id);
 	}
 
 	@Override
 	public void hitUp(int id) {
-		freeBoardDao.hitUp(id);
+		boardDao.hitUp(id);
 	}
 
 	@Override
 	public void update(BoardVo boardVo) {
-		freeBoardDao.update(boardVo);
+		boardDao.update(boardVo);
 	}
 
 	@Override
 	public void delete(int id) {
-		freeBoardDao.delete(id);
+		boardDao.delete(id);
 	}
 
 	@Override
 	public void updateStep(BoardVo boardVo) {
 		//답글을 쓰는 원본글의 ref depth step 정보를 가져옴
-		BoardVo originVo = freeBoardDao.findOne(boardVo.getId());
+		BoardVo originVo = boardDao.findOne(boardVo.getId());
 		//ref depth step 설정
 		boardVo.setRef(originVo.getRef());
 		boardVo.setDepth(originVo.getDepth() + 1);
 		boardVo.setStep(originVo.getStep() + 1);
-		freeBoardDao.updateStep(boardVo);
+		boardDao.updateStep(boardVo);
 	}
 
 	@Override
 	public void addReply(BoardVo boardVo) {
-		freeBoardDao.addReply(boardVo);
+		boardDao.addReply(boardVo);
 	}
 
 	@Override
 	public int getTotalCount(Map<String, Object> searchMap) {
-		return freeBoardDao.getTotalCount(searchMap);
+		return boardDao.getTotalCount(searchMap);
 	}
 
 	@Override
@@ -91,17 +91,17 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 
 	@Override
 	public void notice(int id) {
-		freeBoardDao.notice(id);
+		boardDao.notice(id);
 	}
 	
 	@Override
 	public void delNotice(int id) {
-		freeBoardDao.delNotice(id);
+		boardDao.delNotice(id);
 	}
 
 	@Override
 	public boolean checkNotice(int id) {
-		BoardVo bvo = freeBoardDao.findOne(id);
+		BoardVo bvo = boardDao.findOne(id);
 		if(bvo.getNotice() == 1) {
 			return true;
 		}else {

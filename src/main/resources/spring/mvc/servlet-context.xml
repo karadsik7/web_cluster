@@ -39,13 +39,13 @@
 	
 	<bean name="loginInterceptor" class="com.inc.interceptor.LoginInterceptor" />
 	<bean name="adminInterceptor" class="com.inc.interceptor.AdminInterceptor" />
-	<bean name="mainController" class="com.inc.controller.MainController" p:freeBoardService-ref="freeBoardService"/>
+	<bean name="mainController" class="com.inc.controller.MainController" p:boardService-ref="boardService"/>
 	<bean name="memberController" class="com.inc.controller.MemberController" 
 	p:memberService-ref="memberService"/>
-	<bean name="freeBoardController" class="com.inc.controller.FreeBoardController" 
-	p:freeBoardService-ref="freeBoardService" p:paging-ref="paging" p:commentService-ref="commentService"/>
+	<bean name="boardController" class="com.inc.controller.BoardController" 
+	p:boardService-ref="boardService" p:paging-ref="paging" p:commentService-ref="commentService"/>
 	<bean name="commentController" class="com.inc.controller.CommentController"
-	 p:commentService-ref="commentService" p:freeBoardService-ref="freeBoardService"/>
+	 p:commentService-ref="commentService" p:boardService-ref="boardService"/>
 	<bean 
       class="org.springframework.web.servlet.view.InternalResourceViewResolver"
       p:prefix="/WEB-INF/views"/>

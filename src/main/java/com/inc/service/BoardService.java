@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import com.inc.vo.BoardVo;
 
-public interface FreeBoardService {
+public interface BoardService {
 
 	List<BoardVo> list(Map<String, Object> searchMap);
 

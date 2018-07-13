@@ -8,15 +8,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.inc.service.FreeBoardService;
+import com.inc.service.BoardService;
 import com.inc.vo.BoardVo;
 
 @Controller
 public class MainController {
 
-	private FreeBoardService freeBoardService;
+	private BoardService freeBoardService;
 	
-	public void setFreeBoardService(FreeBoardService freeBoardService) {
+	public void setFreeBoardService(BoardService freeBoardService) {
 		this.freeBoardService = freeBoardService;
 	}
 

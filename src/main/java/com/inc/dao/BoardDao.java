@@ -7,7 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.inc.vo.BoardVo;
 
-public class FreeBoardDao {
+public class BoardDao {
 
 	private SqlSession sqlSession;
 

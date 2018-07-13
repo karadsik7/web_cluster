@@ -20,30 +20,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.inc.service.CommentService;
-import com.inc.service.FreeBoardService;
-import com.inc.service.FreeBoardServiceImpl;
+import com.inc.service.BoardService;
+import com.inc.service.BoardServiceImpl;
 import com.inc.util.Paging;
 import com.inc.vo.BoardVo;
 import com.inc.vo.CommentVo;
 import com.inc.vo.MemberVo;
 
 @Controller
-public class FreeBoardController {
+public class BoardController {
 	
-	private FreeBoardService freeBoardService;
+	private BoardService boardService;
 	private CommentService commentService;
 
-	public void setFreeBoardService(FreeBoardService freeBoardService) {
-		this.freeBoardService = freeBoardService;
-	}
 	
+	public void setBoardService(BoardService boardService) {
+		this.boardService = boardService;
+	}
+
 	public void setCommentService(CommentService commentService) {
 		this.commentService = commentService;
 	}
 	
 	private Paging paging;
 	
-	private static final Logger logger = LoggerFactory.getLogger(FreeBoardController.class);
+	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 	
 	public void setPaging(Paging paging) {
 		this.paging = paging;
@@ -61,12 +62,12 @@ public class FreeBoardController {
 		if(text != null && option != "all") {
 			searchParam = "&option="+option+"&text="+text;
 		}
-		List<BoardVo> boardList = freeBoardService.list(searchMap);
+		List<BoardVo> boardList = boardService.list(searchMap);
 		model.addAttribute(searchMap);
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("paging", paging.getPaging("/board/list", page, 
-				freeBoardService.getTotalCount(searchMap), FreeBoardServiceImpl.maxCountOfOneList, 
-				FreeBoardServiceImpl.maxCountOfOnePage, searchParam));
+				boardService.getTotalCount(searchMap), BoardServiceImpl.maxCountOfOneList, 
+				BoardServiceImpl.maxCountOfOnePage, searchParam));
 		return "/board/list.jsp";
 	}
 	
@@ -86,7 +87,7 @@ public class FreeBoardController {
 		MemberVo mvo = (MemberVo)session.getAttribute("member");
 		boardVo.setIp(request.getRemoteAddr());
 		boardVo.setM_id(mvo.getId());
-		freeBoardService.add(boardVo);
+		boardService.add(boardVo);
 		logger.error("error by " + mvo.getId() + " " + request.getRemoteAddr());
 		return "redirect:/board/list";
 	}
@@ -94,10 +95,10 @@ public class FreeBoardController {
 	@RequestMapping(value="/board/view", method=RequestMethod.GET)
 	public String view(@RequestParam int id, Model model, HttpSession session) {
 		//뷰페이지에 띄울 데이터 수신
-		BoardVo bvo = freeBoardService.findOne(id);
+		BoardVo bvo = boardService.findOne(id);
 		MemberVo loginMember = (MemberVo)session.getAttribute("member");
-		boolean isAdmin = freeBoardService.checkAdmin(session);
-		boolean isNotice = freeBoardService.checkNotice(id);
+		boolean isAdmin = boardService.checkAdmin(session);
+		boolean isNotice = boardService.checkNotice(id);
 		List<CommentVo> commentList = commentService.list(id);
 		
 		model.addAttribute("loginMemberId", loginMember.getId());
@@ -107,13 +108,13 @@ public class FreeBoardController {
 		model.addAttribute("board", bvo);
 		model.addAttribute("commentList", commentList);
 		//조회수 추가
-		freeBoardService.hitUp(id);
+		boardService.hitUp(id);
 		return "/board/view.jsp";
 	}
 	
 	@RequestMapping(value="/board/update", method=RequestMethod.GET)
 	public String updateForm(@RequestParam int id, HttpSession session, Model model) {
-		BoardVo boardVo = freeBoardService.findOne(id);
+		BoardVo boardVo = boardService.findOne(id);
 		if(session.getAttribute("member") == null) {
 			model.addAttribute("msg", "비로그인 사용자는 이용할 수 없습니다.");
 			model.addAttribute("url", "/board/list");
@@ -134,7 +135,7 @@ public class FreeBoardController {
 	
 	@RequestMapping(value="/board/update", method=RequestMethod.POST)
 	public String update(@ModelAttribute @Valid BoardVo boardVo, BindingResult result, HttpSession session, Model model) {
-		BoardVo originVo = freeBoardService.findOne(boardVo.getId());
+		BoardVo originVo = boardService.findOne(boardVo.getId());
 		//보안상 세션비교
 		if(session.getAttribute("member") == null) {
 			model.addAttribute("msg", "비로그인 사용자는 이용할 수 없습니다.");
@@ -150,7 +151,7 @@ public class FreeBoardController {
 			return "/board/update.jsp?id="+boardVo.getId();
 		}else {
 			//수정
-			freeBoardService.update(boardVo);
+			boardService.update(boardVo);
 		}
 		//리다이렉트
 		return "redirect:/board/view?id="+boardVo.getId();
@@ -159,19 +160,19 @@ public class FreeBoardController {
 	@RequestMapping(value="/board/del", method=RequestMethod.POST)
 	@ResponseBody
 	public String delete(@RequestParam int id, HttpSession session, Model model) {
-		BoardVo originVo = freeBoardService.findOne(id);
+		BoardVo originVo = boardService.findOne(id);
 		//보안상 세션비교
 		if(session.getAttribute("member") == null) {
 			model.addAttribute("msg", "비로그인 사용자는 이용할 수 없습니다.");
 			model.addAttribute("url", "/board/list");
 			return "/error.jsp";
 		}else if(!((MemberVo)session.getAttribute("member")).getId().equals(originVo.getM_id())
-				&& !freeBoardService.checkAdmin(session)){
+				&& !boardService.checkAdmin(session)){
 			model.addAttribute("msg", "타인의 게시물은 삭제가 불가능합니다.");
 			model.addAttribute("url", "/board/list");
 			return "/error.jsp";
 		}else {
-			freeBoardService.delete(id);
+			boardService.delete(id);
 			return "y";
 		}
 	}
@@ -179,7 +180,7 @@ public class FreeBoardController {
 	@RequestMapping(value="/board/reply", method=RequestMethod.GET)
 	public String replyForm(@RequestParam int id, Model model) {
 		//원본글의 정보를 가져오기
-		BoardVo originVo = freeBoardService.findOne(id);
+		BoardVo originVo = boardService.findOne(id);
 		//원본글의 내용을 같이 포워드
 		model.addAttribute("board", originVo);
 		model.addAttribute("boardVo", new BoardVo());
@@ -197,8 +198,8 @@ public class FreeBoardController {
 		MemberVo mvo = (MemberVo)session.getAttribute("member");
 		boardVo.setM_id(mvo.getId());
 		//정렬을 위해 이전의 답글들의 step을 비교해 뒤로 미룸 (원본글은 올리면 안되므로 boardVo의 step값보다 같거나 크면 올림)
-		freeBoardService.updateStep(boardVo);
-		freeBoardService.addReply(boardVo);
+		boardService.updateStep(boardVo);
+		boardService.addReply(boardVo);
 		
 		return "redirect:/board/list";
 	}
@@ -206,11 +207,11 @@ public class FreeBoardController {
 	@RequestMapping(value="/board/notice", method=RequestMethod.POST)
 	@ResponseBody
 	public String notice(@RequestParam int id, HttpSession session) {
-		if(!freeBoardService.checkAdmin(session)) {
+		if(!boardService.checkAdmin(session)) {
 			return "notAdmin";
 		}
 		try {
-			freeBoardService.notice(id);
+			boardService.notice(id);
 			return "success";
 		} catch (RuntimeException e) {
 			logger.error("error by notice", e.getStackTrace());
@@ -221,11 +222,11 @@ public class FreeBoardController {
 	@RequestMapping(value="/board/delNotice", method=RequestMethod.POST)
 	@ResponseBody
 	public String delNotice(@RequestParam int id, HttpSession session) {
-		if(!freeBoardService.checkAdmin(session)) {
+		if(!boardService.checkAdmin(session)) {
 			return "notAdmin";
 		}
 		try {
-			freeBoardService.delNotice(id);
+			boardService.delNotice(id);
 			return "success";
 		} catch (RuntimeException e) {
 			logger.error("error by delNotice", e.getMessage());
