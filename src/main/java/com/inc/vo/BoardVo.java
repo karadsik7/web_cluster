@@ -34,7 +34,16 @@ public class BoardVo {
 	private String m_id;
 	private MemberVo mvo;
 	private int notice;
+	private int type;
 	
+	
+	
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
 	public int getNotice() {
 		return notice;
 	}

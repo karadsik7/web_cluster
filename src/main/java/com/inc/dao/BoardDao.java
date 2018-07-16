@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.inc.vo.BoardTypeVo;
 import com.inc.vo.BoardVo;
 
 public class BoardDao {
@@ -58,6 +59,15 @@ public class BoardDao {
 	public void delNotice(int id) {
 		sqlSession.update("board.delNotice", id);
 	}
+
+	public BoardTypeVo boardType(int convertType) {
+		return sqlSession.selectOne("board.boardType", convertType);
+	}
+
+	public List<BoardTypeVo> boardTypeList() {
+		return sqlSession.selectList("board.boardTypeList");
+	}
+
 	
 	
 

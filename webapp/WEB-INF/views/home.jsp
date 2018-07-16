@@ -9,18 +9,8 @@
 </head>
 <body>
     <jsp:include page="../include/nav.jsp" />
-    <!-- Page Header -->
     <header class="masthead" style="background-image: url('/img/main.jpg') ">
       <div class="overlay"></div>
-      <!-- <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
-            <div class="site-heading">
-              <h2>홈페이지</h2>
-            </div>
-          </div>
-        </div>
-      </div> -->
     </header>
 
     <!-- Main Content -->
@@ -41,8 +31,7 @@
             </h2>
             <p class="post-meta">Posted by
               ${bvo.name}
-              on ${bvo.regdate}<%-- <f:parseDate var="date" value="${bvo.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/>
-				<f:formatDate value="${date }" pattern="yyyy/MM/dd HH:mm:ss" /> --%></p>
+              on ${bvo.regdate}</p>
           </div>
           <hr>
           </c:forEach>

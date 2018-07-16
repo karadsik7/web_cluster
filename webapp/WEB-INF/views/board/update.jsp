@@ -32,21 +32,21 @@
 			<tr class="info">
 				<th width="30%">제목</th>
 				<td>
-					<form:input type="text" path="title" value="${boardVo.title }"/>
+					<form:input type="text" path="title" value="${boardVo.title }" class="form-control"/>
 					<form:errors path="title" class="errors"/>
 				</td>
 			</tr>
 			<tr class="active">
 				<th>이름</th>
 				<td>
-					<form:input type="text" path="name" value="${boardVo.name }"/>
+					<form:input type="text" path="name" value="${boardVo.name }" class="form-control"/>
 					<form:errors path="name" class="errors"/>
 				</td>
 			</tr>
 			<tr class="warning">
 				<th>내용</th>
 				<td colspan="2" class="content">
-					<form:textarea path="content" id="content" value="${boardVo.content}"></form:textarea>
+					<form:textarea path="content" id="content" value="${boardVo.content}" class="form-control"></form:textarea>
 					<form:errors path="content" class="errors"/>
 				</td>
 			</tr>

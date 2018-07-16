@@ -75,8 +75,8 @@ create table comments(
     content varchar2(300) not null,
     regdate date not null
 );
-
-create sequence seq_comments_id;
+create sequence seq_board_id start with 109;
+select * from board;
 select * from comments;
 insert into comments values(seq_comments_id.nextval, 64, 'admin', '관리자', 'ㅂㅇㅂㅇ', sysdate+9/24);
 drop table comments;
@@ -87,6 +87,24 @@ create table love(
     c_id number constraint fk_love_cid references comments(id) on delete cascade,
     m_id varchar2(10) constraint fk_love_mid references member(id) on delete cascade
 );
+
+
+--게시판 종류 분류위한 테이블
+create table boardType(
+    id number primary key,
+    name varchar2(60) not null
+);
+
+create sequence seq_boardType_id;
+
+insert into boardType values(seq_boardType_id.nextval, '자유게시판');
+
+select * from board;
+alter table board add type number references boardType(id);
+update board set type = 1;
+
+select * from boardType;
+insert into boardType values(seq_boardType_id.nextval, '중요 게시판');
 
 create table hate(
     id number primary key,
@@ -123,5 +141,15 @@ select * from hate;
 select * from comments_view;
 select * from comments;
 select * from love;
+
+select * from board;
+
+alter table board add constraint fk_board_btid foreign key(type) references boardType(id) on delete cascade;
+SELECT * FROM ALL_CONSTRAINTS WHERE TABLE_NAME = 'BOARD';
+
+
+
+
+
 
 

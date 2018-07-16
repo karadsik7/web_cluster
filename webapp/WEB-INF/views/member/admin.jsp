@@ -49,15 +49,15 @@
 	function addForm(){
 		$('#add').show();
 		$('#del').hide();
-		$('#addBtn').addClass('active');
 		$('#delBtn').removeClass('active');
+		$('#addBtn').addClass('active');
 	}
 	
 	function delForm(){
 		$('#add').hide();
 		$('#del').show();
-		$('#delBtn').addClass('active');
 		$('#addBtn').removeClass('active');
+		$('#delBtn').addClass('active');
 	}
 	
 	function addAdmin(id){

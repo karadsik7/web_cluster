@@ -3,7 +3,8 @@ package com.inc.util;
 public class Paging {
 	
 	
-	public String getPaging(String url, int nowPage, int totalCount, int maxCountOfOneList, int maxCountOfOnePage, String searchParam) {
+	public String getPaging(String url, int nowPage, int totalCount, int maxCountOfOneList, 
+			int maxCountOfOnePage, String searchParam, int type) {
 		StringBuffer sb = new StringBuffer();
 		//전체페이지 수
 		int totalPage;
@@ -50,7 +51,7 @@ public class Paging {
 		
 		//6.이전 페이지 버튼 설정
 		if(isPrevPage) {
-			sb.append(String.format("<li><a href='%s?page=", url));
+			sb.append(String.format("<li><a href='%s/" + type + "/", url));
 			sb.append(groupEndPage-maxCountOfOnePage);
 			sb.append(searchParam);
 			sb.append("'>◀</a></li>");
@@ -62,11 +63,11 @@ public class Paging {
 		for(int i = groupStartPage; i <= groupEndPage; i++) {
 			sb.append("&nbsp");
 			if(i == nowPage) {
-				sb.append(String.format("<li class='active'><a href='%s?page=", url));
+				sb.append(String.format("<li class='active'><a href='%s/" + type + "/", url));
 				sb.append(i + searchParam + "'>");
 				sb.append(i + "</a>" + "</li>");
 			}else {
-				sb.append(String.format("<li><a href='%s?page=", url));
+				sb.append(String.format("<li><a href='%s/" + type + "/", url));
 				sb.append(i + searchParam + "'>");
 				sb.append(i + "</a>" + "</li>");
 			}
@@ -74,7 +75,7 @@ public class Paging {
 		}
 		//8. 다음페이지 그룹 출력
 		if(isNextPage) {
-			sb.append(String.format("<li><a href='%s?page=", url));
+			sb.append(String.format("<li><a href='%s/" + type + "/", url));
 			if(nowPage + maxCountOfOnePage > totalPage) {
 				sb.append(totalPage);
 			}else {

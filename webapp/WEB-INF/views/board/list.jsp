@@ -17,6 +17,29 @@
 		.notice{
 			background-color: #FFFF99 !important;
 		}
+		.vertical-menu {
+			margin-left: 10%;
+			margin-top : 30%;
+			display:inline-block;
+   			width: 200px;
+		}
+
+		.vertical-menu a {
+		    background-color: #eee;
+		    color: black;
+		    display: block;
+		    padding: 12px;
+		    text-decoration: none;
+		}
+		
+		.vertical-menu a:hover {
+		    background-color: #ccc;
+		}
+		
+		.vertical-menu a.active {
+		    background-color: #4CAF50;
+		    color: white;
+		}
 	</style>
 </head>
 <script>
@@ -38,7 +61,7 @@
 		}
 	}
 	
-	function search(){
+	function search(type){
 		var option = $('#search_option').val();
 		var text = $('#search_text').val();
 		if(text == "" && option == 'all'){
@@ -46,7 +69,7 @@
 			$('#search_text').focus();
 			return;
 		}else{
-			location.href = '/board/list?option='+option+'&text='+text;
+			location.href = '/board/list/'+type+'?option='+option+'&text='+text;
 		}
 	}
 	
@@ -57,69 +80,84 @@
 	<header class="masthead" style="background-image: url('/img/board.png') ">
       <div class="overlay"></div>
     </header>
-	<div class="container">
-	<div class="header">
-		<div class="search">
-			<select id="search_option" onchange="lock();">
-				<option value="all">전체</option>
-				<option value="title">제목</option>
-				<option value="name">이름</option>
-				<option value="content">내용</option>
-				<option value="title_content">제목+내용</option>
-			</select>
-			<input type="text" id="search_text" value="${param.text }" />
-			<button type="button" onclick="search();" class="btn btn-success btn-lg">찾기</button>
-		</div>
-	</div>
-	<div class="body">
-		<table class="board table table-striped table-hover">
-			<tr>
-				<th style="width:10%">번호</th>
-				<th style="width:55%">제목</th>
-				<th style="width:15%">이름</th>
-				<th style="width:10%">날짜</th>
-				<th style="width:10%">조회</th>
-			</tr>
-			<c:if test="${empty boardList }">
-			<tr>
-				<td colspan="5">게시물이 존재하지 않습니다.</td>
-			</tr>
-			</c:if>
-			<c:forEach var="bvo" items="${boardList }">
-			<tr <c:if test="${bvo.notice == 1}">class="notice"</c:if>>
-				<td>${bvo.id }</td>
-				<td style="text-align: left;" >
-					<c:if test="${bvo.notice == 1}">
-						<span class="label label-danger">공지</span>
-					</c:if>
-					<c:forEach var="i" begin="1" end="${bvo.depth }">
-						<c:if test="${i != bvo.depth}">
-						&nbsp;&nbsp;&nbsp;
-						</c:if>
-						<c:if test="${i == bvo.depth }">
-						└▶
-						</c:if>
-					</c:forEach>
-					<a href="/board/view?id=${bvo.id}">${bvo.title }</a>
-				<td>${bvo.name } (${bvo.m_id})</td>
-				<td>
-					${bvo.regdate }
-				</td>
-				<td>${bvo.hit }</td>
-			</tr>
+    <div class="col-sm-2">
+		<div class="vertical-menu">
+			<c:forEach var="bt" items="${boardTypeList}">
+				<a href="/board/list/${bt.id}" <c:if test="${bt.id == boardType.id}">class="active"</c:if>>${bt.name}</a>
 			</c:forEach>
-		</table>
-		<div class="buttons">
-			<button type="button" onclick="location.href='/board/add'" class="btn btn-primary btn-lg">글쓰기</button>
 		</div>
 	</div>
-	<div class="center">
-		<ul class="pagination">
-			${paging}
-		</ul>
+	<div class="container-fluid">
+		<div class="col-sm-8">
+		<div class="header" style="margin-top:0">
+		
+		
+		
+			<h2 class="text-left">${boardType.name}</h2>
+			<div class="search">
+				<select id="search_option" onchange="lock();">
+					<option value="all">전체</option>
+					<option value="title">제목</option>
+					<option value="name">이름</option>
+					<option value="content">내용</option>
+					<option value="title_content">제목+내용</option>
+				</select>
+				<input type="text" id="search_text" value="${param.text }" />
+				<button type="button" onclick="search(${boardType.id});" class="btn btn-success btn-lg">찾기</button>
+			</div>
+		</div>
+		<div class="body">
+			<table class="board table table-striped table-hover">
+				<tr>
+					<th style="width:10%">번호</th>
+					<th style="width:55%">제목</th>
+					<th style="width:15%">이름</th>
+					<th style="width:10%">날짜</th>
+					<th style="width:10%">조회</th>
+				</tr>
+				<c:if test="${empty boardList }">
+				<tr>
+					<td colspan="5">게시물이 존재하지 않습니다.</td>
+				</tr>
+				</c:if>
+				<c:forEach var="bvo" items="${boardList }">
+				<tr <c:if test="${bvo.notice == 1}">class="notice"</c:if>>
+					<td>${bvo.id }</td>
+					<td style="text-align: left;" >
+						<c:if test="${bvo.notice == 1}">
+							<span class="label label-danger">공지</span>
+						</c:if>
+						<c:forEach var="i" begin="1" end="${bvo.depth }">
+							<c:if test="${i != bvo.depth}">
+							&nbsp;&nbsp;&nbsp;
+							</c:if>
+							<c:if test="${i == bvo.depth }">
+							└▶
+							</c:if>
+						</c:forEach>
+						<a href="/board/view?id=${bvo.id}">${bvo.title }</a>
+					<td>${bvo.name } (${bvo.m_id})</td>
+					<td>
+						${bvo.regdate }
+					</td>
+					<td>${bvo.hit }</td>
+				</tr>
+				</c:forEach>
+			</table>
+			<div class="buttons">
+				<button type="button" onclick="location.href='/board/add/${boardType.id}'" class="btn btn-primary btn-lg">글쓰기</button>
+			</div>
+		</div>
+			<div class="center">
+				<ul class="pagination">
+					${paging}
+				</ul>
+			</div>
+		</div>
 	</div>
-</div>
 <!-- script library -->
-	<jsp:include page="/WEB-INF/include/footer.jsp" />
+	<div>
+		<jsp:include page="/WEB-INF/include/footer.jsp" />
+	</div>
 </body>
 </html>

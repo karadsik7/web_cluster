@@ -23,6 +23,7 @@
 <div class="container">
 	<div class="body">
 	<form:form action="/board/add" method="post" modelAttribute="boardVo">
+	<form:hidden path="type" value="${boardVo.type}"/>
 		<table class="board-view table table-bordered table-hover">
 			<tr class="info">
 				<th width="30%">제목</th>
@@ -48,7 +49,7 @@
 		</table>
 		<div class="buttons">
 			<button class="btn btn-primary btn-lg">등록</button>
-			<button type="button" onclick="location.href='/board/list'" class="btn btn-danger btn-lg">취소</button>
+			<button type="button" onclick="location.href='/board/list/${boardVo.type}'" class="btn btn-danger btn-lg">취소</button>
 		</div>
 	</form:form>
 	</div>

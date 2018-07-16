@@ -25,6 +25,7 @@ public class MainController {
 	public String main(Model model) {
 		Map<String, Object> defaultMap = new HashMap<>();
 		defaultMap.put("page", 1);
+		defaultMap.put("type", 1);
 		List<BoardVo> boardList = boardService.list(defaultMap);
 		model.addAttribute("boardList", boardList);
 		return "/home.jsp";

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import com.inc.vo.BoardTypeVo;
 import com.inc.vo.BoardVo;
 
 public interface BoardService {
@@ -34,6 +35,10 @@ public interface BoardService {
 	boolean checkNotice(int id);
 
 	void delNotice(int id);
+
+	BoardTypeVo getBoardType(int convertType);
+
+	List<BoardTypeVo> boardTypeList();
 
 	
 	

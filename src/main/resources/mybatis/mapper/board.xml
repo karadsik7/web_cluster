@@ -17,9 +17,10 @@
  
  
  	<select id="list" resultType="boardVo" parameterType="Map">
- 		select * from (select rownum as rnum, b.* from (select * from board 
+ 		select * from (select rownum as rnum, b.* from (select * from board
+ 			where type = #{type} 
  			<if test="option != 'all' and text != null">
- 			where
+ 			 and
  				<choose>
  					<when test="option == 'title'">
  						title like '%'||#{text}||'%'
@@ -38,9 +39,13 @@
  		order by notice desc, ref desc, step asc) b ) where rnum between #{start} and #{end}
  	</select>
  	
+ 	<select id="boardType" parameterType="int" resultType="boardTypeVo">
+ 		select * from boardType where id = #{value}
+ 	</select>
+ 	
  	<insert id="add" parameterType="boardVo">
- 		insert into board values(seq_fBoard_id.nextval, #{name}, #{title}, 
- 		#{content}, #{ip}, sysdate+9/24, 0, seq_fBoard_id.currval, 0, 0, #{m_id}, 0)
+ 		insert into board values(seq_board_id.nextval, #{name}, #{title}, 
+ 		#{content}, #{ip}, sysdate+9/24, 0, seq_board_id.currval, 0, 0, #{m_id}, 0, #{type})
  	</insert>
  	
  	<select id="selectOne" parameterType="int" resultMap="selectMap">
@@ -69,14 +74,14 @@
  	</update>
  	
  	<insert id="addReply" parameterType="boardVo">
- 		insert into board values(seq_fBoard_id.nextval, #{name}, #{title}, 
- 		#{content}, #{ip}, sysdate+9/24, 0, #{ref}, #{step}, #{depth}, #{m_id}, 0)
+ 		insert into board values(seq_board_id.nextval, #{name}, #{title}, 
+ 		#{content}, #{ip}, sysdate+9/24, 0, #{ref}, #{step}, #{depth}, #{m_id}, 0, #{type})
  	</insert>
  	
  	<select id="totalCount" parameterType="Map" resultType="int">
- 		select count(*) from board
+ 		select count(*) from board where type = #{type}
  		<if test="option != null and option != 'all'">
-			where
+			and
 			<choose>
 				<when test="option == 'title'">
 					title like '%'||#{text}||'%'
@@ -102,6 +107,9 @@
  		update board set notice = 0 where id = #{value}
  	</update>
  	
+ 	<select id="boardTypeList" resultType="boardTypeVo">
+ 		select * from boardType order by id asc
+ 	</select>
  	
 </mapper>
 

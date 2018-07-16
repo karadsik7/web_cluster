@@ -3,6 +3,7 @@ package com.inc.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +27,7 @@ import com.inc.service.BoardServiceImpl;
 import com.inc.service.CommentService;
 import com.inc.service.FileService;
 import com.inc.util.Paging;
+import com.inc.vo.BoardTypeVo;
 import com.inc.vo.BoardVo;
 import com.inc.vo.CommentVo;
 import com.inc.vo.MemberVo;
@@ -58,30 +61,41 @@ public class BoardController {
 		this.paging = paging;
 	}
 
-	@RequestMapping(value="/board/list", method=RequestMethod.GET)
+	@RequestMapping(value= {"/board/list", "/board/list/{type}/{page}", "board/list/{type}"}, method=RequestMethod.GET)
 	public String list(Model model, @RequestParam(required=false) String text, 
-			@RequestParam(required=false) String option, @RequestParam(defaultValue="1") int page) {
+			@RequestParam(required=false) String option, @PathVariable Optional<Integer> page, 
+			@PathVariable Optional<Integer> type) {
+		int convertType = Optional.ofNullable(type).get().orElse(1);
+		int convertPage = Optional.ofNullable(page).get().orElse(1);
+		
 		Map<String, Object> searchMap = new HashMap<>();
 		searchMap.put("text", text);
 		searchMap.put("option", option);
-		searchMap.put("page", page);
+		searchMap.put("page", convertPage);
+		searchMap.put("type", convertType);
 		
 		String searchParam = "";
 		if(text != null && option != "all") {
 			searchParam = "&option="+option+"&text="+text;
 		}
 		List<BoardVo> boardList = boardService.list(searchMap);
+		List<BoardTypeVo> boardTypeList = boardService.boardTypeList();
+		BoardTypeVo boardType = boardService.getBoardType(convertType);
+		model.addAttribute("boardTypeList", boardTypeList);
+		model.addAttribute("boardType", boardType);
 		model.addAttribute(searchMap);
 		model.addAttribute("boardList", boardList);
-		model.addAttribute("paging", paging.getPaging("/board/list", page, 
+		model.addAttribute("paging", paging.getPaging("/board/list", convertPage, 
 				boardService.getTotalCount(searchMap), BoardServiceImpl.maxCountOfOneList, 
-				BoardServiceImpl.maxCountOfOnePage, searchParam));
+				BoardServiceImpl.maxCountOfOnePage, searchParam, convertType));
 		return "/board/list.jsp";
 	}
 	
-	@RequestMapping(value="/board/add", method=RequestMethod.GET)
-	public String addForm(Model model) {
-		model.addAttribute("boardVo", new BoardVo());
+	@RequestMapping(value="/board/add/{type}", method=RequestMethod.GET)
+	public String addForm(Model model, @PathVariable int type) {
+		BoardVo bvo = new BoardVo();
+		bvo.setType(type);
+		model.addAttribute("boardVo", bvo);
 		return "/board/add.jsp";
 	}
 	
@@ -104,7 +118,7 @@ public class BoardController {
 			model.addAttribute("url", "/board/list");
 			return "/error.jsp";
 		}
-		return "redirect:/board/list";
+		return "redirect:/board/list/"+boardVo.getType();
 	}
 	
 	@RequestMapping(value="/board/view", method=RequestMethod.GET)
@@ -216,7 +230,7 @@ public class BoardController {
 		boardService.updateStep(boardVo);
 		boardService.addReply(boardVo);
 		
-		return "redirect:/board/list";
+		return "redirect:/board/list/"+boardVo.getType();
 	}
 	
 	@RequestMapping(value="/board/notice", method=RequestMethod.POST)

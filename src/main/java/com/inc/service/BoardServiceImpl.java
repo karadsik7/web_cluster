@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.inc.dao.BoardDao;
+import com.inc.vo.BoardTypeVo;
 import com.inc.vo.BoardVo;
 import com.inc.vo.MemberVo;
 
@@ -31,6 +32,7 @@ public class BoardServiceImpl implements BoardService{
 		searchMap.put("start", startRownum);
 		searchMap.put("end", endRownum);
 		List<BoardVo> boardList = boardDao.list(searchMap);
+		
 		boardList = compareDay(boardList);
 		return boardList;
 	}
@@ -112,7 +114,16 @@ public class BoardServiceImpl implements BoardService{
 		}
 	}
 	
+	@Override
+	public BoardTypeVo getBoardType(int convertType) {
+		return boardDao.boardType(convertType);
+	}
 	
+	@Override
+	public List<BoardTypeVo> boardTypeList() {
+		return boardDao.boardTypeList();
+	}
+
 	private List<BoardVo> compareDay(List<BoardVo> boardList) {
 		Calendar today = Calendar.getInstance();
 		Integer todayYear = today.get(Calendar.YEAR);

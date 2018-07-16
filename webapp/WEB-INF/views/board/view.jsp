@@ -45,7 +45,7 @@
 		</table>
 		<div class="buttons">
 			<button type="button" style="text-align: right" class="btn btn-lg btn-info" 
-			onclick="location.href='/board/list'">목록</button>
+			onclick="location.href='/board/list/${board.type}'">목록</button>
 			<button type="button" class="btn btn-lg btn-primary" 
 			onclick="location.href='/board/reply?id=${board.id }'">답글</button>
 			<c:if test="${board.mvo.id == loginMemberId}">
@@ -54,7 +54,7 @@
 			</c:if>
 			<c:if test="${board.mvo.id == loginMemberId || isAdmin}">
 			<button type="button" style="text-align: right" class="btn btn-lg btn-danger"
-			onclick="del(${board.id});">삭제</button>
+			onclick="del(${board.id}, ${board.type});">삭제</button>
 			</c:if>
 		</div>
 	</div>

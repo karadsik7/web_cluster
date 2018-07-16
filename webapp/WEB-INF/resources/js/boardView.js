@@ -1,4 +1,4 @@
-	function del(id){
+	function del(id, type){
 		if(confirm("정말로 삭제하시겠습니까?")){
 			$.ajax({
 				"url" : "/board/del",
@@ -6,7 +6,7 @@
 				"data" : {"id" : id},
 				"success" : function(data){
 					alert("삭제가 완료됐습니다. 리스트로 이동합니다.");
-					location.href = '/board/list';
+					location.href = '/board/list/'+type;
 				}
 			})
 		}
