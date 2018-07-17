@@ -111,6 +111,26 @@
  		select * from boardType order by id asc
  	</select>
  	
+ 	<select id="boardStasisList" resultType="boardTypeVo">
+ 		select * from boardstasis_view
+ 	</select>
+ 	
+ 	<select id="boardCheck" parameterType="String" resultType="int">
+ 		select count(*) from boardType where name = #{value}
+ 	</select>
+ 	
+ 	<insert id="boardAdd" parameterType="String">
+ 		insert into boardType values(seq_boardType_id.nextval, #{value})
+ 	</insert>
+ 	
+ 	<delete id="delBoard" parameterType="int">
+ 		delete from boardType where id = #{value}
+ 	</delete>
+ 	
+ 	<update id="modBoard" parameterType="Map">
+ 		update boardType set name = #{name} where id = #{id}
+ 	</update>
+ 	
 </mapper>
 
 

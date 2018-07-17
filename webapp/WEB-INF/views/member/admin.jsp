@@ -8,62 +8,88 @@
 <head>
 <jsp:include page="/WEB-INF/include/header.jsp" />
 <style>
-	.nav-sidebar { 
-    width: 100%;
-    padding: 8px 0; 
-    border-right: 1px solid #ddd;
+/* 사이드바 */
+@media screen and (max-width: 767px) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all .25s ease-out;
+         -o-transition: all .25s ease-out;
+            transition: all .25s ease-out;
+  }
+
+  .row-offcanvas-right {
+    right: 0;
+  }
+
+  .row-offcanvas-left {
+    left: 0;
+  }
+
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -60%; /* 6 columns */
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -60%; /* 6 columns */
+  }
+
+  .row-offcanvas-right.active {
+    right: 60%; /* 6 columns */
+  }
+
+  .row-offcanvas-left.active {
+    left: 60%; /* 6 columns */
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 60%; /* 6 columns */
+  }
 }
-.nav-sidebar a {
-    color: #333;
-    -webkit-transition: all 0.08s linear;
-    -moz-transition: all 0.08s linear;
-    -o-transition: all 0.08s linear;
-    transition: all 0.08s linear;
-    -webkit-border-radius: 4px 0 0 4px; 
-    -moz-border-radius: 4px 0 0 4px; 
-    border-radius: 4px 0 0 4px; 
-}
-.nav-sidebar .active a { 
-	width: 100%;
-    cursor: default;
-    background-color: #428bca; 
-    color: #fff; 
-    text-shadow: 1px 1px 1px #666; 
-}
-.nav-sidebar .active a:hover {
-    background-color: #428bca;   
-}
-.nav-sidebar .text-overflow a,
-.nav-sidebar .text-overflow .media-body {
-    white-space: nowrap;
-    overflow: hidden;
-    -o-text-overflow: ellipsis;
-    text-overflow: ellipsis; 
-} 
 </style>
 <script>
 	window.onload = function(){
-		$('#delBtn').addClass('active');
-		$('#add').hide();
+		$('#addBtn').addClass('active');
+		$('#del').hide();
+		$('#boardAdd_Del').hide();
+		$('[data-toggle="offcanvas"]').click(function () {
+		    $('.row-offcanvas').toggleClass('active')
+		  });
 	}
 	function addForm(){
-		$('#add').show();
 		$('#del').hide();
+		$('#boardAdd_Del').hide();
+		$('#add').show();
 		$('#delBtn').removeClass('active');
+		$('#boardBtn').removeClass('active');
 		$('#addBtn').addClass('active');
 	}
 	
 	function delForm(){
 		$('#add').hide();
+		$('#boardAdd_Del').hide();
 		$('#del').show();
 		$('#addBtn').removeClass('active');
+		$('#boardBtn').removeClass('active');
 		$('#delBtn').addClass('active');
+	}
+	
+	function boardForm(){
+		$('#add').hide();
+		$('#del').hide();
+		$('#boardAdd_Del').show();
+		$('#addBtn').removeClass('active');
+		$('#delBtn').removeClass('active');
+		$('#boardBtn').addClass('active');
 	}
 	
 	function addAdmin(id){
 		if(window.confirm(id+"님에게 관리자 권한을 부여하시겠습니까?")){
 			$.ajax({
-				url : "/member/addAdmin",
+				url : "/admin/add",
 				type : "post",
 				data : {"id" : id},
 				success : function(data){
@@ -84,7 +110,7 @@
 	function delAdmin(id){
 		if(window.confirm(id+"님에게 관리자 권한을 제거하시겠습니까?")){
 			$.ajax({
-				url : "/member/delAdmin",
+				url : "/admin/del",
 				type : "post",
 				data : {"id" : id},
 				success : function(data){
@@ -102,6 +128,72 @@
 		}
 	}
 	
+	function boardAdd(f){
+		var name = f.boardName.value;
+		$.ajax({
+			url : "/admin/boardAdd",
+			type : "post",
+			data : {name : name},
+			success : function(data){
+				if(data == 'failVal'){
+					alert("게시판의 제목이 15자를 초과하거나 중복입니다.");
+					f.boardName.focus();
+					return;
+				}else if(data == 'error'){
+					alert("서버 오류입니다. 잠시 후 다시 시도하세요");
+					f.boardName.focus();
+					return;
+				}else if(data == 'done'){
+					alert(name + " 추가가 완료됐습니다.");
+					location.reload();
+				}
+			}
+		}); 
+	};
+	
+	function delBoard(id, name){
+		if(confirm(name + "을 정말로 삭제하시겠습니까?\n해당 게시판의 모든 글은 삭제 됩니다.")){
+			$.ajax({
+				url : "/admin/delBoard",
+				type : "post",
+				data : {id : id},
+				success : function(data){
+					if(data == 'error'){
+						alert("서버 오류입니다. 잠시 후 다시 시도하세요");
+						return;
+					}else if(data == 'done'){
+						alert(name + " 삭제가 완료됐습니다.");
+						location.reload();
+					}
+				}
+			});	
+		}
+		 
+	};
+	
+	function modBoard(id, prevName){
+		var name = window.prompt(prevName + "의 수정할 이름을 입력해주세요.");
+		$.ajax({
+			url : "/admin/modBoard",
+			type : "post",
+			data : {id : id, name : name},
+			success : function(data){
+				if(data == 'failVal'){
+					alert("게시판 이름이 중복되거나 15글자 이내가 아닙니다.");
+					return;
+				}else if(data == 'error'){
+					alert("서버 오류입니다. 잠시 후 다시 시도하세요.");
+					return;
+				}else if(data == 'done'){
+					alert("게시판 이름이 수정됐습니다.");
+					location.reload();
+				}
+			}
+			
+		});
+		
+	}
+	
 </script>
 </head>
 <body>
@@ -115,14 +207,13 @@
 		<h2>관리자 페이지</h2>
 		</div>
 		<div class="bod">
-			<div class="col-sm-2">
-				<nav class="nav-sidebar">
-                <ul class="nav">
-                    <li id="delBtn"><a href="javascript:delForm();"><span class="glyphicon glyphicon-remove"></span> 관리자 제거</a></li>
-                    <li id="addBtn"><a href="javascript:addForm();"><span class="glyphicon glyphicon-ok"></span> 관리자 추가</a></li>
-                </ul>
-                </nav>
-			</div>
+			<div class="col-sm-2 sidebar-offcanvas" id="sidebar">
+	          <div class="list-group">
+	            <a href="javascript:addForm();" id="addBtn" class="list-group-item">관리자 추가</a>
+	            <a href="javascript:delForm();" id="delBtn" class="list-group-item">관리자 제거</a>
+	            <a href="javascript:boardForm();" id="boardBtn" class="list-group-item">게시판 관리</a>
+	          </div>
+        	</div>
 			<div id="del" class="panel panel-success text-center col-sm-10">
 				<div class="panel-heading">관리자 목록</div>
 				<div class="panel-body">
@@ -173,10 +264,56 @@
 							</tr>
 							</c:forEach>
 						</table>
+					</div>
 				</div>
+				
+				<div id="boardAdd_Del" class="panel panel-success text-center col-sm-10">
+					<div class="panel-heading">게시판 관리</div>
+					<div class="panel-body">
+						<span class="text-center">게시판 추가</span>
+						<form>
+						<div class="form-group row col-sm-offset-2">
+							<input type="text" name="boardName" placeholder="15자 이내로 작성하세요. (앞뒤 공백 비허용)" class="form-control col-sm-10"/>
+							<div class="col-sm-2">
+								<button type="button" onclick="boardAdd(this.form);" class="btn btn-primary btn-lg">추가</button>
+							</div>
+						</div>
+						</form>
+						<span class="text-center">게시판 수정/삭제</span>
+						<table class="table table-sm table-bordered table-striped">
+							<tr>
+								<th width="50%">게시판명</th>
+								<th width="15%">전체 게시글</th>
+								<th width="15%">하루 작성글</th>
+								<th width="20%"></th>
+							</tr>	
+							<c:forEach var="boardStasis" items="${boardStasisList }">
+							<tr>
+								<td>
+									<!-- 게시판 이름 -->
+									${boardStasis.name }
+								</td>
+								<td>
+									<!-- 해당 타입의 게시판의 글 카운트 -->
+									${boardStasis.b_total_count }
+								</td>
+								<td>
+									<!-- 하루를 기준으로 작성된 게시글의 카운트 -->
+									${boardStasis.b_yesterday_count }
+								</td>
+								<td>
+									<button type="button" class="btn btn-success" onclick="modBoard(${boardStasis.id}, '${boardStasis.name}');">이름 변경</button>
+									<button type="button" class="btn btn-danger" onclick="delBoard(${boardStasis.id}, '${boardStasis.name}');">삭제</button>
+								</td>
+							</tr>
+							</c:forEach>
+						</table>
+					</div>
+				</div>
+				
+				
 			</div>
 		</div>
-	</div>
 
 
 

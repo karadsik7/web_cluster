@@ -208,50 +208,7 @@ public class MemberController {
 		}
 	}
 	
-	@RequestMapping(value="/member/admin", method=RequestMethod.GET)
-	public String adminForm(Model model, HttpSession session) {
-		List<MemberVo> adminList = memberService.getAdminList();
-		List<MemberVo> memberList = memberService.getNormalList();
-		MemberVo loginAdmin = (MemberVo)session.getAttribute("member");
-		model.addAttribute("myId", loginAdmin.getId());
-		model.addAttribute("memberList", memberList);
-		model.addAttribute("adminList", adminList);
-		return "/member/admin.jsp";
-	}
 	
-	@RequestMapping(value="/member/addAdmin", method=RequestMethod.POST)
-	@ResponseBody
-	public String addAdmin(@RequestParam String id, HttpSession session, HttpServletRequest request) {
-		if(!memberService.checkAdmin(session)) {
-			return "hack";
-		}else {
-			try {
-				memberService.addAdmin(id);
-				return "done";
-			} catch (RuntimeException e) {
-				logger.error("error by addAdmin " + ((MemberVo)session.getAttribute("member")).getId() 
-						+ " " + request.getRemoteAddr() + e.getMessage());
-				return "error";
-			}
-		}
-	}
-	
-	@RequestMapping(value="/member/delAdmin", method=RequestMethod.POST)
-	@ResponseBody
-	public String delAdmin(@RequestParam String id, HttpSession session, HttpServletRequest request) {
-		if(!memberService.checkAdmin(session)) {
-			return "hack";
-		}else {
-			try {
-				memberService.delAdmin(id);
-				return "done";
-			} catch (RuntimeException e) {
-				logger.error("error by delAdmin " + ((MemberVo)session.getAttribute("member")).getId() 
-						+ " " + request.getRemoteAddr() + e.getMessage());
-				return "error";
-			}
-		}
-	}
 	
 	
 	private boolean emailValidator(String email) {

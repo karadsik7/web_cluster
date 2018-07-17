@@ -147,9 +147,15 @@ select * from board;
 alter table board add constraint fk_board_btid foreign key(type) references boardType(id) on delete cascade;
 SELECT * FROM ALL_CONSTRAINTS WHERE TABLE_NAME = 'BOARD';
 
+select * from boardType;
+select * from board;
 
+--관리자 게시판 수정삭제용 boardtype테이블과 board테이블을 조인한 게시판 통계뷰 생성
+select b.*, (select count(*) from board where type = b.id) as b_total_count, (select count(*) from board where type = b.id and to_char(regdate, 'yyyy-mm-dd') = to_char(sysdate - 1, 'yyyy-mm-dd')) as b_yesterday_count from boardType b order by id;
+create or replace view boardstasis_view as select b.*, (select count(*) from board where type = b.id) as b_total_count, (select count(*) from board where type = b.id and to_char(regdate, 'yyyy-mm-dd') = to_char(sysdate - 1, 'yyyy-mm-dd')) as b_yesterday_count from boardType b order by id;
 
-
-
-
+select * from boardstasis_view;
+desc boardType;
+select * from boardType;
+select * from board;
 

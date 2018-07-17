@@ -16,7 +16,7 @@
 					<li class="nav-item"><a class="nav-link" href="/board/list">Board</a></li>
 					<li class="nav-item"><a class="nav-link" href="/member/modify">MyPage</a></li>
 					<c:if test="${sessionScope.member.admin >= 1 }">
-						<li class="nav-item"><a class="nav-link" href="/member/admin">Admin</a></li>
+						<li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
 					</c:if>
 					<li class="nav-item"><a class="nav-link" href="/member/logout">Logout</a></li>
 				</c:if>

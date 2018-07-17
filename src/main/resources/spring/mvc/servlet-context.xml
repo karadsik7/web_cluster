@@ -39,9 +39,7 @@
 			<ref bean="loginInterceptor"/>
 		</mvc:interceptor>
 		<mvc:interceptor>
-			<mvc:mapping path="/member/admin/**"/>
-			<mvc:mapping path="/member/addAdmin/**"/>
-			<mvc:mapping path="/member/delAdmin/**"/>
+			<mvc:mapping path="/admin/**"/>
 			<ref bean="adminInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>
@@ -59,7 +57,8 @@
 	 p:commentService-ref="commentService" p:fileService-ref="fileService"/>
 	<bean name="commentController" class="com.inc.controller.CommentController"
 	 p:commentService-ref="commentService" p:boardService-ref="boardService"/>
-	
+	<bean name="adminController" class="com.inc.controller.AdminController" 
+	p:boardService-ref="boardService" p:memberService-ref="memberService"/>
 	
 </beans>
 

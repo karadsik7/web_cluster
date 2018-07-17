@@ -68,6 +68,26 @@ public class BoardDao {
 		return sqlSession.selectList("board.boardTypeList");
 	}
 
+	public List<BoardTypeVo> boardStasisList() {
+		return sqlSession.selectList("board.boardStasisList");
+	}
+
+	public int boardDualCheck(String name) {
+		return sqlSession.selectOne("board.boardCheck", name);
+	}
+
+	public void boardAdd(String name) {
+		sqlSession.insert("board.boardAdd", name);
+	}
+
+	public void delBoard(int id) {
+		sqlSession.delete("board.delBoard", id);
+	}
+
+	public void modBoard(Map<String, Object> modMap) {
+		sqlSession.update("board.modBoard", modMap);
+	}
+
 	
 	
 

@@ -40,6 +40,16 @@ public interface BoardService {
 
 	List<BoardTypeVo> boardTypeList();
 
+	List<BoardTypeVo> getboardStasisList();
+
+	boolean validateBoardName(String name);
+
+	void boardAdd(String name);
+
+	void delBoard(int id);
+
+	void modBoard(int id, String name);
+
 	
 	
 	

@@ -1,8 +1,10 @@
 package com.inc.service;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpSession;
 
@@ -123,6 +125,11 @@ public class BoardServiceImpl implements BoardService{
 	public List<BoardTypeVo> boardTypeList() {
 		return boardDao.boardTypeList();
 	}
+	
+	@Override
+	public List<BoardTypeVo> getboardStasisList() {
+		return boardDao.boardStasisList();
+	}
 
 	private List<BoardVo> compareDay(List<BoardVo> boardList) {
 		Calendar today = Calendar.getInstance();
@@ -144,6 +151,41 @@ public class BoardServiceImpl implements BoardService{
 			}
 		}
 		return boardList;
+	}
+	
+	@Override
+	public boolean validateBoardName(String name) {
+		String policy =  "([^\\s].{4,15}[^\\s])";
+		boolean validation = Pattern.compile(policy).matcher(name).matches();
+		if(!validation) {
+			return false;
+		}else if(boardCheck(name) != 0) {
+			return false;
+		}else {
+			return true;
+		}
+	}
+	
+	@Override
+	public void delBoard(int id) {
+		boardDao.delBoard(id);
+	}
+	
+	@Override
+	public void modBoard(int id, String name) {
+		Map<String, Object> modMap = new HashMap<>();
+		modMap.put("id", id);
+		modMap.put("name", name);
+		boardDao.modBoard(modMap);
+	}
+
+	@Override
+	public void boardAdd(String name) {
+		boardDao.boardAdd(name);
+	}
+
+	private int boardCheck(String name) {
+		return boardDao.boardDualCheck(name);
 	}
 	
 	
