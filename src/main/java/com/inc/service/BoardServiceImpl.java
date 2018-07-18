@@ -184,6 +184,11 @@ public class BoardServiceImpl implements BoardService{
 		boardDao.boardAdd(name);
 	}
 
+	@Override
+	public List<BoardTypeVo> boardStasisSearchList(String name) {
+		return boardDao.boardStasisSearchList(name);
+	}
+
 	private int boardCheck(String name) {
 		return boardDao.boardDualCheck(name);
 	}

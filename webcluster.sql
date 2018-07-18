@@ -159,3 +159,5 @@ desc boardType;
 select * from boardType;
 select * from board;
 
+desc member;
+select * from member;

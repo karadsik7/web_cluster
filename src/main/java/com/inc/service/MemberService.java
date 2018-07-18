@@ -33,5 +33,9 @@ public interface MemberService {
 	public void addAdmin(String id);
 
 	public void delAdmin(String id);
+
+	public List<MemberVo> adminSearchList(String id);
+
+	public List<MemberVo> memberSearchList(String id);
 	
 }

@@ -155,6 +155,17 @@ public class MemberServiceImpl implements MemberService{
 	public void delAdmin(String id) {
 		memberDao.delAdmin(id);
 	}
+
+	@Override
+	public List<MemberVo> adminSearchList(String id) {
+		return memberDao.adminSearch(id);
+	}
+
+	@Override
+	public List<MemberVo> memberSearchList(String id) {
+		return memberDao.memberSearchList(id);
+	}
+	
 	
 	
 	

@@ -53,6 +53,14 @@
  		update member set admin = 0 where id = #{value}
  	</update>
  	
+ 	<select id="adminSearch" parameterType="String" resultType="memberVo">
+ 		select * from member where id like '%'||#{value}||'%' and admin = 1
+ 	</select>
+ 	
+ 	<select id="memberSearchList" parameterType="String" resultType="memberVo">
+ 		select * from member where id like '%'||#{value}||'%' and admin = 0
+ 	</select>
+ 	
 </mapper>
 
 

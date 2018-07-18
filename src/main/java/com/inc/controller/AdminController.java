@@ -1,6 +1,8 @@
 package com.inc.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -127,6 +129,29 @@ public class AdminController {
 		}
 	}
 	
+	@RequestMapping(value="/admin/adminSearch", method=RequestMethod.POST)
+	@ResponseBody
+	public List<MemberVo> adminSearch(@RequestParam String id){
+		List<MemberVo> adminList = memberService.adminSearchList(id);
+		logger.info("adminList:" + adminList);
+		return adminList;
+	}
+	
+	@RequestMapping(value="/admin/memberSearch", method=RequestMethod.POST)
+	@ResponseBody
+	public List<MemberVo> memberSearch(@RequestParam String id){
+		List<MemberVo> memberList = memberService.memberSearchList(id);
+		logger.info("memberList:" + memberList);
+		return memberList;
+	}
+	
+	@RequestMapping(value="/admin/boardStasisSearch", method=RequestMethod.POST)
+	@ResponseBody
+	public List<BoardTypeVo> boardStasisSearch(@RequestParam String name){
+		List<BoardTypeVo> boardStasisList = boardService.boardStasisSearchList(name);
+		logger.info("boardStasisList:" + boardStasisList);
+		return boardStasisList;
+	}
 	
 	
 	

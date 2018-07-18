@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.inc.vo.BoardTypeVo;
 import com.inc.vo.BoardVo;
+import com.inc.vo.MemberVo;
 
 public class BoardDao {
 
@@ -86,6 +87,10 @@ public class BoardDao {
 
 	public void modBoard(Map<String, Object> modMap) {
 		sqlSession.update("board.modBoard", modMap);
+	}
+
+	public List<BoardTypeVo> boardStasisSearchList(String name) {
+		return sqlSession.selectList("board.boardStasisSearchList", name);
 	}
 
 	

@@ -58,6 +58,14 @@ public class MemberDao {
 	public void delAdmin(String id) {
 		session.update("member.delAdmin", id);
 	}
+
+	public List<MemberVo> adminSearch(String id) {
+		return session.selectList("member.adminSearch", id);
+	}
+
+	public List<MemberVo> memberSearchList(String id) {
+		return session.selectList("member.memberSearchList", id);
+	}
 	
 	
 	

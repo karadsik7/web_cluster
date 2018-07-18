@@ -194,6 +194,61 @@
 		
 	}
 	
+	function adminSearch(f){
+		var id = f.id.value;
+		$.ajax({
+			url : "/admin/adminSearch",
+			type : "post",
+			data : {id : id},
+			success : function(adminList){
+				console.log(adminList);
+				$('#adminTable>tbody').empty();
+				if(adminList.length == 0){
+					$('#adminTable>tbody').append('<tr><td colspan="3">조회한 결과가 없습니다.</td></tr>');
+				}
+				for(var i of adminList){
+					$('#adminTable>tbody').append('<tr><td>'+i.id+'</td><td>'+i.name+'</td><td><button type="button" class="btn btn-danger" onclick="delAdmin(\''+i.id+'\');">권한 제거</button></td></tr>');	
+				}
+			}
+		})
+	}
+	
+	function memberSearch(f){
+		var id = f.id.value;
+		$.ajax({
+			url : "/admin/memberSearch",
+			type : "post",
+			data : {id : id},
+			success : function(memberList){
+				$('#memberTable>tbody').empty();
+				if(memberList.length == 0){
+					$('#memberTable>tbody').append('<tr><td colspan="3">조회한 결과가 없습니다.</td></tr>');
+				}
+				for(var i of memberList){
+					$('#memberTable>tbody').append('<tr><td>'+i.id+'</td><td>'+i.name+'</td><td><button type="button" class="btn btn-danger" onclick="addAdmin(\''+i.id+'\');">권한 추가</button></td></tr>');	
+				}
+			}
+		})
+	}
+	
+	function boardStasisSearch(f){
+		var name = f.name.value;
+		$.ajax({
+			url : "/admin/boardStasisSearch",
+			type : "post",
+			data : {name : name},
+			success : function(boardStasisList){
+				$('#boardStasisTable>tbody').empty();
+				if(boardStasisList.length == 0){
+					$('#boardStasisTable>tbody').append('<tr><td colspan="4">조회한 결과가 없습니다.</td></tr>');
+				}
+				for(var i of boardStasisList){
+					$('#boardStasisTable>tbody').append('<tr><td>'+i.name+'</td><td>'+i.b_total_count+'</td><td>'+i.b_yesterday_count+'</td><td><button type="button" class="btn btn-success" onclick="modBoard('+i.id+', \''+i.name+'\');">이름 변경</button><button type="button" class="btn btn-danger" onclick="delBoard('+i.id+', \''+i.name+'\');">삭제</button></td></tr>');	
+				}
+			}
+		})
+	}
+	
 </script>
 </head>
 <body>
@@ -217,39 +272,50 @@
 			<div id="del" class="panel panel-success text-center col-sm-10">
 				<div class="panel-heading">관리자 목록</div>
 				<div class="panel-body">
-						<table class="table table-sm table-bordered table-striped">
-							<tr>
+						<table class="table table-sm table-bordered table-striped" id="adminTable">
+							<thead>
 								<th width="50%">아이디</th>
 								<th width="30%">이름</th>
 								<th width="20%"></th>
-							</tr>	
+							</thead>
 							<c:forEach var="admin" items="${adminList }">
 							<c:if test="${myId != admin.id }">
 							<tr>
-								<td>
+								<td id="admin_id_td">
 									${admin.id }
 								</td>
-								<td>
+								<td id="admin_name_td">
 									${admin.name }
 								</td>
-								<td>
+								<td id="admin_button_td">
 									<button type="button" class="btn btn-danger" onclick="delAdmin('${admin.id}');">권한 제거</button>
 								</td>
 							</tr>
 							</c:if>
 							</c:forEach>
 						</table>
+						<div class="adminpaging text-center">
+						
+						</div>
+						<div class="adminSearch row">
+							<form class="form-group text-center col-sm-offset-5">
+								<input type="text" name="id" class="form-control col-sm-6" placeholder="아이디를 입력하세요."/>
+								<div class="col-sm-2">
+									<button type="button" onclick="adminSearch(this.form);" class="btn btn-success">검색</button>
+								</div>
+							</form>
+						</div>
 				</div>
 			</div>
 			<div id="add" class="panel panel-success text-center col-sm-10">
 				<div class="panel-heading">멤버 목록</div>
 				<div class="panel-body">
-						<table class="table table-sm table-bordered table-striped">
-							<tr>
+						<table class="table table-sm table-bordered table-striped" id="memberTable">
+							<thead>
 								<th width="50%">아이디</th>
 								<th width="30%">이름</th>
 								<th width="20%"></th>
-							</tr>	
+							</thead>	
 							<c:forEach var="member" items="${memberList }">
 							<tr>
 								<td>
@@ -264,6 +330,19 @@
 							</tr>
 							</c:forEach>
 						</table>
+						<div class="memberpaging text-center">
+							<ul class="pagination">
+								${memberPaging}
+							</ul>
+						</div>
+						<div class="memberSearch row">
+							<form class="form-group text-center col-sm-offset-5">
+								<input type="text" name="id" class="form-control col-sm-6" placeholder="아이디를 입력하세요."/>
+								<div class="col-sm-2">
+									<button type="button" onclick="memberSearch(this.form);" class="btn btn-success">검색</button>
+								</div>
+							</form>
+						</div>
 					</div>
 				</div>
 				
@@ -280,13 +359,13 @@
 						</div>
 						</form>
 						<span class="text-center">게시판 수정/삭제</span>
-						<table class="table table-sm table-bordered table-striped">
-							<tr>
+						<table class="table table-sm table-bordered table-striped" id="boardStasisTable">
+							<thead>
 								<th width="50%">게시판명</th>
 								<th width="15%">전체 게시글</th>
 								<th width="15%">하루 작성글</th>
 								<th width="20%"></th>
-							</tr>	
+							</thead>	
 							<c:forEach var="boardStasis" items="${boardStasisList }">
 							<tr>
 								<td>
@@ -308,6 +387,19 @@
 							</tr>
 							</c:forEach>
 						</table>
+						<div class="boardstasispaging text-center">
+							<ul class="pagination">
+								${boardStasisPaging}
+							</ul>
+						</div>
+						<div class="boardStasisSearch row">
+							<form class="form-group text-center col-sm-offset-5">
+								<input type="text" name="name" class="form-control col-sm-6" placeholder="게시판 이름을 입력하세요."/>
+								<div class="col-sm-2">
+									<button type="button" onclick="boardStasisSearch(this.form);" class="btn btn-success">검색</button>
+								</div>
+							</form>
+						</div>
 					</div>
 				</div>
 				

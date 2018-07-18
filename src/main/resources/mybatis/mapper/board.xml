@@ -131,6 +131,10 @@
  		update boardType set name = #{name} where id = #{id}
  	</update>
  	
+ 	<select id="boardStasisSearchList" parameterType="String" resultType="boardTypeVo">
+ 		select * from boardstasis_view where name like '%'||#{value}||'%'
+ 	</select>
+ 	
 </mapper>
 
 

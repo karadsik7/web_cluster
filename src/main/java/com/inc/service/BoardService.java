@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import com.inc.vo.BoardTypeVo;
 import com.inc.vo.BoardVo;
+import com.inc.vo.MemberVo;
 
 public interface BoardService {
 
@@ -49,6 +50,8 @@ public interface BoardService {
 	void delBoard(int id);
 
 	void modBoard(int id, String name);
+
+	List<BoardTypeVo> boardStasisSearchList(String name);
 
 	
 	
