@@ -20,6 +20,9 @@ public class MemberServiceImpl implements MemberService{
 
 	private MemberDao memberDao;
 	private JavaMailSender javaMailSender;
+	private static final int maxCountOfOneList = 5;
+	
+	
 	
 	public void setMemberDao(MemberDao memberDao) {
 		this.memberDao = memberDao;
@@ -162,9 +165,34 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public List<MemberVo> memberSearchList(String id) {
-		return memberDao.memberSearchList(id);
+	public Map<String, Object> memberSearchPageList(Map<String, Object> searchMap){
+		int totalCount = memberDao.membertotalCount(searchMap);
+		int page = (int)(searchMap.get("page"));
+		int startRownum = (page - 1) * maxCountOfOneList + 1;
+		int endRownum = startRownum + (maxCountOfOneList - 1);
+		
+		searchMap.put("total", totalCount);
+		searchMap.put("start", startRownum);
+		searchMap.put("end", endRownum);
+		
+		List<MemberVo> memberList = memberDao.memberSearchPage(searchMap);
+		
+		searchMap.put("memberList", memberList);
+		int totalPage = 0;
+		
+		if(totalCount % maxCountOfOneList == 0) {
+			totalPage = totalCount / maxCountOfOneList;
+		}else {
+			totalPage = (totalCount / maxCountOfOneList) + 1;
+		}
+		
+		searchMap.put("totalPage", totalPage);
+		
+		return searchMap;
+		
 	}
+
+	
 	
 	
 	

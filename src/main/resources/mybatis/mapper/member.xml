@@ -61,6 +61,19 @@
  		select * from member where id like '%'||#{value}||'%' and admin = 0
  	</select>
  	
+ 	<select id="totalCount" parameterType="Map" resultType="int">
+ 		select count(*) from member where id like '%'||#{id}||'%' and admin = 0
+ 	</select>
+ 	
+ 	<select id="searchPage" parameterType="Map" resultType="memberVo">
+ 		select * from (select rownum as rnum, b.* from (select * from member
+ 			where admin = 0 
+ 			
+ 			 and id like '%'||#{id}||'%' 
+ 			
+ 		) b ) where rnum between #{start} and #{end}
+ 	</select>
+ 	
 </mapper>
 
 

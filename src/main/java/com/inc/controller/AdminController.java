@@ -40,12 +40,15 @@ public class AdminController {
 	@RequestMapping(value="/admin", method=RequestMethod.GET)
 	public String adminForm(Model model, HttpSession session) {
 		List<MemberVo> adminList = memberService.getAdminList();
-		List<MemberVo> memberList = memberService.getNormalList();
+		Map<String, Object> memberMap = new HashMap<>();
+		memberMap.put("id", "");
+		memberMap.put("page", 1);
+		Map<String, Object> resultMap = memberService.memberSearchPageList(memberMap);
 		List<BoardTypeVo> boardStasisList = boardService.getboardStasisList();
 		MemberVo loginAdmin = (MemberVo)session.getAttribute("member");
 		model.addAttribute("boardStasisList", boardStasisList);
 		model.addAttribute("myId", loginAdmin.getId());
-		model.addAttribute("memberList", memberList);
+		model.addAttribute("memberMap", memberMap);
 		model.addAttribute("adminList", adminList);
 		return "/member/admin.jsp";
 	}
@@ -133,24 +136,24 @@ public class AdminController {
 	@ResponseBody
 	public List<MemberVo> adminSearch(@RequestParam String id){
 		List<MemberVo> adminList = memberService.adminSearchList(id);
-		logger.info("adminList:" + adminList);
 		return adminList;
-	}
-	
-	@RequestMapping(value="/admin/memberSearch", method=RequestMethod.POST)
-	@ResponseBody
-	public List<MemberVo> memberSearch(@RequestParam String id){
-		List<MemberVo> memberList = memberService.memberSearchList(id);
-		logger.info("memberList:" + memberList);
-		return memberList;
 	}
 	
 	@RequestMapping(value="/admin/boardStasisSearch", method=RequestMethod.POST)
 	@ResponseBody
 	public List<BoardTypeVo> boardStasisSearch(@RequestParam String name){
 		List<BoardTypeVo> boardStasisList = boardService.boardStasisSearchList(name);
-		logger.info("boardStasisList:" + boardStasisList);
 		return boardStasisList;
+	}
+	
+	@RequestMapping(value="/admin/memberPaging", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> memberPaging(@RequestParam String id, @RequestParam int page){
+		Map<String, Object> searchMap = new HashMap<>();
+		searchMap.put("id", id);
+		searchMap.put("page", page);
+		Map<String, Object> resultMap = memberService.memberSearchPageList(searchMap);
+		return resultMap;
 	}
 	
 	

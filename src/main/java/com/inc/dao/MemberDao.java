@@ -63,8 +63,12 @@ public class MemberDao {
 		return session.selectList("member.adminSearch", id);
 	}
 
-	public List<MemberVo> memberSearchList(String id) {
-		return session.selectList("member.memberSearchList", id);
+	public int membertotalCount(Map<String, Object> searchMap) {
+		return session.selectOne("member.totalCount", searchMap);
+	}
+
+	public List<MemberVo> memberSearchPage(Map<String, Object> searchMap) {
+		return session.selectList("member.searchPage", searchMap);
 	}
 	
 	

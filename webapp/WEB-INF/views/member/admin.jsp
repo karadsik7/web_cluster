@@ -7,6 +7,13 @@
 <html>
 <head>
 <jsp:include page="/WEB-INF/include/header.jsp" />
+
+<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/jquery.bootpag.min.js"></script>
+
+
+
 <style>
 /* 사이드바 */
 @media screen and (max-width: 767px) {
@@ -48,7 +55,11 @@
     top: 0;
     width: 60%; /* 6 columns */
   }
+  
 }
+	.pagination{
+		display: inline-block;
+	}
 </style>
 <script>
 	window.onload = function(){
@@ -213,24 +224,6 @@
 		})
 	}
 	
-	function memberSearch(f){
-		var id = f.id.value;
-		$.ajax({
-			url : "/admin/memberSearch",
-			type : "post",
-			data : {id : id},
-			success : function(memberList){
-				$('#memberTable>tbody').empty();
-				if(memberList.length == 0){
-					$('#memberTable>tbody').append('<tr><td colspan="3">조회한 결과가 없습니다.</td></tr>');
-				}
-				for(var i of memberList){
-					$('#memberTable>tbody').append('<tr><td>'+i.id+'</td><td>'+i.name+'</td><td><button type="button" class="btn btn-danger" onclick="addAdmin(\''+i.id+'\');">권한 추가</button></td></tr>');	
-				}
-			}
-		})
-	}
-	
 	function boardStasisSearch(f){
 		var name = f.name.value;
 		$.ajax({
@@ -248,6 +241,8 @@
 			}
 		})
 	}
+	
+	
 	
 </script>
 </head>
@@ -294,9 +289,6 @@
 							</c:if>
 							</c:forEach>
 						</table>
-						<div class="adminpaging text-center">
-						
-						</div>
 						<div class="adminSearch row">
 							<form class="form-group text-center col-sm-offset-5">
 								<input type="text" name="id" class="form-control col-sm-6" placeholder="아이디를 입력하세요."/>
@@ -309,14 +301,14 @@
 			</div>
 			<div id="add" class="panel panel-success text-center col-sm-10">
 				<div class="panel-heading">멤버 목록</div>
-				<div class="panel-body">
+				<div class="panel-body member-body">
 						<table class="table table-sm table-bordered table-striped" id="memberTable">
 							<thead>
 								<th width="50%">아이디</th>
 								<th width="30%">이름</th>
 								<th width="20%"></th>
 							</thead>	
-							<c:forEach var="member" items="${memberList }">
+							<c:forEach var="member" items="${memberMap.memberList }">
 							<tr>
 								<td>
 									${member.id }
@@ -330,16 +322,76 @@
 							</tr>
 							</c:forEach>
 						</table>
-						<div class="memberpaging text-center">
-							<ul class="pagination">
-								${memberPaging}
-							</ul>
-						</div>
+   						<div id="content">Dynamic Content goes here</div>
+   						<div id="page-selection"></div>
+					    <script>
+					        // init bootpag
+					        
+					        var myboot = $('#page-selection').bootpag({
+							    total: ${memberMap.totalPage},
+							    page: 1,
+							    maxVisible: 5,
+							    leaps: true,
+							    firstLastUse: true,
+							    first: '←',
+							    last: '→',
+							    wrapClass: 'pagination',
+							    activeClass: 'active',
+							    disabledClass: 'disabled',
+							    nextClass: 'next',
+							    prevClass: 'prev',
+							    lastClass: 'last',
+							    firstClass: 'first'
+							}).on("page", function(event, num){
+								var text = $('#idText').val();
+							    $.ajax({
+							    	url : "/admin/memberPaging",
+							    	type : "post",
+							    	data : {page : num, id : text},
+							    	success : function(data){
+							    		//총 페이지의 수
+							    		//현재 페이지부터의 한페이지에 출력할 로우량만큼의 데이터리스트
+						    			myboot.bootpag({total: data.totalPage, page : num})
+							    		 //데이터 넣기
+							    		 $('#memberTable>tbody').empty();
+											if(data.memberList.length == 0){
+												$('#memberTable>tbody').append('<tr><td colspan="3">조회한 결과가 없습니다.</td></tr>');
+											}
+											for(var i of data.memberList){
+												$('#memberTable>tbody').append('<tr><td>'+i.id+'</td><td>'+i.name+'</td><td><button type="button" class="btn btn-danger" onclick="addAdmin(\''+i.id+'\');">권한 추가</button></td></tr>');	
+											}
+							    	}
+							    })
+							})
+					        
+					        var repaging = function(event, num){
+								var text = $('#idText').val();
+							    $.ajax({
+							    	url : "/admin/memberPaging",
+							    	type : "post",
+							    	data : {page : num, id : text},
+							    	success : function(data){
+							    		//총 페이지의 수
+							    		//현재 페이지부터의 한페이지에 출력할 로우량만큼의 데이터리스트
+							    		myboot.bootpag({total: data.totalPage, page : num})
+							    		 //데이터 넣기
+							    		 $('#memberTable>tbody').empty();
+											if(data.memberList.length == 0){
+												$('#memberTable>tbody').append('<tr><td colspan="3">조회한 결과가 없습니다.</td></tr>');
+											}
+											for(var i of data.memberList){
+												$('#memberTable>tbody').append('<tr><td>'+i.id+'</td><td>'+i.name+'</td><td><button type="button" class="btn btn-danger" onclick="addAdmin(\''+i.id+'\');">권한 추가</button></td></tr>');	
+											}
+							    	}
+							    })
+							}
+					        
+					    </script>
 						<div class="memberSearch row">
 							<form class="form-group text-center col-sm-offset-5">
-								<input type="text" name="id" class="form-control col-sm-6" placeholder="아이디를 입력하세요."/>
+								<input type="text" id="idText" name="id" class="form-control col-sm-6" placeholder="아이디를 입력하세요."/>
 								<div class="col-sm-2">
-									<button type="button" onclick="memberSearch(this.form);" class="btn btn-success">검색</button>
+									<button type="button" onclick='repaging(event, 1);' class="btn btn-success">검색</button>
 								</div>
 							</form>
 						</div>
@@ -387,11 +439,6 @@
 							</tr>
 							</c:forEach>
 						</table>
-						<div class="boardstasispaging text-center">
-							<ul class="pagination">
-								${boardStasisPaging}
-							</ul>
-						</div>
 						<div class="boardStasisSearch row">
 							<form class="form-group text-center col-sm-offset-5">
 								<input type="text" name="name" class="form-control col-sm-6" placeholder="게시판 이름을 입력하세요."/>

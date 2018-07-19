@@ -1,6 +1,7 @@
 package com.inc.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -36,6 +37,7 @@ public interface MemberService {
 
 	public List<MemberVo> adminSearchList(String id);
 
-	public List<MemberVo> memberSearchList(String id);
+	Map<String, Object> memberSearchPageList(Map<String, Object> searchMap);
+
 	
 }
