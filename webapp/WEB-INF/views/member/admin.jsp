@@ -15,48 +15,29 @@
 
 
 <style>
-/* 사이드바 */
-@media screen and (max-width: 767px) {
-  .row-offcanvas {
-    position: relative;
-    -webkit-transition: all .25s ease-out;
-         -o-transition: all .25s ease-out;
-            transition: all .25s ease-out;
-  }
+	.vertical-menu {
+		margin-left: 10%;
+		margin-top : 30%;
+		display:inline-block;
+  			width: 200px;
+	}
 
-  .row-offcanvas-right {
-    right: 0;
-  }
-
-  .row-offcanvas-left {
-    left: 0;
-  }
-
-  .row-offcanvas-right
-  .sidebar-offcanvas {
-    right: -60%; /* 6 columns */
-  }
-
-  .row-offcanvas-left
-  .sidebar-offcanvas {
-    left: -60%; /* 6 columns */
-  }
-
-  .row-offcanvas-right.active {
-    right: 60%; /* 6 columns */
-  }
-
-  .row-offcanvas-left.active {
-    left: 60%; /* 6 columns */
-  }
-
-  .sidebar-offcanvas {
-    position: absolute;
-    top: 0;
-    width: 60%; /* 6 columns */
-  }
-  
-}
+	.vertical-menu a {
+	    background-color: #eee;
+	    color: black;
+	    display: block;
+	    padding: 12px;
+	    text-decoration: none;
+	}
+	
+	.vertical-menu a:hover {
+	    background-color: #ccc;
+	}
+	
+	.vertical-menu a.active {
+	    background-color: #007bff;
+	    color: white;
+	}
 	.pagination{
 		display: inline-block;
 	}
@@ -252,18 +233,19 @@
 	<div class="overlay"></div>
 </header>
 
-	<div class="container">
+	<div class="container-fluid">
 		<div class="header">
-		<h2>관리자 페이지</h2>
 		</div>
-		<div class="bod">
-			<div class="col-sm-2 sidebar-offcanvas" id="sidebar">
-	          <div class="list-group">
-	            <a href="javascript:addForm();" id="addBtn" class="list-group-item">관리자 추가</a>
-	            <a href="javascript:delForm();" id="delBtn" class="list-group-item">관리자 제거</a>
-	            <a href="javascript:boardForm();" id="boardBtn" class="list-group-item">게시판 관리</a>
-	          </div>
-        	</div>
+		<div class="bod">.
+			<div class="col-sm-2">
+			<h2 class="text-center"><span class="glyphicon glyphicon-signal">&nbsp;</span>관리자 페이지</h2>
+				<div class="vertical-menu">
+						<a href="javascript:addForm();" id="addBtn" class="list-group-item">관리자 추가</a>
+	            		<a href="javascript:delForm();" id="delBtn" class="list-group-item">관리자 제거</a>
+	            		<a href="javascript:boardForm();" id="boardBtn" class="list-group-item">게시판 관리</a>
+				</div>
+			</div>
+        	
 			<div id="del" class="panel panel-success text-center col-sm-10">
 				<div class="panel-heading">관리자 목록</div>
 				<div class="panel-body">
@@ -322,7 +304,6 @@
 							</tr>
 							</c:forEach>
 						</table>
-   						<div id="content">Dynamic Content goes here</div>
    						<div id="page-selection"></div>
 					    <script>
 					        // init bootpag

@@ -90,9 +90,6 @@
 	<div class="container-fluid">
 		<div class="col-sm-8">
 		<div class="header" style="margin-top:0">
-		
-		
-		
 			<h2 class="text-left">${boardType.name}</h2>
 			<div class="search">
 				<select id="search_option" onchange="lock();">
