@@ -35,9 +35,15 @@ public class BoardVo {
 	private MemberVo mvo;
 	private int notice;
 	private int type;
+	private int commentCount;
 	
 	
-	
+	public int getCommentCount() {
+		return commentCount;
+	}
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
+	}
 	public int getType() {
 		return type;
 	}

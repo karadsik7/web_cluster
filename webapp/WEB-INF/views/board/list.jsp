@@ -136,8 +136,25 @@
 					<td colspan="5">게시물이 존재하지 않습니다.</td>
 				</tr>
 				</c:if>
+				
+				<c:forEach var="bvo" items="${boardNoticeList }">
+				<c:if test="${bvo.notice==1 }">
+				<tr class="notice">
+					<td>${bvo.id }</td>
+					<td style="text-align: left;" >
+							<span class="label label-danger">공지</span>
+						<a href="/board/view?id=${bvo.id}">${bvo.title } &nbsp;&nbsp;<span style="color:#FF8000; font-size: 9pt; font-weight: bold">(${bvo.commentCount })</span></a>
+					<td>${bvo.name } (${bvo.m_id})</td>
+					<td>
+						${bvo.regdate }
+					</td>
+					<td>${bvo.hit }</td>
+				</tr>
+				</c:if>
+				</c:forEach>
+				
 				<c:forEach var="bvo" items="${boardList }">
-				<tr <c:if test="${bvo.notice == 1}">class="notice"</c:if>>
+				<tr>
 					<td>${bvo.id }</td>
 					<td style="text-align: left;" >
 						<c:if test="${bvo.notice == 1}">
@@ -151,7 +168,7 @@
 							└▶
 							</c:if>
 						</c:forEach>
-						<a href="/board/view?id=${bvo.id}">${bvo.title }</a>
+						<a href="/board/view?id=${bvo.id}">${bvo.title } &nbsp;&nbsp;<span style="color:#FF8000; font-size: 9pt; font-weight: bold">(${bvo.commentCount })</span></a>
 					<td>${bvo.name } (${bvo.m_id})</td>
 					<td>
 						${bvo.regdate }

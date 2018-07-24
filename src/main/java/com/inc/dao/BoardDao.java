@@ -93,6 +93,10 @@ public class BoardDao {
 		return sqlSession.selectList("board.boardStasisSearchList", name);
 	}
 
+	public List<BoardVo> boardNoticeList(int type) {
+		return sqlSession.selectList("board.boardNoticeList", type);
+	}
+
 	
 	
 

@@ -16,7 +16,7 @@
 	DEPTH            NUMBER -->
  
  
- 	<select id="list" resultType="boardVo" parameterType="Map">
+ 	<select id="list" resultMap="boardListMap" parameterType="Map">
  		select * from (select rownum as rnum, b.* from (select * from board
  			where type = #{type} 
  			<if test="option != 'all' and text != null">
@@ -36,8 +36,13 @@
 					</when>
  				</choose>
  			</if>
- 		order by notice desc, ref desc, step asc) b ) where rnum between #{start} and #{end}
+ 		order by ref desc, step asc) b ) where rnum between #{start} and #{end}
  	</select>
+ 	
+ 	<resultMap type="boardVo" id="boardListMap">
+ 		<id property="id" column="id"/>
+ 		<association property="commentCount" column="id" javaType="int" select="comments.count" />
+ 	</resultMap>
  	
  	<select id="boardType" parameterType="int" resultType="boardTypeVo">
  		select * from boardType where id = #{value}
@@ -134,6 +139,12 @@
  	<select id="boardStasisSearchList" parameterType="String" resultType="boardTypeVo">
  		select * from boardstasis_view where name like '%'||#{value}||'%'
  	</select>
+ 	
+ 	<select id="boardNoticeList" parameterType="int" resultMap="boardListMap">
+ 		select * from board where type = #{value} and notice = 1
+ 	</select>
+ 	
+ 	
  	
 </mapper>
 

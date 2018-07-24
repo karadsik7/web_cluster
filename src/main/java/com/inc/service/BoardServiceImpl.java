@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpSession;
@@ -187,6 +188,13 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public List<BoardTypeVo> boardStasisSearchList(String name) {
 		return boardDao.boardStasisSearchList(name);
+	}
+	
+	@Override
+	public List<BoardVo> boardNoticeList(int type) {
+		List<BoardVo> boardList = boardDao.boardNoticeList(type);
+		boardList = compareDay(boardList);
+		return boardList;
 	}
 
 	private int boardCheck(String name) {

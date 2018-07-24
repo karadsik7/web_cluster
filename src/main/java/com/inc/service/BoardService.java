@@ -2,6 +2,7 @@ package com.inc.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -52,6 +53,8 @@ public interface BoardService {
 	void modBoard(int id, String name);
 
 	List<BoardTypeVo> boardStasisSearchList(String name);
+
+	List<BoardVo> boardNoticeList(int type);
 
 	
 	

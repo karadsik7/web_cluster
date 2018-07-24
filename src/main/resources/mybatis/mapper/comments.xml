@@ -42,6 +42,10 @@
 		insert into hate values(seq_hate_id.nextval, #{c_id}, #{m_id})
 	</insert>
 	
+	<select id="count" parameterType="int" resultType="int">
+		select count(*) from comments where b_id = #{value}
+	</select>
+	
 </mapper>
 
 

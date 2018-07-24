@@ -80,7 +80,9 @@ public class BoardController {
 		}
 		List<BoardVo> boardList = boardService.list(searchMap);
 		List<BoardTypeVo> boardTypeList = boardService.boardTypeList();
+		List<BoardVo> boardNoticeList = boardService.boardNoticeList(convertType);
 		BoardTypeVo boardType = boardService.getBoardType(convertType);
+		model.addAttribute("boardNoticeList", boardNoticeList);
 		model.addAttribute("boardTypeList", boardTypeList);
 		model.addAttribute("boardType", boardType);
 		model.addAttribute(searchMap);
