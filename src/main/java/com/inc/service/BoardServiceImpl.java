@@ -208,7 +208,16 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	
-	
+	public boolean tagVerifier(List<TagVo> tagList, int t_id) {
+		boolean verifier = false;
+		for(TagVo tag : tagList) {
+			if(tag.getId() == t_id) {
+				verifier = true;
+				break;
+			}
+		}
+		return verifier;
+	};
 	
 	
 	

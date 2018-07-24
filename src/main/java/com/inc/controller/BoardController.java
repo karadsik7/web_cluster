@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -109,8 +110,14 @@ public class BoardController {
 	public String add(@ModelAttribute @Valid BoardVo boardVo, BindingResult result, HttpServletRequest request, HttpSession session,
 			Model model) {
 		//입력값 검증 및 에러 포워드
-		if(result.hasErrors()) {
+			//라디오박스 밸류값 취약점 점검
 			List<TagVo> tagList = boardService.tagList();
+			if(!boardService.tagVerifier(tagList, boardVo.getT_id())) {
+				model.addAttribute("msg", "정상적인 데이터 요청이 아닙니다.");
+				model.addAttribute("url", "/");
+				return "/error.jsp";
+			}
+		if(result.hasErrors()) {
 			model.addAttribute("tagList", tagList);
 			return "/board/add.jsp";
 		}
@@ -157,8 +164,6 @@ public class BoardController {
 			model.addAttribute("url", "/board/list");
 			return "/error.jsp";
 		}else if(!((MemberVo)session.getAttribute("member")).getId().equals(boardVo.getM_id())){
-			System.out.println(((MemberVo)session.getAttribute("member")).getId());
-			System.out.println(boardVo.getM_id());
 			model.addAttribute("msg", "타인의 게시물은 수정이 불가능합니다.");
 			model.addAttribute("url", "/board/list");
 			return "/error.jsp";
@@ -175,6 +180,12 @@ public class BoardController {
 	@RequestMapping(value="/board/update", method=RequestMethod.POST)
 	public String update(@ModelAttribute @Valid BoardVo boardVo, BindingResult result, HttpSession session, Model model) {
 		BoardVo originVo = boardService.findOne(boardVo.getId());
+		List<TagVo> tagList = boardService.tagList();
+		if(!boardService.tagVerifier(tagList, boardVo.getT_id())) {
+			model.addAttribute("msg", "정상적인 데이터 요청이 아닙니다.");
+			model.addAttribute("url", "/");
+			return "/error.jsp";
+		}
 		//보안상 세션비교
 		if(session.getAttribute("member") == null) {
 			model.addAttribute("msg", "비로그인 사용자는 이용할 수 없습니다.");
@@ -186,7 +197,7 @@ public class BoardController {
 			return "/error.jsp";
 		}else if(result.hasErrors()){
 			//수정된 글이 정규표현식에 맞지 않을 경우
-			List<TagVo> tagList = boardService.tagList();
+			
 			model.addAttribute("tagList", tagList);
 			model.addAttribute("boardVo", boardVo);
 			return "/board/update.jsp?id="+boardVo.getId();
@@ -235,10 +246,15 @@ public class BoardController {
 	@RequestMapping(value="/board/reply", method=RequestMethod.POST)
 	public String addReply(@ModelAttribute @Valid BoardVo boardVo, BindingResult result, HttpServletRequest request, HttpSession session, Model model) {
 		//데이터에 유효성에 문제가 있을 시 다시 돌려보냄
+		List<TagVo> tagList = boardService.tagList();
 		if(result.hasErrors()) {
-			List<TagVo> tagList = boardService.tagList();
 			model.addAttribute("tagList", tagList);
 			return "/board/reply.jsp";
+		}
+		if(!boardService.tagVerifier(tagList, boardVo.getT_id())) {
+			model.addAttribute("msg", "정상적인 데이터 요청이 아닙니다.");
+			model.addAttribute("url", "/");
+			return "/error.jsp";
 		}
 		//사용자 정보 저장
 		boardVo.setIp(request.getRemoteAddr());
