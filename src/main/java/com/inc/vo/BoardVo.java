@@ -14,8 +14,11 @@ public class BoardVo {
 	HIT              NUMBER       
 	REF              NUMBER       
 	STEP             NUMBER       
-	DEPTH            NUMBER
-	M_ID             VARCHAR2(10)
+	DEPTH            NUMBER       
+	M_ID             VARCHAR2(10) 
+	NOTICE           NUMBER(1)    
+	TYPE             NUMBER       
+	T_ID             NUMBER 
 	*/
 	
 	private int id;
@@ -36,8 +39,24 @@ public class BoardVo {
 	private int notice;
 	private int type;
 	private int commentCount;
+	private int t_id;
+	private TagVo tvo;
 	
 	
+	
+	
+	public TagVo getTvo() {
+		return tvo;
+	}
+	public void setTvo(TagVo tvo) {
+		this.tvo = tvo;
+	}
+	public int getT_id() {
+		return t_id;
+	}
+	public void setT_id(int t_id) {
+		this.t_id = t_id;
+	}
 	public int getCommentCount() {
 		return commentCount;
 	}

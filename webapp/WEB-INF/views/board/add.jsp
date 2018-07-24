@@ -13,6 +13,11 @@
 	width: 100%;
 }
 </style>
+<script>
+	window.onload = function(){
+		
+	}
+</script>
 </head>
 <body>
 <jsp:include page="/WEB-INF/include/nav.jsp" />
@@ -44,6 +49,16 @@
 				<td colspan="2" class="">
 					<form:textarea path="content" id="content" class="form-control"></form:textarea>
 					<form:errors class="errors" path="content"/>
+				</td>
+			</tr>
+			<tr class="active">
+				<th>분류</th>
+				<td>
+					<c:forEach var="tag" items="${tagList}">
+						<label class="radio-inline">
+							<input type="radio" name="t_id" value="${tag.id}" <c:if test="${tag.id == 1}">checked="checked"</c:if>>${tag.name}
+						</label>	
+					</c:forEach>
 				</td>
 			</tr>
 		</table>

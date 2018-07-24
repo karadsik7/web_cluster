@@ -13,6 +13,7 @@ import com.inc.dao.BoardDao;
 import com.inc.vo.BoardTypeVo;
 import com.inc.vo.BoardVo;
 import com.inc.vo.MemberVo;
+import com.inc.vo.TagVo;
 
 
 public class BoardServiceImpl implements BoardService{
@@ -44,6 +45,11 @@ public class BoardServiceImpl implements BoardService{
 	public void add(BoardVo boardVo) {
 		
 		boardDao.add(boardVo);
+	}
+	
+	@Override
+	public List<TagVo> tagList() {
+		return boardDao.tagList();
 	}
 
 	@Override

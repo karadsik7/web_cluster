@@ -13,7 +13,11 @@
 	HIT              NUMBER       
 	REF              NUMBER       
 	STEP             NUMBER       
-	DEPTH            NUMBER -->
+	DEPTH            NUMBER       
+	M_ID             VARCHAR2(10) 
+	NOTICE           NUMBER(1)    
+	TYPE             NUMBER       
+	T_ID             NUMBER  -->
  
  
  	<select id="list" resultMap="boardListMap" parameterType="Map">
@@ -36,12 +40,14 @@
 					</when>
  				</choose>
  			</if>
+ 			<if test="t_id != null">and t_id = #{t_id}</if>
  		order by ref desc, step asc) b ) where rnum between #{start} and #{end}
  	</select>
  	
  	<resultMap type="boardVo" id="boardListMap">
  		<id property="id" column="id"/>
  		<association property="commentCount" column="id" javaType="int" select="comments.count" />
+ 		<association property="tvo" column="t_id" javaType="tagVo" select="tags.selectOne" />
  	</resultMap>
  	
  	<select id="boardType" parameterType="int" resultType="boardTypeVo">
@@ -50,7 +56,7 @@
  	
  	<insert id="add" parameterType="boardVo">
  		insert into board values(seq_board_id.nextval, #{name}, #{title}, 
- 		#{content}, #{ip}, sysdate+9/24, 0, seq_board_id.currval, 0, 0, #{m_id}, 0, #{type})
+ 		#{content}, #{ip}, sysdate+9/24, 0, seq_board_id.currval, 0, 0, #{m_id}, 0, #{type}, #{t_id})
  	</insert>
  	
  	<select id="selectOne" parameterType="int" resultMap="selectMap">
@@ -67,7 +73,7 @@
  	</update>
  	
  	<update id="update" parameterType="boardVo">
- 		update board set title = #{title}, name = #{name}, content = #{content} where id = #{id}
+ 		update board set title = #{title}, name = #{name}, content = #{content}, t_id = #{t_id} where id = #{id}
  	</update>
  	
  	<delete id="delete" parameterType="int">
@@ -80,7 +86,7 @@
  	
  	<insert id="addReply" parameterType="boardVo">
  		insert into board values(seq_board_id.nextval, #{name}, #{title}, 
- 		#{content}, #{ip}, sysdate+9/24, 0, #{ref}, #{step}, #{depth}, #{m_id}, 0, #{type})
+ 		#{content}, #{ip}, sysdate+9/24, 0, #{ref}, #{step}, #{depth}, #{m_id}, 0, #{type}, #{t_id})
  	</insert>
  	
  	<select id="totalCount" parameterType="Map" resultType="int">

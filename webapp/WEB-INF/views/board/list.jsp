@@ -2,6 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<c:set var="baseURL" value="${fn:replace(req.requestURL, fn:substring(req.requestURI, 0, fn:length(req.requestURI)), req.contextPath)}" />
+<c:set var="path" value="${requestScope['javax.servlet.forward.servlet_path']}" /> 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,6 +66,9 @@
 	
 	.btn-group button:hover {
 	    background-color: red;
+	}
+	.tagLink{
+		font-weight:normal!important;
 	}	
 </style>
 </head>
@@ -116,17 +123,19 @@
 		<div class="header" style="margin-top:0">
 			<h2 class="text-left">${boardType.name}</h2>
 			<div class="btn-group" style="width:100%">
-			  <button style="width:25%">정보/TIP</button>
-			  <button style="width:25%">추천글</button>
-			  <button style="width:25%">질문</button>
-			  <button style="width:25%">스크린샷</button>	
+			  <button type="button" onclick="location.href='${baseURL}${path}'" style="width:25%">전체 보기</button>
+			  <button type="button" onclick="location.href='${baseURL}${path}?t_id=2'" style="width:25%">정보/TIP</button>
+			  <button type="button" onclick="location.href='${baseURL}${path}?t_id=3'" style="width:25%">질문</button>
+			  <button type="button" onclick="location.href='${baseURL}${path}?t_id=5'" style="width:25%">팬아트</button>
+			  <button type="button" onclick="location.href='${baseURL}${path}?t_id=4'" style="width:25%">스크린샷</button>	
 			</div>
 		</div>
 		<div class="body">
 			<table class="board table table-striped table-hover">
 				<tr>
 					<th style="width:10%">번호</th>
-					<th style="width:55%">제목</th>
+					<th style="width:10%">분류</th>
+					<th style="width:45%">제목</th>
 					<th style="width:15%">이름</th>
 					<th style="width:10%">날짜</th>
 					<th style="width:10%">조회</th>
@@ -141,6 +150,7 @@
 				<c:if test="${bvo.notice==1 }">
 				<tr class="notice">
 					<td>${bvo.id }</td>
+					<td><a class="tagLink" href="${baseURL}${path}?t_id=${bvo.tvo.id}">${bvo.tvo.name }</a></td>
 					<td style="text-align: left;" >
 							<span class="label label-danger">공지</span>
 						<a href="/board/view?id=${bvo.id}">${bvo.title } &nbsp;&nbsp;<span style="color:#FF8000; font-size: 9pt; font-weight: bold">(${bvo.commentCount })</span></a>
@@ -156,6 +166,7 @@
 				<c:forEach var="bvo" items="${boardList }">
 				<tr>
 					<td>${bvo.id }</td>
+					<td><a class="tagLink" href="${baseURL}${path}?t_id=${bvo.tvo.id}">${bvo.tvo.name }</a></td>
 					<td style="text-align: left;" >
 						<c:if test="${bvo.notice == 1}">
 							<span class="label label-danger">공지</span>

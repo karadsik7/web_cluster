@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import com.inc.vo.BoardTypeVo;
 import com.inc.vo.BoardVo;
 import com.inc.vo.MemberVo;
+import com.inc.vo.TagVo;
 
 public class BoardDao {
 
@@ -95,6 +96,10 @@ public class BoardDao {
 
 	public List<BoardVo> boardNoticeList(int type) {
 		return sqlSession.selectList("board.boardNoticeList", type);
+	}
+
+	public List<TagVo> tagList() {
+		return sqlSession.selectList("tags.list");
 	}
 
 	

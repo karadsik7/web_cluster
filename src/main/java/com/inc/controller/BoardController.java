@@ -31,6 +31,7 @@ import com.inc.vo.BoardTypeVo;
 import com.inc.vo.BoardVo;
 import com.inc.vo.CommentVo;
 import com.inc.vo.MemberVo;
+import com.inc.vo.TagVo;
 
 @Controller
 public class BoardController {
@@ -64,7 +65,7 @@ public class BoardController {
 	@RequestMapping(value= {"/board/list", "/board/list/{type}/{page}", "board/list/{type}"}, method=RequestMethod.GET)
 	public String list(Model model, @RequestParam(required=false) String text, 
 			@RequestParam(required=false) String option, @PathVariable Optional<Integer> page, 
-			@PathVariable Optional<Integer> type) {
+			@PathVariable Optional<Integer> type, @RequestParam(required=false) String t_id) {
 		int convertType = Optional.ofNullable(type).get().orElse(1);
 		int convertPage = Optional.ofNullable(page).get().orElse(1);
 		
@@ -73,6 +74,7 @@ public class BoardController {
 		searchMap.put("option", option);
 		searchMap.put("page", convertPage);
 		searchMap.put("type", convertType);
+		searchMap.put("t_id", t_id);
 		
 		String searchParam = "";
 		if(text != null && option != "all") {
@@ -96,8 +98,10 @@ public class BoardController {
 	@RequestMapping(value="/board/add/{type}", method=RequestMethod.GET)
 	public String addForm(Model model, @PathVariable int type) {
 		BoardVo bvo = new BoardVo();
+		List<TagVo> tagList = boardService.tagList();
 		bvo.setType(type);
 		model.addAttribute("boardVo", bvo);
+		model.addAttribute("tagList", tagList);
 		return "/board/add.jsp";
 	}
 	
@@ -106,6 +110,8 @@ public class BoardController {
 			Model model) {
 		//입력값 검증 및 에러 포워드
 		if(result.hasErrors()) {
+			List<TagVo> tagList = boardService.tagList();
+			model.addAttribute("tagList", tagList);
 			return "/board/add.jsp";
 		}
 		//성공시 데이터베이스 입력후 리다이렉트
@@ -158,7 +164,9 @@ public class BoardController {
 			return "/error.jsp";
 		}else {
 			//수정폼으로 보내줌
+			List<TagVo> tagList = boardService.tagList();
 			model.addAttribute("boardVo", boardVo);
+			model.addAttribute("tagList", tagList);
 			return "/board/update.jsp?id="+boardVo.getId();
 		}
 	}
@@ -178,6 +186,8 @@ public class BoardController {
 			return "/error.jsp";
 		}else if(result.hasErrors()){
 			//수정된 글이 정규표현식에 맞지 않을 경우
+			List<TagVo> tagList = boardService.tagList();
+			model.addAttribute("tagList", tagList);
 			model.addAttribute("boardVo", boardVo);
 			return "/board/update.jsp?id="+boardVo.getId();
 		}else {
@@ -212,16 +222,22 @@ public class BoardController {
 	public String replyForm(@RequestParam int id, Model model) {
 		//원본글의 정보를 가져오기
 		BoardVo originVo = boardService.findOne(id);
+		
 		//원본글의 내용을 같이 포워드
 		model.addAttribute("board", originVo);
 		model.addAttribute("boardVo", new BoardVo());
+		//답글의 태그 설정
+		List<TagVo> tagList = boardService.tagList();
+		model.addAttribute("tagList", tagList);
 		return "/board/reply.jsp";
 	}
 	
 	@RequestMapping(value="/board/reply", method=RequestMethod.POST)
-	public String addReply(@ModelAttribute @Valid BoardVo boardVo, BindingResult result, HttpServletRequest request, HttpSession session) {
+	public String addReply(@ModelAttribute @Valid BoardVo boardVo, BindingResult result, HttpServletRequest request, HttpSession session, Model model) {
 		//데이터에 유효성에 문제가 있을 시 다시 돌려보냄
 		if(result.hasErrors()) {
+			List<TagVo> tagList = boardService.tagList();
+			model.addAttribute("tagList", tagList);
 			return "/board/reply.jsp";
 		}
 		//사용자 정보 저장

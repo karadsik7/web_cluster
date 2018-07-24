@@ -2,13 +2,12 @@ package com.inc.service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
 import com.inc.vo.BoardTypeVo;
 import com.inc.vo.BoardVo;
-import com.inc.vo.MemberVo;
+import com.inc.vo.TagVo;
 
 public interface BoardService {
 
@@ -55,6 +54,8 @@ public interface BoardService {
 	List<BoardTypeVo> boardStasisSearchList(String name);
 
 	List<BoardVo> boardNoticeList(int type);
+
+	List<TagVo> tagList();
 
 	
 	

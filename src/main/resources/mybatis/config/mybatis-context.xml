@@ -13,6 +13,7 @@
     <mapper resource="mybatis/mapper/member.xml"/>
     <mapper resource="mybatis/mapper/board.xml"/>
     <mapper resource="mybatis/mapper/comments.xml"/>
+    <mapper resource="mybatis/mapper/tags.xml"/>
   </mappers>
 </configuration>
 

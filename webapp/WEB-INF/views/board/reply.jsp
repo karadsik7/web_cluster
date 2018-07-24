@@ -62,6 +62,16 @@
 					<form:errors class="errors" path="content"/>
 				</td>
 			</tr>
+			<tr class="active">
+				<th>분류</th>
+				<td>
+					<c:forEach var="tag" items="${tagList}">
+						<label class="radio-inline">
+							<input type="radio" name="t_id" value="${tag.id}" <c:if test="${tag.id == 1}">checked="checked"</c:if>>${tag.name}
+						</label>	
+					</c:forEach>
+				</td>
+			</tr>
 		</table>
 		<div class="buttons">
 			<button class="btn btn-primary btn-lg">등록</button>

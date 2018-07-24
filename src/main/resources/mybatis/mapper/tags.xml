@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tags">
+	
+	<!-- 
+	ID      NOT NULL NUMBER        
+	NAME    NOT NULL VARCHAR2(15)  
+	 -->
+	<select id="selectOne" parameterType="int" resultType="tagVo">
+		select * from tags where id = #{value}
+	</select>
+	
+	<select id="list" resultType="tagVo">
+		select * from tags
+	</select>
+	
+</mapper>
+
+
