@@ -97,9 +97,11 @@ td.content{
 	color: gray;
 }
 
+
 .search{
-	text-align: right;
+	text-align: left !important;
 	padding: 20px;
+	display:inline-block;
 }
 
 .search input[type=text]{

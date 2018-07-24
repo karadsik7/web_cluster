@@ -5,42 +5,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<jsp:include page="/WEB-INF/include/header.jsp" />
-	<link href="/css/board.css" rel="stylesheet">
-	<style>
-		.center{
-			text-align:center;
-		}
-		.pagination{
-			display:inline-block;
-		}
-		.notice{
-			background-color: #FFFF99 !important;
-		}
-		.vertical-menu {
-			margin-left: 10%;
-			margin-top : 30%;
-			display:inline-block;
-   			width: 200px;
-		}
+<jsp:include page="/WEB-INF/include/header.jsp" />
+<link href="/css/board.css?ver=1" rel="stylesheet">
+<style>
+	.center{
+		text-align:center;
+	}
+	.pagination{
+		display:inline-block;
+	}
+	.notice{
+		background-color: #FFFF99 !important;
+	}
+	.vertical-menu {
+		margin-left: 10%;
+		margin-top : 30%;
+		display:inline-block;
+  			width: 200px;
+	}
 
-		.vertical-menu a {
-		    background-color: #eee;
-		    color: black;
-		    display: block;
-		    padding: 12px;
-		    text-decoration: none;
-		}
-		
-		.vertical-menu a:hover {
-		    background-color: #ccc;
-		}
-		
-		.vertical-menu a.active {
-		    background-color: #4CAF50;
-		    color: white;
-		}
-	</style>
+	.vertical-menu a {
+	    background-color: #eee;
+	    color: black;
+	    display: block;
+	    padding: 12px;
+	    text-decoration: none;
+	}
+	
+	.vertical-menu a:hover {
+	    background-color: #ccc;
+	}
+	
+	.vertical-menu a.active {
+	    background-color: #007bff;
+	    color: white;
+	}
+	
+	.btn-group button {
+    background-color: #333; 
+    border: 1px solid black;
+    color: white; 
+    padding: 10px 24px;
+    cursor: pointer;
+    float: left;
+	}
+	
+	.btn-group:after {
+	    content: "";
+	    clear: both;
+	    display: table;
+	}
+	
+	.btn-group button:not(:last-child) {
+	    border-right: none;
+	}
+	
+	.btn-group button:hover {
+	    background-color: red;
+	}	
+</style>
 </head>
 <script>
 	window.onload = function(){
@@ -81,6 +104,7 @@
       <div class="overlay"></div>
     </header>
     <div class="col-sm-2">
+    	<h2 class="text-center">커뮤니티</h2>
 		<div class="vertical-menu">
 			<c:forEach var="bt" items="${boardTypeList}">
 				<a href="/board/list/${bt.id}" <c:if test="${bt.id == boardType.id}">class="active"</c:if>>${bt.name}</a>
@@ -91,16 +115,11 @@
 		<div class="col-sm-8">
 		<div class="header" style="margin-top:0">
 			<h2 class="text-left">${boardType.name}</h2>
-			<div class="search">
-				<select id="search_option" onchange="lock();">
-					<option value="all">전체</option>
-					<option value="title">제목</option>
-					<option value="name">이름</option>
-					<option value="content">내용</option>
-					<option value="title_content">제목+내용</option>
-				</select>
-				<input type="text" id="search_text" value="${param.text }" />
-				<button type="button" onclick="search(${boardType.id});" class="btn btn-success btn-lg">찾기</button>
+			<div class="btn-group" style="width:100%">
+			  <button style="width:25%">정보/TIP</button>
+			  <button style="width:25%">추천글</button>
+			  <button style="width:25%">질문</button>
+			  <button style="width:25%">스크린샷</button>	
 			</div>
 		</div>
 		<div class="body">
@@ -141,8 +160,19 @@
 				</tr>
 				</c:forEach>
 			</table>
-			<div class="buttons">
-				<button type="button" onclick="location.href='/board/add/${boardType.id}'" class="btn btn-primary btn-lg">글쓰기</button>
+			<div>
+				<div class="search">
+					<select id="search_option" onchange="lock();">
+						<option value="all">전체</option>
+						<option value="title">제목</option>
+						<option value="name">이름</option>
+						<option value="content">내용</option>
+						<option value="title_content">제목+내용</option>
+					</select>
+					<input type="text" id="search_text" value="${param.text }" />
+					<button type="button" onclick="search(${boardType.id});" class="btn btn-success">찾기</button>
+				</div>
+				<button type="button" onclick="location.href='/board/add/${boardType.id}'" class="btn btn-primary btn-lg" style="float:right; padding-top: 10px;">글쓰기</button>
 			</div>
 		</div>
 			<div class="center">
