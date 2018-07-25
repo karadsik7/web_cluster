@@ -58,6 +58,10 @@ public interface BoardService {
 	List<TagVo> tagList();
 
 	boolean tagVerifier(List<TagVo> tagList, int t_id);
+
+	boolean favoriteDual(String loginMemberId, int id);
+
+	void addFavorite(String loginMemberId, int id);
 	
 	
 }

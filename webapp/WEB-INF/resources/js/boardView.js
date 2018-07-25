@@ -76,7 +76,7 @@
 		}
 	}
 	
-	function love(id, bid){
+	function love(id){
 		$.ajax({
 			url : "/comment/love",
 			type : 'post',
@@ -87,13 +87,14 @@
 					return;
 				}else if (data == 'error'){
 					alert("서버 에러입니다. 잠시 후 다시 시도하세요.");
+					return;
 				}
 				location.reload();
 			}
 		})
 	}
 	
-	function hate(id, bid){
+	function hate(id){
 		$.ajax({
 			url : "/comment/hate",
 			type : 'post',
@@ -106,6 +107,26 @@
 					alert("서버 에러입니다. 잠시 후 다시 시도하세요.");
 				}
 				location.reload();
+				
 			}
 		})
+	}
+	
+	function favorite(id){
+		$.ajax({
+			url : "/board/favorite",
+			type : "post",
+			data : {id : id},
+			success : function(data){
+				if(data == 'dual'){
+					alert("이미 추천한 게시글입니다.");
+					return;
+				}else if (data == 'error'){
+					alert("서버 에러입니다. 잠시 후 다시 시도하세요.");
+					return;
+				}
+				alert("게시글을 추천했습니다.");
+				location.reload();
+			}
+		});
 	}

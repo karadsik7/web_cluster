@@ -99,7 +99,15 @@
 			$('#search_text').focus();
 			return;
 		}else{
-			location.href = '/board/list/'+type+'?option='+option+'&text='+text;
+			if(${empty param.t_id && empty param.fv}){
+				location.href = '/board/list/'+type+'?option='+option+'&text='+text;	
+			}else if(${empty param.fv}){
+				location.href = '/board/list/'+type+'?option='+option+'&text='+text+'&t_id=${param.t_id}';
+			}else if(${empty param.t_id}){
+				location.href = '/board/list/'+type+'?option='+option+'&text='+text+'&fv=${param.fv}';
+			}else{
+				location.href = '/board/list/'+type+'?option='+option+'&text='+text+'&t_id=${param.t_id}'+'&fv=${param.fv}';
+			}
 		}
 	}
 	
@@ -133,18 +141,14 @@
 		<div class="body">
 			<table class="board table table-striped table-hover">
 				<tr>
-					<th style="width:10%">번호</th>
+					<th style="width:5%">번호</th>
 					<th style="width:10%">분류</th>
-					<th style="width:45%">제목</th>
+					<th style="width:40%">제목</th>
 					<th style="width:15%">이름</th>
 					<th style="width:10%">날짜</th>
+					<th style="width:10%">추천</th>
 					<th style="width:10%">조회</th>
 				</tr>
-				<c:if test="${empty boardList }">
-				<tr>
-					<td colspan="5">게시물이 존재하지 않습니다.</td>
-				</tr>
-				</c:if>
 				
 				<c:forEach var="bvo" items="${boardNoticeList }">
 				<c:if test="${bvo.notice==1 }">
@@ -158,10 +162,19 @@
 					<td>
 						${bvo.regdate }
 					</td>
+					<td>${bvo.favoriteCount }</td>
 					<td>${bvo.hit }</td>
 				</tr>
 				</c:if>
 				</c:forEach>
+				
+				<c:if test="${empty boardList }">
+				<tr>
+					<td colspan="5">게시물이 존재하지 않습니다.</td>
+				</tr>
+				</c:if>
+				
+				
 				
 				<c:forEach var="bvo" items="${boardList }">
 				<tr>
@@ -170,6 +183,9 @@
 					<td style="text-align: left;" >
 						<c:if test="${bvo.notice == 1}">
 							<span class="label label-danger">공지</span>
+						</c:if>
+						<c:if test="${bvo.favoriteCount >= 3}">
+							<span class="label label-primary">추천</span>
 						</c:if>
 						<c:forEach var="i" begin="1" end="${bvo.depth }">
 							<c:if test="${i != bvo.depth}">
@@ -184,6 +200,7 @@
 					<td>
 						${bvo.regdate }
 					</td>
+					<td>${bvo.favoriteCount }</td>
 					<td>${bvo.hit }</td>
 				</tr>
 				</c:forEach>
@@ -200,7 +217,9 @@
 					<input type="text" id="search_text" value="${param.text }" />
 					<button type="button" onclick="search(${boardType.id});" class="btn btn-success">찾기</button>
 				</div>
-				<button type="button" onclick="location.href='/board/add/${boardType.id}'" class="btn btn-primary btn-lg" style="float:right; padding-top: 10px;">글쓰기</button>
+				
+				<button type="button" onclick="location.href='/board/add/${boardType.id}'" class="btn btn-primary" style="float:right;">글쓰기</button>
+				<button type="button" onclick="location.href='/board/list/${boardType.id}?fv=1'" class="btn btn-dark" style="float:right;">추천글</button>
 			</div>
 		</div>
 			<div class="center">

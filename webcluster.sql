@@ -176,3 +176,49 @@ create sequence seq_tem_id start with 8;
 insert into member values('user'||seq_tem_id.nextval, 'ebcc70bef9ccf602fc325cbfeebfcbcd803b0afb1cdc56c2e7ba8eb68241bd02', '더미유저', 
 'abc@a.bc'||seq_tem_id.currval, 'm', 0);
 select * from member;
+select * from comments;
+
+select count(*) from comments where b_id = 64;
+
+create table tags(
+    id number primary key,
+    name varchar2(15) not null
+    );
+    
+create sequence seq_tags_id;
+
+insert into tags values(seq_tags_id.nextval, '잡담');
+insert into tags values(seq_tags_id.nextval, '정보/Tip');
+insert into tags values(seq_tags_id.nextval, '질문');
+insert into tags values(seq_tags_id.nextval, '스샷');
+insert into tags values(seq_tags_id.nextval, '팬아트');
+insert into tags values(seq_tags_id.nextval, '영상');
+
+select * from tags;
+update tags set name = '영상' where name = 'VOD';
+
+alter table board add t_id number constraint fk_board_tid references tags(id);
+
+update board set t_id = 1;
+
+select * from board;
+
+desc board;
+
+
+create table favorite(
+    id number primary key,
+    m_id varchar2(10) constraint fk_favorite_mid references member(id) on delete cascade,
+    b_id number constraint fk_favorite_bid references board(id) on delete cascade
+);
+
+create sequence seq_favorite_id;
+select * from favorite;
+
+select count(*) from favorite where b_id = 111 and m_id = 'admin';
+insert into favorite values(seq_favorite_id.nextval, 'user15', '110');
+
+select b_id from favorite group by b_id having count(*) >= 3;
+
+select b.* from board b where id in (select b_id from favorite group by b_id having count(*) >= 3);
+

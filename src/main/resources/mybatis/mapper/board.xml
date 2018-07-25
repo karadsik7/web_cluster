@@ -21,7 +21,11 @@
  
  
  	<select id="list" resultMap="boardListMap" parameterType="Map">
- 		select * from (select rownum as rnum, b.* from (select * from board
+ 		select * from (select rownum as rnum, b.* from (select * from 
+ 			<choose>
+	 			<when test="fv != null">(select b.* from board b where id in (select b_id from favorite group by b_id having count(*) >= 3))</when>
+	 			<otherwise>board</otherwise>
+ 			</choose> 
  			where type = #{type} 
  			<if test="option != 'all' and text != null">
  			 and
@@ -41,6 +45,7 @@
  				</choose>
  			</if>
  			<if test="t_id != null">and t_id = #{t_id}</if>
+ 			 
  		order by ref desc, step asc) b ) where rnum between #{start} and #{end}
  	</select>
  	
@@ -48,6 +53,7 @@
  		<id property="id" column="id"/>
  		<association property="commentCount" column="id" javaType="int" select="comments.count" />
  		<association property="tvo" column="t_id" javaType="tagVo" select="tags.selectOne" />
+ 		<association property="favoriteCount" column="id" javaType="int" select="favoriteCount" />
  	</resultMap>
  	
  	<select id="boardType" parameterType="int" resultType="boardTypeVo">
@@ -65,7 +71,11 @@
  	
  	<resultMap type="boardVo" id="selectMap">
  		<id property="m_id" column="m_id"/>
+ 		<id property="id" column="id"/>
  		<association property="mvo" column="m_id" javaType="memberVo" select="member.selectOne" />
+ 		<association property="commentCount" column="id" javaType="int" select="comments.count" />
+ 		<association property="tvo" column="t_id" javaType="tagVo" select="tags.selectOne" />
+ 		<association property="favoriteCount" column="id" javaType="int" select="favoriteCount" />
  	</resultMap>
  	
  	<update id="hit" parameterType="int">
@@ -150,6 +160,17 @@
  		select * from board where type = #{value} and notice = 1
  	</select>
  	
+ 	<select id="favoriteDualCheck" parameterType="Map" resultType="int">
+ 		select count(*) from favorite where b_id = #{b_id} and m_id = #{m_id}
+ 	</select>
+ 	
+ 	<insert id="addFavorite" parameterType="map">
+ 		insert into favorite values(seq_favorite_id.nextval, #{m_id}, #{b_id})
+ 	</insert>
+ 	
+ 	<select id="favoriteCount" parameterType="int" resultType="int">
+ 		select count(*) from favorite where b_id = #{value}
+ 	</select>
  	
  	
 </mapper>

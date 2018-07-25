@@ -41,10 +41,17 @@ public class BoardVo {
 	private int commentCount;
 	private int t_id;
 	private TagVo tvo;
+	private int favoriteCount;
 	
 	
 	
 	
+	public int getFavoriteCount() {
+		return favoriteCount;
+	}
+	public void setFavoriteCount(int favoriteCount) {
+		this.favoriteCount = favoriteCount;
+	}
 	public TagVo getTvo() {
 		return tvo;
 	}

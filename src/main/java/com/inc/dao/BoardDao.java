@@ -102,6 +102,14 @@ public class BoardDao {
 		return sqlSession.selectList("tags.list");
 	}
 
+	public int favoriteDualCheck(Map<String, Object> idMap) {
+		return sqlSession.selectOne("board.favoriteDualCheck", idMap);
+	}
+
+	public void addFavorite(Map<String, Object> idMap) {
+		sqlSession.insert("board.addFavorite", idMap);
+	}
+
 	
 	
 

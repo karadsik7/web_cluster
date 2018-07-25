@@ -66,7 +66,7 @@ public class BoardController {
 	@RequestMapping(value= {"/board/list", "/board/list/{type}/{page}", "board/list/{type}"}, method=RequestMethod.GET)
 	public String list(Model model, @RequestParam(required=false) String text, 
 			@RequestParam(required=false) String option, @PathVariable Optional<Integer> page, 
-			@PathVariable Optional<Integer> type, @RequestParam(required=false) String t_id) {
+			@PathVariable Optional<Integer> type, @RequestParam(required=false) String t_id, @RequestParam(required=false) String fv) {
 		int convertType = Optional.ofNullable(type).get().orElse(1);
 		int convertPage = Optional.ofNullable(page).get().orElse(1);
 		
@@ -76,10 +76,16 @@ public class BoardController {
 		searchMap.put("page", convertPage);
 		searchMap.put("type", convertType);
 		searchMap.put("t_id", t_id);
+		searchMap.put("fv", fv);
 		
 		String searchParam = "";
 		if(text != null && option != "all") {
 			searchParam = "&option="+option+"&text="+text;
+			if(t_id != null) {
+				searchParam += "&t_id="+t_id;
+			}if(fv != null) {
+				searchParam += "&fv="+fv;
+			}
 		}
 		List<BoardVo> boardList = boardService.list(searchMap);
 		List<BoardTypeVo> boardTypeList = boardService.boardTypeList();
@@ -315,7 +321,25 @@ public class BoardController {
 		
 	}
 	
-	
+	@RequestMapping(value="/board/favorite", method=RequestMethod.POST)
+	@ResponseBody
+	public String favorite(@RequestParam int id, HttpSession session, HttpServletRequest request) {
+		MemberVo loginMember = (MemberVo)session.getAttribute("member");
+		String loginMemberId = loginMember.getId();
+		boolean isFavoriteDual = boardService.favoriteDual(loginMemberId, id);
+		if(isFavoriteDual) {
+			return "dual";
+		}else {
+			try {
+				boardService.addFavorite(loginMemberId, id);
+				return "done";
+			} catch (RuntimeException e) {
+				logger.error("error by favorite " + ((MemberVo)session.getAttribute("member")).getId() 
+						+ " " + request.getRemoteAddr() + e.getMessage());
+				return "error";
+			}
+		}
+	}
 	
 	
 	

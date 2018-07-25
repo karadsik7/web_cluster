@@ -9,7 +9,10 @@
 <jsp:include page="/WEB-INF/include/header.jsp" />
 <link href="/css/board.css" rel="stylesheet">
 <link href="/css/boardView.css" rel="stylesheet">
-<script src="/js/boardView.js" type="text/javascript"></script>
+<script src="/js/boardView.js?ver=2" type="text/javascript"></script>
+
+
+
 	
 </head>
 <body>
@@ -40,7 +43,12 @@
 			</tr>
 			<tr class="warning">
 				<th>내용</th>
-				<td colspan="2" class="content">${board.content }</td>
+				<td colspan="2" class="content">
+					${board.content }
+					<div class="row">
+						<button type="button" class="col-sm-offset-5 btn btn-warning text-center" onclick="favorite(${board.id});">이 글을 추천!&nbsp;&nbsp;<span style="color:red;">${board.favoriteCount }</span></button>
+					</div>
+				</td>
 			</tr>
 		</table>
 		<div class="buttons">
@@ -84,6 +92,7 @@
 				</table>
 				
 			</form:form>
+			<h4><span class="badge badge-pill badge-success">${board.commentCount }</span>개의 댓글</h4>
 			<table class="table table-bordered table-sm comment_table">
 			<c:if test="${empty commentList}">
 				<tr>
@@ -98,10 +107,10 @@
 					<th width="15%" class="commentName bestTh text-right">${comment.name} <br /> (${comment.m_id})</th>
 					<td width="75%" class="commentContent bestTd"><span class="label label-danger">best</span><br />${comment.content}</td>
 					<td width="10%" class="bestTd">
-						<button class="btn btn-sm thumb_up_btn" type="button" onclick="love(${comment.id}, ${board.id});">
+						<button class="btn btn-sm thumb_up_btn" type="button" onclick="love(${comment.id});">
 							<span class="glyphicon glyphicon-thumbs-up thumb"></span>좋아요 <span class="count">${comment.loveCount}</span>
 						</button>
-						<button class="btn btn-sm thumb_down_btn" type="button" onclick="hate(${comment.id}, ${board.id});">
+						<button class="btn btn-sm thumb_down_btn" type="button" onclick="hate(${comment.id});">
 							<span class="glyphicon glyphicon-thumbs-down thumb"></span>싫어요 <span class="count">${comment.hateCount}</span>
 						</button>
 						<f:parseDate var="date" value="${comment.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/>
@@ -116,10 +125,10 @@
 					<th width="15%" class="commentName comment_all_th text-right">${comment.name} <br /> (${comment.m_id})</th>
 					<td width="75%" class="commentContent"><c:if test="${comment.loveCount - comment.hateCount >= 2}"><span class="label label-danger">best</span><br /></c:if>${comment.content}</td>
 					<td width="10%">
-						<button class="btn btn-sm thumb_up_btn" type="button" onclick="love(${comment.id}, ${board.id});">
+						<button class="btn btn-sm thumb_up_btn" type="button" onclick="love(${comment.id});">
 							<span class="glyphicon glyphicon-thumbs-up thumb"></span>좋아요 <span class="count">${comment.loveCount}</span>
 						</button>
-						<button class="btn btn-sm thumb_down_btn" type="button" onclick="hate(${comment.id}, ${board.id});">
+						<button class="btn btn-sm thumb_down_btn" type="button" onclick="hate(${comment.id});">
 							<span class="glyphicon glyphicon-thumbs-down thumb"></span>싫어요 <span class="count">${comment.hateCount}</span>
 						</button>
 						<f:parseDate var="date" value="${comment.regdate }" pattern="yyyy-MM-dd HH:mm:ss"/>

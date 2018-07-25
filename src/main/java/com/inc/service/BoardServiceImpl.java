@@ -203,6 +203,31 @@ public class BoardServiceImpl implements BoardService{
 		return boardList;
 	}
 
+	@Override
+	public boolean favoriteDual(String loginMemberId, int id) {
+		Map<String, Object> idMap = idMapCreate(loginMemberId, id);
+		int result = boardDao.favoriteDualCheck(idMap);
+		System.out.println(result);
+		if(result != 0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	private Map<String, Object> idMapCreate(String loginMemberId, int id) {
+		Map<String, Object> idMap = new HashMap<>();
+		idMap.put("m_id", loginMemberId);
+		idMap.put("b_id", id);
+		return idMap;
+	}
+
+	@Override
+	public void addFavorite(String loginMemberId, int id) {
+		Map<String, Object> idMap = idMapCreate(loginMemberId, id);
+		boardDao.addFavorite(idMap);
+	}
+
 	private int boardCheck(String name) {
 		return boardDao.boardDualCheck(name);
 	}
