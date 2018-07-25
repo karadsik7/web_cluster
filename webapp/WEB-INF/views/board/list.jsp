@@ -10,7 +10,7 @@
 <html>
 <head>
 <jsp:include page="/WEB-INF/include/header.jsp" />
-<link href="/css/board.css?ver=1" rel="stylesheet">
+<link href="/css/board.css?ver=3" rel="stylesheet">
 <style>
 	.center{
 		text-align:center;
@@ -139,7 +139,7 @@
 			</div>
 		</div>
 		<div class="body">
-			<table class="board table table-striped table-hover">
+			<table class="board table table-hover">
 				<tr>
 					<th style="width:5%">번호</th>
 					<th style="width:10%">분류</th>

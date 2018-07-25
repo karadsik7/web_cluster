@@ -27,7 +27,7 @@
 	border:0;
 }
 .board th {
-	background-color:#87CEFA;
+	background-color:#bae3fc;
 	color:#000000;
 	border-top: 1px solid rgba(0,0,0,0.3);
 	border-bottom: 2px solid rgba(0,0,0,0.7);
@@ -46,7 +46,7 @@
 	border: 1px solid #bae3fc;
 }
 .board tr:nth-child(odd){
-	background-color:#d7eefd;
+	background-color:#fdfdfd;
 }
 .board tr:nth-child(even){
 	background-color:#fdfdfd;

@@ -23,11 +23,41 @@ public class MainController {
 
 	@RequestMapping("/")
 	public String main(Model model) {
-		Map<String, Object> defaultMap = new HashMap<>();
-		defaultMap.put("page", 1);
-		defaultMap.put("type", 1);
-		List<BoardVo> boardList = boardService.list(defaultMap);
-		model.addAttribute("boardList", boardList);
+		Map<String, Object> freeboardMap = new HashMap<>();
+		freeboardMap.put("page", 1);
+		freeboardMap.put("type", 1);
+		Map<String, Object> humorboardMap = new HashMap<>();
+		humorboardMap.put("page", 1);
+		humorboardMap.put("type", 2);
+		Map<String, Object> lolboardMap = new HashMap<>();
+		lolboardMap.put("page", 1);
+		lolboardMap.put("type", 3);
+		/*Map<String, Object> bgboardMap = new HashMap<>();
+		freeboardMap.put("page", 1);
+		freeboardMap.put("type", 4);
+		Map<String, Object> owboardMap = new HashMap<>();
+		freeboardMap.put("page", 1);
+		freeboardMap.put("type", 5);
+		Map<String, Object> dfboardMap = new HashMap<>();
+		freeboardMap.put("page", 1);
+		freeboardMap.put("type", 6);*/
+		
+		
+		
+		List<BoardVo> freeboardList = boardService.list(freeboardMap);
+		List<BoardVo> humorboardList = boardService.list(humorboardMap);
+		List<BoardVo> lolboardList = boardService.list(lolboardMap);
+	/*	List<BoardVo> bgboardList = boardService.list(bgboardMap);
+		List<BoardVo> owboardList = boardService.list(owboardMap);
+		List<BoardVo> dfboardList = boardService.list(dfboardMap);
+		*/
+		
+		model.addAttribute("freeboardList", freeboardList);
+		model.addAttribute("humorboardList", humorboardList);
+		model.addAttribute("lolboardList", lolboardList);
+	/*	model.addAttribute("bgboardList", bgboardList);
+		model.addAttribute("dfboardList", dfboardList);
+		model.addAttribute("owboardList", owboardList);*/
 		return "/home.jsp";
 	}
 	
