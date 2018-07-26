@@ -10,7 +10,17 @@
 <link href="/css/board.css" rel="stylesheet">
 <link href="/css/boardView.css" rel="stylesheet">
 <script src="/js/boardView.js?ver=2" type="text/javascript"></script>
-
+<style>
+	.comment_table{
+		background-color: #FAFAFA;
+	}
+	.commentWrite{
+		background-color: white;
+	}
+	.comment_add{
+		background-color: #FAFAFA;
+	}
+</style>
 
 
 	
@@ -71,7 +81,7 @@
 		<div class="comments">
 			<form:form action="/comment/add" modelAttribute="commentVo" method="post">
 				<form:input type="hidden" path="b_id" value="${board.id }"/>
-				<table class="table table-bordered">
+				<table class="table table-bordered comment_add">
 					<tr>
 						<th width="15%">이름</th>
 						<td>

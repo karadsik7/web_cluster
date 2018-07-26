@@ -97,10 +97,8 @@ public class MemberController {
 	
 	@RequestMapping(value="/member/dualCheck", method=RequestMethod.POST)
 	@ResponseBody
-	public String dualCheck(@RequestParam String id, BindingResult result) {
+	public String dualCheck(@RequestParam String id) {
 		if(id == "") {
-			FieldError error = new FieldError("noValueId", "id", "아이디를 입력하세요.");
-			result.addError(error);
 			return "denied";
 		}
 		String dualResult = memberService.dualCheck(id);

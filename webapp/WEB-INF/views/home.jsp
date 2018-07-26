@@ -60,15 +60,15 @@
 			      </div>
 			
 			      <div class="item">
-			        <a href="/board/list/4"><img src="/img/pubg.jpg" width="800" height="150"></a>
+			        <a href="/board/list/22"><img src="/img/pubg.jpg" width="800" height="150"></a>
 			      </div>
 			      
 			      <div class="item">
-			        <a href="/board/list/5"><img src="/img/overwatch.jpg" width="800" height="150"></a>
+			        <a href="/board/list/21"><img src="/img/overwatch.jpg" width="800" height="150"></a>
 			      </div>
 			      
 			      <div class="item">
-			        <a href="/board/list/6"><img src="/img/df.jpg" width="800" height="150"></a>
+			        <a href="/board/list/23"><img src="/img/df.jpg" width="800" height="150"></a>
 			      </div>
 			      
 			    </div>
@@ -97,6 +97,9 @@
 	    			<label class="label label-danger text-center"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;최근 게시글</label>
 	    		</div>
 	    	  </div>
+	    	  <c:if test="${empty freeboardList }">
+	          	<h4>게시글이 없어요 T_T</h4>
+	          </c:if>
 	          <c:forEach var="bvo" items="${freeboardList }" begin="0" end="2">
 	          
 	          <div class="post-preview">
@@ -126,8 +129,10 @@
 	    			<label class="label label-danger text-center"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;최근 게시글</label>
 	    		</div>
 	    	  </div>
+	    	  <c:if test="${empty humorboardList }">
+	          	<h4>게시글이 없어요 T_T</h4>
+	          </c:if>
 	          <c:forEach var="bvo" items="${humorboardList }" begin="0" end="2">
-	          
 	          <div class="post-preview">
 	            <h2 class="post-title">
 	            <a href="/board/view?id=${bvo.id}">
@@ -155,8 +160,10 @@
 	    			<label class="label label-danger text-center"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;최근 게시글</label>
 	    		</div>
 	    	  </div>
+	    	  <c:if test="${empty lolboardList }">
+	          	<h4>게시글이 없어요 T_T</h4>
+	          </c:if>
 	          <c:forEach var="bvo" items="${lolboardList }" begin="0" end="2">
-	          
 	          <div class="post-preview">
 	            <h2 class="post-title">
 	            <a href="/board/view?id=${bvo.id}">
@@ -171,7 +178,7 @@
 	          </c:forEach>
 	          <hr>
 	          <div class="clearfix">
-	            <a class="btn btn-primary float-right" href="/board/list/1">더보기 &rarr;</a>
+	            <a class="btn btn-primary float-right" href="/board/list/3">더보기 &rarr;</a>
 	          </div>
 	       </div>
 	     </div>
@@ -190,8 +197,10 @@
 	    			<label class="label label-danger text-center"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;최근 게시글</label>
 	    		</div>
 	    	  </div>
+	    	  <c:if test="${empty bgboardList }">
+	          	<h4>게시글이 없어요 T_T</h4>
+	          </c:if>
 	          <c:forEach var="bvo" items="${bgboardList }" begin="0" end="2">
-	          
 	          <div class="post-preview">
 	            <h2 class="post-title">
 	            <a href="/board/view?id=${bvo.id}">
@@ -206,7 +215,7 @@
 	          </c:forEach>
 	          <hr>
 	          <div class="clearfix">
-	            <a class="btn btn-primary float-right" href="/board/list/1">더보기 &rarr;</a>
+	            <a class="btn btn-primary float-right" href="/board/list/22">더보기 &rarr;</a>
 	          </div>
 	       </div>
 	     </div>
@@ -219,8 +228,10 @@
 	    			<label class="label label-danger text-center"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;최근 게시글</label>
 	    		</div>
 	    	  </div>
+	    	  <c:if test="${empty owboardList }">
+	          	<h4>게시글이 없어요 T_T</h4>
+	          </c:if>
 	          <c:forEach var="bvo" items="${owboardList }" begin="0" end="2">
-	          
 	          <div class="post-preview">
 	            <h2 class="post-title">
 	            <a href="/board/view?id=${bvo.id}">
@@ -235,7 +246,7 @@
 	          </c:forEach>
 	          <hr>
 	          <div class="clearfix">
-	            <a class="btn btn-primary float-right" href="/board/list/1">더보기 &rarr;</a>
+	            <a class="btn btn-primary float-right" href="/board/list/21">더보기 &rarr;</a>
 	          </div>
 	       </div>
 	     </div>
@@ -248,8 +259,10 @@
 	    			<label class="label label-danger text-center"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;최근 게시글</label>
 	    		</div>
 	    	  </div>
+	    	  <c:if test="${empty dfboardList }">
+	          	<h4>게시글이 없어요 T_T</h4>
+	          </c:if>
 	          <c:forEach var="bvo" items="${dfboardList }" begin="0" end="2">
-	          
 	          <div class="post-preview">
 	            <h2 class="post-title">
 	            <a href="/board/view?id=${bvo.id}">
@@ -264,7 +277,7 @@
 	          </c:forEach>
 	          <hr>
 	          <div class="clearfix">
-	            <a class="btn btn-primary float-right" href="/board/list/1">더보기 &rarr;</a>
+	            <a class="btn btn-primary float-right" href="/board/list/23">더보기 &rarr;</a>
 	          </div>
 	       </div>
 	     </div>

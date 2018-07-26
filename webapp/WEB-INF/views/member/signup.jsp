@@ -118,7 +118,6 @@
 	function mailSend(){
 		$("#email-error").text("");
 		var email = $("#email").val();
-		console.log(email);
 		$.ajax({
 			url : "/member/mailSend",
 			type : "post",
