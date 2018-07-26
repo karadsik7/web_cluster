@@ -18,7 +18,7 @@
 </head>
 <body>
 <jsp:include page="/WEB-INF/include/nav.jsp" />
-<header class="masthead" style="background-image: url('/img/board.png') ">
+<header class="masthead" style="background-image: url('/img/board1.png') ">
       <div class="overlay"></div>
 </header>
 <div class="container">
