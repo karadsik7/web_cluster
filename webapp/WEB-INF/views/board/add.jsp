@@ -101,7 +101,11 @@
 				success : function(data){
 					var $img = $("<img>").attr('src', data.url);
 					$("#content").summernote("insertNode", $img[0]);
+				},
+				error : function(err){
+					console.log(err);
 				}
+			
 			});
 		} 
 	</script>
