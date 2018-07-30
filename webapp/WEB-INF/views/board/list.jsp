@@ -70,6 +70,10 @@
 	.tagLink{
 		font-weight:normal!important;
 	}	
+	
+	.tagLink span:hover{
+		text-decoration: underline!important;
+	}
 </style>
 </head>
 <script>
@@ -111,6 +115,98 @@
 		}
 	}
 	
+	function occurrences(string, subString, allowOverlapping) {
+
+	    string += "";
+	    subString += "";
+	    if (subString.length <= 0) return (string.length + 1);
+
+	    var n = 0,
+	        pos = 0,
+	        step = allowOverlapping ? 1 : subString.length;
+
+	    while (true) {
+	        pos = string.indexOf(subString, pos);
+	        if (pos >= 0) {
+	            ++n;
+	            pos += step;
+	        } else break;
+	    }
+	    return n;
+	}
+	
+	function allView(){
+		var url = '${path}';
+		var pageIndex = url.indexOf("/", 12);
+		if(pageIndex == -1){
+			location.href = url + '/1';	
+		}else{
+			pageIndex = url.lastIndexOf("/");
+			var viewUrl = url.substring(0, pageIndex);
+			location.href = viewUrl + '/1';
+		}
+	}
+	
+	function infoView(){
+		var url = '${path}';
+		var pageIndex = url.indexOf("/", 12);
+		if(pageIndex == -1){
+			location.href = url + '/1?t_id=2';	
+		}else{
+			pageIndex = url.lastIndexOf("/");
+			var viewUrl = url.substring(0, pageIndex);
+			location.href = viewUrl + '/1?t_id=2';
+		}
+	}
+	
+	function questionView(){
+		var url = '${path}';
+		var pageIndex = url.indexOf("/", 12);
+		if(pageIndex == -1){
+			location.href = url + '/1?t_id=3';	
+		}else{
+			pageIndex = url.lastIndexOf("/");
+			var viewUrl = url.substring(0, pageIndex);
+			location.href = viewUrl + '/1?t_id=3';
+		}
+	}
+	
+	function fanartView(){
+		var url = '${path}';
+		var pageIndex = url.indexOf("/", 12);
+		if(pageIndex == -1){
+			location.href = url + '/1?t_id=5';	
+		}else{
+			pageIndex = url.lastIndexOf("/");
+			var viewUrl = url.substring(0, pageIndex);
+			location.href = viewUrl + '/1?t_id=5';
+		}
+	}
+	
+	function screenshotView(){
+		var url = '${path}';
+		var pageIndex = url.indexOf("/", 12);
+		if(pageIndex == -1){
+			location.href = url + '/1?t_id=4';	
+		}else{
+			pageIndex = url.lastIndexOf("/");
+			var viewUrl = url.substring(0, pageIndex);
+			location.href = viewUrl + '/1?t_id=4';
+		}
+	}
+	
+	function tagView(tagId){
+		var url = '${path}';
+		var tag = tagId;
+		var pageIndex = url.indexOf("/", 12);
+		if(pageIndex == -1){
+			location.href = url + '/1?t_id='+tagId;	
+		}else{
+			pageIndex = url.lastIndexOf("/");
+			var viewUrl = url.substring(0, pageIndex);
+			location.href = viewUrl + '/1?t_id='+tagId;
+		}
+	}
 	
 </script>
 <body>
@@ -131,11 +227,11 @@
 		<div class="header" style="margin-top:0">
 			<h2 class="text-left">${boardType.name}</h2>
 			<div class="btn-group" style="width:100%">
-			  <button type="button" onclick="location.href='${baseURL}${path}'" style="width:25%">전체 보기</button>
-			  <button type="button" onclick="location.href='${baseURL}${path}?t_id=2'" style="width:25%">정보/TIP</button>
-			  <button type="button" onclick="location.href='${baseURL}${path}?t_id=3'" style="width:25%">질문</button>
-			  <button type="button" onclick="location.href='${baseURL}${path}?t_id=5'" style="width:25%">팬아트</button>
-			  <button type="button" onclick="location.href='${baseURL}${path}?t_id=4'" style="width:25%">스크린샷</button>	
+			  <button type="button" onclick="allView();" style="width:25%">전체 보기</button>
+			  <button type="button" onclick="infoView();" style="width:25%">정보/TIP</button>
+			  <button type="button" onclick="questionView();" style="width:25%">질문</button>
+			  <button type="button" onclick="fanartView();" style="width:25%">팬아트</button>
+			  <button type="button" onclick="screenshotView();" style="width:25%">스크린샷</button>	
 			</div>
 		</div>
 		<div class="body">
@@ -154,7 +250,7 @@
 				<c:if test="${bvo.notice==1 }">
 				<tr class="notice">
 					<td>${bvo.id }</td>
-					<td><a class="tagLink" href="${baseURL}${path}?t_id=${bvo.tvo.id}">${bvo.tvo.name }</a></td>
+					<td><span class="tagLink" onclick="tagView(${bvo.tvo.id});">${bvo.tvo.name }</span></td>
 					<td style="text-align: left;" >
 							<span class="label label-danger">공지</span>
 						<a href="/board/view?id=${bvo.id}">${bvo.title } &nbsp;&nbsp;<span style="color:#FF8000; font-size: 9pt; font-weight: bold">(${bvo.commentCount })</span></a>
@@ -179,7 +275,7 @@
 				<c:forEach var="bvo" items="${boardList }">
 				<tr>
 					<td>${bvo.id }</td>
-					<td><a class="tagLink" href="${baseURL}${path}?t_id=${bvo.tvo.id}">${bvo.tvo.name }</a></td>
+					<td><span class="tagLink" onclick="tagView(${bvo.tvo.id});">${bvo.tvo.name }</span></td>
 					<td style="text-align: left;" >
 						<c:if test="${bvo.notice == 1}">
 							<span class="label label-danger">공지</span>

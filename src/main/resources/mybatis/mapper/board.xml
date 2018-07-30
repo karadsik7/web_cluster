@@ -100,7 +100,12 @@
  	</insert>
  	
  	<select id="totalCount" parameterType="Map" resultType="int">
- 		select count(*) from board where type = #{type}
+ 		select count(*) from 
+ 		<choose>
+	 			<when test="fv != null">(select b.* from board b where id in (select b_id from favorite group by b_id having count(*) >= 3))</when>
+	 			<otherwise>board</otherwise>
+ 		</choose>
+ 		where type = #{type}
  		<if test="option != null and option != 'all'">
 			and
 			<choose>
@@ -117,7 +122,8 @@
 					title like '%'||#{text}||'%' or content like '%'||#{text}||'%' 
 				</when>
 			</choose>
-		</if> 
+		</if>
+		<if test="t_id != null">and t_id = #{t_id}</if>
  	</select>
  	
  	<update id="notice" parameterType="int">

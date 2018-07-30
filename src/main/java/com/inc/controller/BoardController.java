@@ -81,12 +81,14 @@ public class BoardController {
 		String searchParam = "";
 		if(text != null && option != "all") {
 			searchParam = "&option="+option+"&text="+text;
-			if(t_id != null) {
-				searchParam += "&t_id="+t_id;
-			}if(fv != null) {
-				searchParam += "&fv="+fv;
-			}
 		}
+		else if(t_id != null) {
+			searchParam += "?t_id="+t_id;
+		}else if(fv != null) {
+			searchParam += "?fv="+fv;
+		}
+		
+		
 		List<BoardVo> boardList = boardService.list(searchMap);
 		List<BoardTypeVo> boardTypeList = boardService.boardTypeList();
 		List<BoardVo> boardNoticeList = boardService.boardNoticeList(convertType);
